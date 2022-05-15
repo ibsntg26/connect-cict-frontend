@@ -1,28 +1,4 @@
 import React, { useContext, useEffect, useState } from "react";
-import { Link } from "react-router-dom";
-
-import {
-  Flex,
-  Container,
-  Grid,
-  GridItem,
-  Center,
-  SimpleGrid,
-  Heading,
-  Box,
-  Stack,
-  Text,
-  Table,
-  Thead,
-  Tbody,
-  Tfoot,
-  Tr,
-  Th,
-  Td,
-  TableCaption,
-  TableContainer,
-  useColorModeValue,
-} from "@chakra-ui/react";
 
 import StudentLayout from "../../components/student/StudentLayout";
 
@@ -30,7 +6,42 @@ import AuthContext from "../../context/auth-context";
 import useAxios from "../../utils/axios";
 
 const Profile = () => {
-  return <StudentLayout>Profile</StudentLayout>;
+  const { user } = useContext(AuthContext);
+  const [userInfo, setUserInfo] = useState("");
+  const [studentInfo, setStudentInfo] = useState("");
+  const api = useAxios();
+
+  const getUserProfile = async () => {
+    const response = await api.get(
+      `/api/user/student/${user.user_id}/student_profile/`
+    );
+    return response.data;
+  };
+
+  useEffect(() => {
+    document.title = "CONNECT | Profile";
+    
+    getUserProfile()
+      .then((res) => {
+        let student = res;
+        let account = res.account;
+        delete student.account;
+        setStudentInfo(student);
+        setUserInfo(account);
+        // console.log(studentInfo);
+      })
+      .catch((e) => {
+        alert(e.message);
+      });
+  }, []);
+
+  return (
+    <StudentLayout>
+      {userInfo.first_name}
+    {userInfo.last_name}
+    {studentInfo.student_id}
+    </StudentLayout>
+  );
 };
 
 export default Profile;

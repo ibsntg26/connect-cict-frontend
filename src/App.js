@@ -11,10 +11,13 @@ import Signup from "./pages/Signup";
 import Demo from "./pages/Demo";
 
 import Dashboard from "./pages/student/Dashboard";
-import NewTicket from "./pages/student/NewTicket";
 import Tickets from "./pages/student/Tickets";
+import Ticket from "./pages/student/Ticket";
+import NewTicket from "./pages/student/NewTicket";
 import Notifications from "./pages/student/Notifications";
 import Profile from "./pages/student/Profile";
+
+import TicketSample from "./pages/student/TicketSample";
 
 function App() {
   return (
@@ -36,19 +39,28 @@ function App() {
           />
 
           <Route
-            path="/tickets/new"
+            path="/tickets"
             element={
               <ProtectedRoute>
-                <NewTicket />
+                <Tickets />
               </ProtectedRoute>
             }
           />
 
           <Route
-            path="/tickets"
+            path="/tickets/:ticketId"
             element={
               <ProtectedRoute>
-                <Tickets />
+                <Ticket />
+              </ProtectedRoute>
+            }
+          />
+
+          <Route
+            path="/tickets/new"
+            element={
+              <ProtectedRoute>
+                <NewTicket />
               </ProtectedRoute>
             }
           />
@@ -67,6 +79,15 @@ function App() {
             element={
               <ProtectedRoute>
                 <Profile />
+              </ProtectedRoute>
+            }
+          />
+
+          <Route
+            path="/ticketsample"
+            element={
+              <ProtectedRoute>
+                <TicketSample />
               </ProtectedRoute>
             }
           />

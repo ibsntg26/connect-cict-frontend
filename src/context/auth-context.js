@@ -21,9 +21,23 @@ export const AuthProvider = ({ children }) => {
   const [role, setRole] = useState("");
   const [canReport, setCanReport] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
-
-
   const navigate = useNavigate();
+
+  if (user && !role) {
+    switch (user.role) {
+      case 1:
+        setRole("admin");
+        break;
+      case 2:
+        setRole("evaluator");
+        break;
+      case 3:
+        setRole("student");
+        break;
+      default:
+        setRole(null);
+    }
+  }
 
   const loginUser = async (e) => {
     e.preventDefault();
@@ -46,21 +60,6 @@ export const AuthProvider = ({ children }) => {
         setAuthTokens(data);
         setUser(jwt_decode(data.access));
 
-        // setRole(user.role);
-        // switch (user.role) {
-        //   case 1:
-        //     setRole("admin");
-        //     break;
-        //   case 2:
-        //     setRole("evaluator");
-        //     break;
-        //   case 3:
-        //     setRole("student");
-        //     break;
-        //   default:
-        //     setRole(null);
-        // }
-
         localStorage.setItem("authTokens", JSON.stringify(data));
         setError(null);
         navigate("/dashboard");
@@ -75,6 +74,7 @@ export const AuthProvider = ({ children }) => {
   const logoutUser = () => {
     setAuthTokens(null);
     setUser(null);
+    setRole(null);
     setCanReport(false);
     setError(null);
     localStorage.removeItem("authTokens");

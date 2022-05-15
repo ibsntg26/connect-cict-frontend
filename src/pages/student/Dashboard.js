@@ -1,4 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
+import dayjs from "dayjs";
 import { Link } from "react-router-dom";
 
 import {
@@ -13,6 +14,8 @@ import {
   Stack,
   Text,
   Table,
+  Tag,
+  TagLabel,
   Thead,
   Tbody,
   Tfoot,
@@ -30,12 +33,46 @@ import AuthContext from "../../context/auth-context";
 import useAxios from "../../utils/axios";
 
 const Dashboard = () => {
-  const { user } =
-    useContext(AuthContext);
+  const { user, setCanReport } = useContext(AuthContext);
+  const [recentTicket, updateRecentTicket] = useState([]);
+  const [ticketType, updateTicketType] = useState('');
+
+  const api = useAxios();
 
   useEffect(() => {
     document.title = "CONNECT | Dashboard";
-  });
+
+    const getCanReportPerm = async () => {
+      const response = await api.get("/api/student-ticket/can_report_perm");
+      return response.data;
+    };
+
+    const getRecentTicket = async () => {
+      const response = await api.get("/api/student-ticket/recent_ticket");
+      return response.data;
+    };
+
+    getCanReportPerm()
+      .then((res) => {
+        setCanReport(res["report_perm"] ? res["report_perm"] : false);
+      })
+      .catch((e) => {
+        alert(e.message);
+      });
+
+    getRecentTicket()
+      .then((res) => {
+        if (res.detail) updateRecentTicket([]);
+        else {
+          updateRecentTicket(res);
+          updateTicketType(res.type.name);
+          // console.log(res);
+        }
+      })
+      .catch((e) => {
+        alert(e.message);
+      });
+  }, []);
 
   return (
     <StudentLayout>
@@ -46,34 +83,57 @@ const Dashboard = () => {
 
         <SimpleGrid minChildWidth="300px" spacing={5} lineHeight={1.25}>
           <Box bg="white" borderRadius="10px" box-shadow="md" padding={5}>
-            <Flex justifyContent="space-between">
-              <Heading fontSize="lg">Recent Ticket Info</Heading>
-              <Link to="/">
-                <Text
-                  fontSize="sm"
-                  color="orange.400"
-                  _hover={{ color: "orange.300" }}
-                >
-                  see full report
-                </Text>
-              </Link>
-            </Flex>
+            {recentTicket !== null ? (
+              <div>
+                <Flex justifyContent="space-between">
+                  <Heading fontSize="lg">Recent Ticket Info</Heading>
+                  <Link to={"/tickets/" + recentTicket.id}>
+                    <Text
+                      fontSize="sm"
+                      color="orange.400"
+                      _hover={{ color: "orange.300" }}
+                    >
+                      see full report
+                    </Text>
+                  </Link>
+                </Flex>
 
-            <Box mt={6}>
-              <Text fontSize="sm">Ticket #1122</Text>
-              <Text fontWeight={600}>Subject/s not yet taken (OOP2)</Text>
-            </Box>
+                <SimpleGrid minChildWidth="200px" mt={6}>
+                  <Box>
+                    <Text fontSize="sm">Ticket #{recentTicket.id}</Text>
+                    <Text fontWeight={600}>{ticketType}</Text>
+                  </Box>
+                  <Box>
+                    <Tag size="lg" colorScheme="orange" borderRadius="full">
+                      <TagLabel textTransform="uppercase">
+                        {recentTicket.status}
+                      </TagLabel>
+                    </Tag>
+                  </Box>
+                </SimpleGrid>
 
-            <SimpleGrid minChildWidth="200px" mt={5}>
-              <Box>
-                <Text fontSize="sm">Submitted on</Text>
-                <Text fontWeight={600}>2022-04-29</Text>
-              </Box>
-              <Box>
-                <Text fontSize="sm">Last update on</Text>
-                <Text fontWeight={600}>2022-05-11 by you</Text>
-              </Box>
-            </SimpleGrid>
+                <SimpleGrid minChildWidth="200px" mt={5}>
+                  <Box>
+                    <Text fontSize="sm">Submitted on</Text>
+                    <Text fontWeight={600}>
+                      {dayjs(recentTicket.date_created).format(
+                        "MMMM D, YYYY h:mm a"
+                      )}
+                    </Text>
+                  </Box>
+                  <Box>
+                    <Text fontSize="sm">Last update on</Text>
+                    <Text fontWeight={600}>
+                      {dayjs(recentTicket.date_updated).format(
+                        "MMMM D, YYYY h:mm a"
+                      )}
+                    </Text>
+                  </Box>
+                </SimpleGrid>
+              </div>
+            ) : (
+              <div>spspsp</div>
+            )}
           </Box>
           <Box bg="white" borderRadius="10px" box-shadow="md"></Box>
         </SimpleGrid>

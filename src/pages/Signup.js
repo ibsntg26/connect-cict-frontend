@@ -23,7 +23,7 @@ import {
   useToast,
 } from "@chakra-ui/react";
 
-import { Axios } from "axios";
+import axios from "axios";
 import LayoutContext from "../context/layout-context";
 
 const Signup = () => {
@@ -36,7 +36,7 @@ const Signup = () => {
     middle_initial: "",
     last_name: "",
     student_id: "",
-    year_level: "",
+    year_level: "1st",
     section: "",
   });
 
@@ -66,12 +66,47 @@ const Signup = () => {
     e.preventDefault();
     setIsSubmitting(true);
 
-    const response = await fetch("http://127.0.0.1:8000/api/user/student/", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
+    //   const response = await fetch("http://127.0.0.1:8000/api/user/student/", {
+    //     method: "POST",
+    //     headers: {
+    //       "Content-Type": "application/json",
+    //     },
+    //     body: JSON.stringify({
+    //       email: formData.email,
+    //       password: formData.password,
+    //       password2: formData.password2,
+    //       first_name: formData.first_name,
+    //       middle_initial: formData.middle_initial,
+    //       last_name: formData.last_name,
+    //       student: {
+    //         student_id: formData.student_id,
+    //         year_level: formData.year_level,
+    //         section: formData.section,
+    //       },
+    //     }),
+    //   });
+
+    //   const data = await response.json();
+    //   if (!response) alert("No server response");
+    //   else {
+    //     if (response.status === 201) {
+    //       toast({
+    //         title: "Sign up success!",
+    //         description: "You can now log in to your account.",
+    //         status: "success",
+    //         position: "top",
+    //         duration: 5000,
+    //         isClosable: true,
+    //       });
+    //     } else if (response.status === 400) {
+    //       console.log(data);
+    //       if (data.email) alert("error sa email!");
+    //     } else alert("Signup failed.");
+    //   }
+    // };
+
+    axios
+      .post(`http://127.0.0.1:8000/api/user/student/`, {
         email: formData.email,
         password: formData.password,
         password2: formData.password2,
@@ -83,13 +118,10 @@ const Signup = () => {
           year_level: formData.year_level,
           section: formData.section,
         },
-      }),
-    });
-
-    const data = await response.json();
-    if (!response) alert("No server response");
-    else {
-      if (response.status === 201) {
+      })
+      .then((res) => {
+        // navigate('/');
+        // console.log(res);
         toast({
           title: "Sign up success!",
           description: "You can now log in to your account.",
@@ -98,37 +130,13 @@ const Signup = () => {
           duration: 5000,
           isClosable: true,
         });
-      } else if (response.status === 400) {
-        // console.log(data);
-        if (data.email) alert("error sa email!");
-      } else alert("Signup failed.");
-    }
+        console.log(res.data);
+        // e.target.reset();
+      })
+      .catch((err) => {
+        console.log(err.response.data);
+      });
   };
-
-  //     Axios
-  //       .post(`http://127.0.0.1:8000/api/user/student/`, {
-  //         email: formData.email,
-  //         password: formData.password,
-  //         password2: formData.password2,
-  //         first_name: formData.first_name,
-  //         middle_initial: formData.middle_initial,
-  //         last_name: formData.last_name,
-  //         student: {
-  //           student_id: formData.student_id,
-  //           year_level: formData.year_level,
-  //           section: formData.section,
-  //         },
-  //       })
-  //       .then((res) => {
-  //         // navigate('/');
-  //         // console.log(res);
-  //         console.log(res.data);
-  //         // e.target.reset();
-  //       })
-  //       .catch((err) => {
-  //         console.log(err.response.data);
-  //       });
-  //   };
 
   return (
     <Flex

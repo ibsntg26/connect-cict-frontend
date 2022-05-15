@@ -35,13 +35,13 @@ import useAxios from "../../utils/axios";
 const Tickets = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [tickets, setTickets] = useState([]);
-  const { user, role, canReport, logoutUser, setCanReport } =
+  const { canReport } =
     useContext(AuthContext);
   const api = useAxios();
 
+
   useEffect(() => {
     document.title = "CONNECT | Tickets";
-
     setIsLoading(true);
     const getTickets = async () => {
       const response = await api.get("/api/student-ticket/");
@@ -49,10 +49,8 @@ const Tickets = () => {
     };
     getTickets()
       .then((res) => {
-        const flag = res.pop(); //pop the last element (create report permission)
-        setCanReport(flag["report_perm"] ? flag["report_perm"] : false);
         setTickets(res);
-        console.log(res);
+        // console.log(res);
       })
       .catch((e) => {
         alert(e.message);
@@ -74,7 +72,7 @@ const Tickets = () => {
           <Flex justifyContent="space-between">
             <Heading fontSize="lg">My Help Tickets</Heading>
             <Link to="/tickets/new">
-              {canReport == false && (
+              {canReport == true && (
                 <Button size="sm" colorScheme="orange" variant="solid">
                   Open new ticket
                 </Button>
@@ -95,43 +93,54 @@ const Tickets = () => {
                 </Tr>
               </Thead>
               <Tbody>
-                {tickets.map((ticket) => (
-                  <Tr key={ticket.id}>
-                    <Td>{ticket.subject}</Td>
-                    <Td>{ticket.message}</Td>
-                    <Td>
-                      {ticket.status ? (
-                        <Tag size="lg" colorScheme="green" borderRadius="full">
-                          <TagLabel>Completed</TagLabel>
-                        </Tag>
-                      ) : (
-                        <Tag size="lg" colorScheme="gray" borderRadius="full">
-                          <TagLabel>Processing</TagLabel>
-                        </Tag>
-                      )}
-                    </Td>
-                    <Td>
-                      {dayjs(ticket.date_created).format("MMMM D, YYYY h:mm a")}
-                    </Td>
-                    <Td>
-                      {ticket.date_completed
-                        ? dayjs(ticket.date_completed).format(
-                            "MMMM D, YYYY h:mm a"
-                          )
-                        : "-"}
-                    </Td>
-                    <Td>
-                      <Link to="/">
-                        <Text
-                          color="orange.400"
-                          _hover={{ color: "orange.300" }}
-                        >
-                          view
-                        </Text>
-                      </Link>
-                    </Td>
-                  </Tr>
-                ))}
+                {tickets.length > 0 ? (
+                  tickets.map((ticket) => (
+                    <Tr key={ticket.id}>
+                      <Td>{ticket.subject}</Td>
+                      <Td>{ticket.message}</Td>
+                      <Td>
+
+                        {ticket.status === 'closed' ? (
+                          <Tag
+                            size="lg"
+                            colorScheme="green"
+                            borderRadius="full"
+                          >
+                            <TagLabel textTransform="capitalize">{ticket.status}</TagLabel>
+                          </Tag>
+                        ) : (
+                          <Tag size="lg" colorScheme="gray" borderRadius="full">
+                            <TagLabel textTransform="capitalize">{ticket.status}</TagLabel>
+                          </Tag>
+                        )}
+                      </Td>
+                      <Td>
+                        {dayjs(ticket.date_created).format(
+                          "MMMM D, YYYY h:mm a"
+                        )}
+                      </Td>
+                      <Td>
+                        {ticket.date_completed
+                          ? dayjs(ticket.date_completed).format(
+                              "MMMM D, YYYY h:mm a"
+                            )
+                          : "-"}
+                      </Td>
+                      <Td>
+                        <Link to={"/tickets/" + ticket.id}>
+                          <Text
+                            color="orange.400"
+                            _hover={{ color: "orange.300" }}
+                          >
+                            view
+                          </Text>
+                        </Link>
+                      </Td>
+                    </Tr>
+                  ))
+                ) : (
+                  <Tr><Td colSpan={6} textAlign="center">You haven't submitted any tickets yet.</Td></Tr>
+                )}
               </Tbody>
             </Table>
           </TableContainer>
