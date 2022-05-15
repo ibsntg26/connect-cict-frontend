@@ -14,6 +14,7 @@ import Demo from "./pages/Demo";
 import NewTicket from "./pages/student/NewTicket";
 
 import TicketSample from "./pages/student/TicketSample";
+import HelpCenter from "./pages/student/HelpCenter";
 
 function App() {
   return (
@@ -85,6 +86,15 @@ function App() {
             element={
               <ProtectedRoute>
                 <NewTicket />
+              </ProtectedRoute>
+            }
+          />
+
+          <Route
+            path="/helpcenter"
+            element={
+              <ProtectedRoute>
+                <HelpCenter />
               </ProtectedRoute>
             }
           />
