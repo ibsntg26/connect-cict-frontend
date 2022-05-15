@@ -1,7 +1,6 @@
 import { createContext, useState, useEffect } from "react";
-// import axios from "axios";
-
 const LayoutContext = createContext();
+
 export default LayoutContext;
 export const LayoutProvider = ({ children }) => {
   const [siteLogoMD, setSiteLogoMD] = useState("");

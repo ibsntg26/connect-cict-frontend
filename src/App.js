@@ -1,6 +1,7 @@
 import { Route, Routes } from "react-router-dom";
 
 import ProtectedRoute from "./utils/protected-route";
+import RedirectRoute from "./utils/redirect-route";
 import { AuthProvider } from "./context/auth-context";
 import { LayoutProvider } from "./context/layout-context";
 
@@ -10,12 +11,7 @@ import Signup from "./pages/Signup";
 
 import Demo from "./pages/Demo";
 
-import Dashboard from "./pages/student/Dashboard";
-import Tickets from "./pages/student/Tickets";
-import Ticket from "./pages/student/Ticket";
 import NewTicket from "./pages/student/NewTicket";
-import Notifications from "./pages/student/Notifications";
-import Profile from "./pages/student/Profile";
 
 import TicketSample from "./pages/student/TicketSample";
 
@@ -29,11 +25,39 @@ function App() {
           <Route path="/signup" element={<Signup />} />
 
           <Route path="/demo" element={<Demo />} />
+
+          <Route
+            path="/ticketsample"
+            element={
+              <ProtectedRoute>
+                <TicketSample />
+              </ProtectedRoute>
+            }
+          />
+
           <Route
             path="/dashboard"
             element={
               <ProtectedRoute>
-                <Dashboard />
+                <RedirectRoute page="dashboard" />
+              </ProtectedRoute>
+            }
+          />
+
+          <Route
+            path="/notifications"
+            element={
+              <ProtectedRoute>
+                <RedirectRoute page="notifications" />
+              </ProtectedRoute>
+            }
+          />
+
+          <Route
+            path="/profile"
+            element={
+              <ProtectedRoute>
+                <RedirectRoute page="profile" />
               </ProtectedRoute>
             }
           />
@@ -42,7 +66,7 @@ function App() {
             path="/tickets"
             element={
               <ProtectedRoute>
-                <Tickets />
+                <RedirectRoute page="tickets" />
               </ProtectedRoute>
             }
           />
@@ -51,7 +75,7 @@ function App() {
             path="/tickets/:ticketId"
             element={
               <ProtectedRoute>
-                <Ticket />
+                <RedirectRoute page="ticket" />
               </ProtectedRoute>
             }
           />
@@ -61,33 +85,6 @@ function App() {
             element={
               <ProtectedRoute>
                 <NewTicket />
-              </ProtectedRoute>
-            }
-          />
-
-          <Route
-            path="/notifications"
-            element={
-              <ProtectedRoute>
-                <Notifications />
-              </ProtectedRoute>
-            }
-          />
-
-          <Route
-            path="/profile"
-            element={
-              <ProtectedRoute>
-                <Profile />
-              </ProtectedRoute>
-            }
-          />
-
-          <Route
-            path="/ticketsample"
-            element={
-              <ProtectedRoute>
-                <TicketSample />
               </ProtectedRoute>
             }
           />

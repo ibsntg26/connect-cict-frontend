@@ -3,39 +3,21 @@ import { Link } from "react-router-dom";
 
 import {
   Flex,
-  Container,
-  Grid,
-  GridItem,
-  Center,
   SimpleGrid,
-  Heading,
   Box,
   Stack,
-  HStack,
-  VStack,
   Text,
-  Table,
-  Thead,
-  Tbody,
-  Tfoot,
-  Tr,
-  Th,
-  Td,
-  TableCaption,
-  TableContainer,
-  useColorModeValue,
   FormControl,
   FormLabel,
-  FormErrorMessage,
-  FormHelperText,
+  Image,
+  Button
 } from "@chakra-ui/react";
 
 import StudentLayout from "../../components/student/StudentLayout";
 
 import AuthContext from "../../context/auth-context";
 import useAxios from "../../utils/axios";
-import { Image } from '@chakra-ui/react'
-import { Button} from '@chakra-ui/react'
+
 const Profile = () => {
   const { user } = useContext(AuthContext);
   const [userInfo, setUserInfo] = useState("");
@@ -51,7 +33,7 @@ const Profile = () => {
 
   useEffect(() => {
     document.title = "CONNECT | Profile";
-    
+
     getUserProfile()
       .then((res) => {
         let student = res;
@@ -59,96 +41,106 @@ const Profile = () => {
         delete student.account;
         setStudentInfo(student);
         setUserInfo(account);
-        // console.log(studentInfo);
+        // console.log(userInfo);
       })
       .catch((e) => {
         alert(e.message);
       });
   }, []);
 
-  return(
+  return (
     <StudentLayout>
-           {userInfo.first_name}
-    {userInfo.last_name}
-    {studentInfo.student_id}
       <Stack m={5} spacing={5}>
-        <Box
-          bg="white"
-          borderRadius="10px"
-          box-shadow="md"
-          padding={10}
+        <SimpleGrid
+          minChildWidth="300px"
+          spacing={5}
           lineHeight={1.25}
-          height="110vh"
+          paddingBottom={40}
         >
-    <SimpleGrid minChildWidth="300px" spacing={5} lineHeight={1.25} paddingBottom={40} >
-      <Box bg="#EDF2F7" borderRadius="10px" box-shadow="md"  padding={10}>
-        <Flex justifyContent="center">
-          <Image
-            borderRadius='full'
-            boxSize='400px'
-            src='https://bit.ly/dan-abramov'
-            alt='Dan Abramov'
-        />
-        </Flex>
-        <Flex justifyContent="center">
-        <Stack direction={['row']}spacing='100px'>
-              <Box ><Button colorScheme='yellow'>Update<br></br>Details</Button></Box>
-              <Box ><Button colorScheme='yellow'>Change<br></br>Password</Button></Box>
+          <Box bg="white" borderRadius="10px" box-shadow="md" padding={10}>
+            <Flex justifyContent="center">
+              <Image
+                borderRadius="full"
+                boxSize="300px"
+                mb={4}
+                src={userInfo.profile_picture}
+                alt={userInfo.name}
+              />
+            </Flex>
+            <Flex justifyContent="center">
+              <Stack direction={["row"]} spacing="100px">
+                <Box>
+                  <Button colorScheme="orange" variant="ghost">
+                    Update Details
+                  </Button>
+                </Box>
+                <Box>
+                  <Button colorScheme="gray" variant="ghost">
+                    Change Password
+                  </Button>
+                </Box>
               </Stack>
-              </Flex>
+            </Flex>
+          </Box>
+          <Box bg="white" borderRadius="10px" box-shadow="md" padding={8}>
+            <SimpleGrid columns={2} spacingY="20px">
+              <Text as="b" fontSize="lg">
+                Student Number
+              </Text>
+              <FormControl>
+                <FormLabel>{studentInfo.student_id}</FormLabel>
+              </FormControl>
 
-      </Box>
-      <Box bg="#EDF2F7" borderRadius="10px" box-shadow="md"  padding={10}>
-               <SimpleGrid columns={2} spacingX='40px' spacingY='20px' >
-                <Text as='b'>First Name</Text>
-                <FormControl id="firstName">
-                  <FormLabel>N/A</FormLabel>
-                </FormControl>
+              <Text as="b" fontSize="lg">
+                First Name
+              </Text>
+              <FormControl>
+                <FormLabel fontSize="lg">{userInfo.first_name}</FormLabel>
+              </FormControl>
 
-                <Text as='b'>Last Name</Text>
-                <FormControl id="lastname">
-                  <FormLabel>N/A</FormLabel>
-                </FormControl>
+              <Text as="b" fontSize="lg">
+                Middle Initial
+              </Text>
+              <FormControl>
+                <FormLabel fontSize="lg">
+                  {userInfo.middle_initial ? userInfo.middle_initial : "_"}
+                </FormLabel>
+              </FormControl>
 
-                <Text as='b'>Middle Name</Text>
-                <FormControl id="middlename">
-                  <FormLabel>N/A</FormLabel>
-                </FormControl>
+              <Text as="b" fontSize="lg">
+                Last Name
+              </Text>
+              <FormControl>
+                <FormLabel fontSize="lg">{userInfo.last_name}</FormLabel>
+              </FormControl>
 
-                <Text as='b'>Year Level</Text>
-                <FormControl id="yearlevel">
-                  <FormLabel>N/A</FormLabel>
-                </FormControl>
+              <Text as="b" fontSize="lg">
+                Year and Section
+              </Text>
+              <FormControl>
+                <FormLabel fontSize="lg">
+                  {studentInfo.year_level} {studentInfo.section}
+                </FormLabel>
+              </FormControl>
 
-                <Text as='b'>Section</Text>
-                <FormControl id="section">
-                  <FormLabel>N/A</FormLabel>
-                </FormControl>
+              <Text as="b" fontSize="lg">
+                Email Address
+              </Text>
+              <FormControl>
+                <FormLabel fontSize="lg">{userInfo.email}</FormLabel>
+              </FormControl>
 
-                <Text as='b'>Student Number</Text>
-                <FormControl id="studnum">
-                  <FormLabel>N/A</FormLabel>
-                </FormControl>
-
-                <Text as='b'>Email Adress</Text>
-                <FormControl id="emailadd">
-                  <FormLabel>N/A</FormLabel>
-                </FormControl>
-
-                <Text as='b'>Home Adress</Text>
-                <FormControl id="homeadd">
-                  <FormLabel>N/A</FormLabel>
-                </FormControl>
-               </SimpleGrid>
-               
-      </Box>
-      
-    </SimpleGrid>
-    
-    <hr></hr>
-      </Box>
-       </Stack>   
-    </StudentLayout> 
+              <Text as="b" fontSize="lg">
+                Home Address
+              </Text>
+              <FormControl>
+                <FormLabel fontSize="lg">N/A</FormLabel>
+              </FormControl>
+            </SimpleGrid>
+          </Box>
+        </SimpleGrid>
+      </Stack>
+    </StudentLayout>
   );
 };
 

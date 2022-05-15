@@ -8,8 +8,6 @@ import {
   Button,
   Image,
   Divider,
-  Avatar,
-  Heading,
   Icon,
   Modal,
   Tooltip,
@@ -20,7 +18,6 @@ import {
   ModalCloseButton,
   ModalFooter,
   useDisclosure,
-  useColorModeValue,
 } from "@chakra-ui/react";
 import { IoMenuSharp, IoLogOutSharp } from "react-icons/io5";
 import { BsFillQuestionCircleFill } from "react-icons/bs";
@@ -58,8 +55,8 @@ export default function Sidebar({ children, user, role }) {
         pos="fixed"
         h="100vh"
         boxShadow="3px 0 40px -10px rgba(0,0,0,0.75)"
-        w={navSize == "small" ? "10vh" : "30vh"}
-        borderRightRadius={navSize == "small" ? "10px" : "5px"}
+        w={navSize === "small" ? "10vh" : "30vh"}
+        borderRightRadius={navSize === "small" ? "10px" : "5px"}
         flexDir="column"
         bg={"gray.800"}
         color={"gray.50"}
@@ -70,7 +67,7 @@ export default function Sidebar({ children, user, role }) {
           p="5%"
           flexDir="column"
           w="100%"
-          alignItems={navSize == "small" ? "center" : "flex-start"}
+          alignItems={navSize === "small" ? "center" : "flex-start"}
           as="nav"
         >
           <Flex>
@@ -81,7 +78,7 @@ export default function Sidebar({ children, user, role }) {
               _hover={{ background: "none" }}
               icon={<IoMenuSharp />}
               onClick={() => {
-                if (navSize == "small") {
+                if (navSize === "small") {
                   changeNavSize("large");
                   changeSidebarWidth("30vh");
                 } else {
@@ -100,7 +97,7 @@ export default function Sidebar({ children, user, role }) {
                   maxH={6}
                   mt={6}
                   ml={1}
-                  display={navSize == "small" ? "none" : "flex"}
+                  display={navSize === "small" ? "none" : "flex"}
                 />
               </Link>
             </Tooltip>
@@ -108,7 +105,7 @@ export default function Sidebar({ children, user, role }) {
           <Divider
             mt={3}
             mb={2}
-            display={navSize == "small" ? "none" : "flex"}
+            display={navSize === "small" ? "none" : "flex"}
           />
 
           {/* children */}
@@ -126,23 +123,23 @@ export default function Sidebar({ children, user, role }) {
           p="5%"
           flexDir="column"
           w="100%"
-          alignItems={navSize == "small" ? "center" : "flex-start"}
+          alignItems={navSize === "small" ? "center" : "flex-start"}
           mb={2}
         >
-          <Divider display={navSize == "small" ? "none" : "flex"} />
+          <Divider display={navSize === "small" ? "none" : "flex"} />
           <Link to="../help-center/">
             <Flex mt={4} align="center">
               {/* <Avatar size="sm" src="avatar-1.jpg" /> */}
               <Icon
                 as={BsFillQuestionCircleFill}
                 fontSize="2xl"
-                ml={navSize == "small" ? 0 : 2}
+                ml={navSize === "small" ? 0 : 2}
                 color="gray.500"
               />
               <Flex
                 flexDir="column"
                 ml={4}
-                display={navSize == "small" ? "none" : "flex"}
+                display={navSize === "small" ? "none" : "flex"}
               >
                 {/* <Heading as="h3" size="sm">
                   {user.email}
