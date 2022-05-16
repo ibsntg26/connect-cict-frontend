@@ -1,5 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
 import { Link,useNavigate } from "react-router-dom";
+import { BsFillEyeFill, BsFillEyeSlashFill } from "react-icons/bs";
+import { Tooltip } from '@chakra-ui/react'
 
 import {
   Flex,
@@ -8,6 +10,8 @@ import {
   Stack,
   Text,
   FormControl,
+    InputGroup,
+  InputRightElement,
   FormLabel,
   Image,
   Input,
@@ -22,11 +26,12 @@ import useAxios from "../../utils/axios";
 
 
 
-const UpdateProfile = () => {
+const ChangePassword = () => {
   const { user } = useContext(AuthContext);
   const [userInfo, setUserInfo] = useState("");
   const [studentInfo, setStudentInfo] = useState("");
   const api = useAxios();
+  const [show, setShow] = useState(false);
 
   const getUserProfile = async () => {
     const response = await api.get(
@@ -73,73 +78,52 @@ const UpdateProfile = () => {
             </Flex>
           </Box>
           <Box bg="white" borderRadius="10px" box-shadow="md" padding={8}>
-            <SimpleGrid columns={2} spacingY="18px" >
+            <SimpleGrid columns={2} spacingY="18px" >           
               <Text as="b" fontSize="lg">
-                Student Number
+                Old Password
               </Text>
               <FormControl>
-                <FormLabel>{studentInfo.student_id}</FormLabel>
+              <Input size='sm' type="password" />
+                <FormLabel fontSize="lg">{userInfo.oldpassword}</FormLabel>
               </FormControl>
 
               <Text as="b" fontSize="lg">
-                First Name
+                New Password
               </Text>
               <FormControl>
-              <Input size='sm' type="firstname" />
-                <FormLabel fontSize="lg">{userInfo.first_name}</FormLabel>
-              </FormControl>
-
-              <Text as="b" fontSize="lg">
-                Middle Initial
-              </Text>
-              <FormControl>
-              <Input size='sm' name="middle_initial" />
+              <Input type={show ? "text" : "password"} />
                 <FormLabel fontSize="lg">
-                  {userInfo.middle_initial ? userInfo.middle_initial : ""}
+                  {userInfo.middle_initial ? userInfo.newpassword : ""}
                 </FormLabel>
               </FormControl>
 
               <Text as="b" fontSize="lg">
-                Last Name
+                Confirm New Password
               </Text>
               <FormControl>
-              <Input size='sm' name="lastname" />
-                <FormLabel fontSize="lg">{userInfo.last_name}</FormLabel>
+                  <Input type={show ? "text" : "password"} /> 
+                  <FormLabel fontSize="lg">
+                  {userInfo.middle_initial ? userInfo.confirmpassword : ""} <br></br> 
+                  <Flex justifyContent="right" >
+              <Button
+                      w='5rem'
+                      h='2rem'
+                      padding={2}
+                      onClick={() =>
+                        setShow((show) => !show)
+                      }
+                      
+                      _hover={{
+                          
+                        color: "gray.600",
+                      }}
+                    >
+                    {show ? 'Hide' : 'Show'}
+                    </Button>
+                    </Flex>
+                    </FormLabel>
               </FormControl>
-
-              <Text as="b" fontSize="lg">
-                Year and Section
-              </Text>
-              <FormControl>
-              <SimpleGrid columns={2} spacingX="1px">
-                  <Select width={"7vw"} height="3.5vh">
-                      <option value='1st'>1st</option>
-                      <option value='2nd'>2nd</option>
-                      <option value='3rd'>3rd</option>
-                      <option value='4th'>4th</option>
-                  </Select>
-                <Input size='sm' name="year_and_sec" /> 
-                </SimpleGrid>
-                <FormLabel fontSize="lg">
-                  {studentInfo.year_level ? (studentInfo.year_level).charAt(0) : studentInfo.year_level}{studentInfo.section}
-                </FormLabel>
-              </FormControl>
-
-              <Text as="b" fontSize="lg">
-                Email Address
-              </Text>
-              <FormControl>
-              <Input size='sm' name="emailadd" />
-                <FormLabel fontSize="lg">{userInfo.email}</FormLabel>
-              </FormControl>
-
-              <Text as="b" fontSize="lg">
-                Home Address
-              </Text>
-              <FormControl>
-              <Input size='sm' name="homeaddress" />
-                <FormLabel fontSize="lg">{userInfo.homeaddress}</FormLabel>
-              </FormControl>
+            
             </SimpleGrid>
           </Box>
         </SimpleGrid>
@@ -148,4 +132,4 @@ const UpdateProfile = () => {
   </UserLayout>);
 };
 
-export default UpdateProfile;
+export default ChangePassword;

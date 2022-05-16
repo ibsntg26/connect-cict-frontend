@@ -21,7 +21,7 @@ function App() {
     <AuthProvider>
       <LayoutProvider>
         <Routes>
-          <Route path="/" element={<Landing />} />
+          <Route path="/" element={<Signin />} />
           <Route path="/signin" element={<Signin />} />
           <Route path="/signup" element={<Signup />} />
 
@@ -60,6 +60,25 @@ function App() {
             element={
               <ProtectedRoute>
                 <RedirectRoute page="profile" />
+              </ProtectedRoute>
+            }
+          />
+
+             <Route
+            path="/updateprofile"
+            element={
+              <ProtectedRoute>
+                <RedirectRoute page="updateprofile" />
+              </ProtectedRoute>
+            }
+          />
+
+          
+            <Route
+            path="/changepassword"
+            element={
+              <ProtectedRoute>
+                <RedirectRoute page="changepassword" />
               </ProtectedRoute>
             }
           />

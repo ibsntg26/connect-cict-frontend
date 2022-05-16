@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link,useNavigate } from "react-router-dom";
 
 import {
   Flex,
@@ -48,6 +48,8 @@ const Profile = () => {
       });
   }, []);
 
+
+  const navigate = useNavigate();
   return (
     <UserLayout>
       <Stack m={5} spacing={5}>
@@ -70,12 +72,12 @@ const Profile = () => {
             <Flex justifyContent="center">
               <Stack direction={["row"]} spacing="100px">
                 <Box>
-                  <Button colorScheme="orange" variant="ghost">
+                  <Button onClick={() => navigate("/updateprofile")} colorScheme="orange" variant="ghost">
                     Update Details
                   </Button>
                 </Box>
                 <Box>
-                  <Button colorScheme="orange" variant="ghost">
+                  <Button onClick={() => navigate("/changepassword")} colorScheme="orange" variant="ghost">
                     Change Password
                   </Button>
                 </Box>
@@ -83,7 +85,7 @@ const Profile = () => {
             </Flex>
           </Box>
           <Box bg="white" borderRadius="10px" box-shadow="md" padding={8}>
-            <SimpleGrid columns={2} spacingY="20px">
+            <SimpleGrid columns={2} spacingY="31px">
               <Text as="b" fontSize="lg">
                 Student Number
               </Text>

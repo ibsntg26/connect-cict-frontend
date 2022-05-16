@@ -6,6 +6,8 @@ import Notifications from "../pages/student/Notifications";
 import Profile from "../pages/student/Profile";
 import Tickets from "../pages/student/Tickets";
 import Ticket from "../pages/student/Ticket";
+import UpdateProfile from "../pages/student/UpdateProfile";
+import ChangePassword from "../pages/student/ChangePassword";
 
 // const RedirectRoute = ({page}) => {
 //   const { role } = useContext(AuthContext);
@@ -29,6 +31,10 @@ export default function RedirectRoute({ page }) {
       return role === "student" ? <Tickets /> : null;
     case "ticket":
       return role === "student" ? <Ticket /> : null;
+    case "updateprofile":
+      return role === "student" ? <UpdateProfile /> : null;
+    case "changepassword":
+      return role === "student" ? <ChangePassword /> : null;
     default:
       return null;
   }
