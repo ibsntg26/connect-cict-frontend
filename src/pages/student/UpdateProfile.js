@@ -1,13 +1,13 @@
 import React from "react";
 
-import StudentLayout from "../../components/student/StudentLayout";
+import UserLayout from "../../components/UserLayout";
 
 const UpdateProfile = () => {
   useEffect(() => {
     document.title = "CONNECT | Update Profile";
   }, []);
 
-  return <StudentLayout>UpdateProfile</StudentLayout>;
+  return <UserLayout>UpdateProfile</UserLayout>;
 };
 
 export default UpdateProfile;

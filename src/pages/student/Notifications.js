@@ -24,16 +24,16 @@ import {
   useColorModeValue,
 } from "@chakra-ui/react";
 
-import StudentLayout from "../../components/student/StudentLayout";
+import UserLayout from "../../components/UserLayout";
 
 import AuthContext from "../../context/auth-context";
 import useAxios from "../../utils/axios";
 
 const Notifications = () => {
   return (
-    <StudentLayout>
+    <UserLayout>
         Notifications
-    </StudentLayout>
+    </UserLayout>
   )
 }
 

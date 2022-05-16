@@ -24,7 +24,7 @@ import {
   useToast,
 } from "@chakra-ui/react";
 
-import StudentLayout from "../../components/student/StudentLayout";
+import UserLayout from "../../components/UserLayout";
 
 import AuthContext from "../../context/auth-context";
 import useAxios from "../../utils/axios";
@@ -147,7 +147,7 @@ const NewTicket = () => {
   };
 
   return (
-    <StudentLayout>
+    <UserLayout>
       {canReport === true ? (
         <Stack m={5} spacing={5}>
           <Center>
@@ -253,7 +253,7 @@ const NewTicket = () => {
           </Heading>
         </Stack>
       )}
-    </StudentLayout>
+    </UserLayout>
   );
 };
 

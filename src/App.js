@@ -12,9 +12,9 @@ import Signup from "./pages/Signup";
 import Demo from "./pages/Demo";
 
 import NewTicket from "./pages/student/NewTicket";
+import HelpCenter from "./pages/student/HelpCenter";
 
 import TicketSample from "./pages/student/TicketSample";
-import HelpCenter from "./pages/student/HelpCenter";
 
 function App() {
   return (
@@ -35,6 +35,7 @@ function App() {
               </ProtectedRoute>
             }
           />
+
 
           <Route
             path="/dashboard"
@@ -91,7 +92,7 @@ function App() {
           />
 
           <Route
-            path="/helpcenter"
+            path="/help-center"
             element={
               <ProtectedRoute>
                 <HelpCenter />

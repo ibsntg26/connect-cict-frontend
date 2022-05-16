@@ -7,12 +7,12 @@ import {
   IoPersonSharp,
 } from "react-icons/io5";
 
-import LayoutContext from "../../context/layout-context";
+import LayoutContext from "../context/layout-context";
 
-import Sidebar from "../Sidebar";
-import NavItem from "../NavItem";
+import Sidebar from "./Sidebar";
+import NavItem from "./NavItem";
 
-export default function StudentSidebar({ children }) {
+export default function UserSidebar({ children }) {
   const {navSize, sidebarWidth, changeNavSize, changeSidebarWidth} =
     useContext(LayoutContext);
 

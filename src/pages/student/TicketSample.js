@@ -1,12 +1,12 @@
 import React, { useContext, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 
-import StudentLayout from "../../components/student/StudentLayout";
+import UserLayout from "../../components/UserLayout";
 
 const TicketSample = () => {
-  return <StudentLayout>
+  return <UserLayout>
     I love L
-  </StudentLayout>;
+  </UserLayout>;
 };
 
 export default TicketSample;

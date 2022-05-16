@@ -27,8 +27,7 @@ import {
   useColorModeValue,
 } from "@chakra-ui/react";
 
-import StudentLayout from "../../components/student/StudentLayout";
-
+import UserLayout from "../../components/UserLayout";
 import AuthContext from "../../context/auth-context";
 import useAxios from "../../utils/axios";
 
@@ -75,7 +74,7 @@ const Dashboard = () => {
   }, []);
 
   return (
-    <StudentLayout>
+    <UserLayout>
       <Stack m={5} spacing={5}>
         <Center bg="white" height="15vh" borderRadius="10px" box-shadow="md">
           <Heading fontSize="4xl">Hello, {user.name}</Heading>
@@ -201,7 +200,7 @@ const Dashboard = () => {
        Lorem, ipsum dolor sit amet consectetur adipisicing elit. Corporis, hic corrupti aliquid eveniet quas quaerat, assumenda laboriosam, quae obcaecati velit maxime. Ipsa quidem optio aliquid nobis dolorum, amet laborum libero!
        Lorem ipsum dolor, sit amet consectetur adipisicing elit. Omnis sunt voluptatum accusamus maxime illum eum et repellendus earum, deserunt explicabo recusandae quam commodi perspiciatis officiis consequatur esse, temporibus odio amet?
      </Heading>  */}
-    </StudentLayout>
+    </UserLayout>
   );
 };
 

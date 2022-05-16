@@ -13,7 +13,7 @@ import {
   Button
 } from "@chakra-ui/react";
 
-import StudentLayout from "../../components/student/StudentLayout";
+import UserLayout from "../../components/UserLayout";
 
 import AuthContext from "../../context/auth-context";
 import useAxios from "../../utils/axios";
@@ -49,7 +49,7 @@ const Profile = () => {
   }, []);
 
   return (
-    <StudentLayout>
+    <UserLayout>
       <Stack m={5} spacing={5}>
         <SimpleGrid
           minChildWidth="300px"
@@ -75,7 +75,7 @@ const Profile = () => {
                   </Button>
                 </Box>
                 <Box>
-                  <Button colorScheme="gray" variant="ghost">
+                  <Button colorScheme="orange" variant="ghost">
                     Change Password
                   </Button>
                 </Box>
@@ -119,7 +119,7 @@ const Profile = () => {
               </Text>
               <FormControl>
                 <FormLabel fontSize="lg">
-                  {studentInfo.year_level} {studentInfo.section}
+                  {studentInfo.year_level ? (studentInfo.year_level).charAt(0) : studentInfo.year_level}{studentInfo.section}
                 </FormLabel>
               </FormControl>
 
@@ -140,7 +140,7 @@ const Profile = () => {
           </Box>
         </SimpleGrid>
       </Stack>
-    </StudentLayout>
+    </UserLayout>
   );
 };
 

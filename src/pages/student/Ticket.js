@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 
-import StudentLayout from "../../components/student/StudentLayout";
+import UserLayout from "../../components/UserLayout";
 
 import AuthContext from "../../context/auth-context";
 import useAxios from "../../utils/axios";
@@ -37,11 +37,11 @@ const Ticket = () => {
       // insert get followups
   }, []);
 
-  return <StudentLayout>
+  return <UserLayout>
     {ticketInfo.id}
     {ticketType}
     {ticketInfo.message}
-  </StudentLayout>;
+  </UserLayout>;
 };
 
 export default Ticket;
