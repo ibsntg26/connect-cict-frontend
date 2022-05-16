@@ -24,7 +24,6 @@ import {
   Td,
   TableCaption,
   TableContainer,
-  useColorModeValue,
 } from "@chakra-ui/react";
 
 import UserLayout from "../../components/UserLayout";
@@ -90,7 +89,7 @@ const Dashboard = () => {
                     <Text
                       fontSize="sm"
                       color="orange.400"
-                      _hover={{ color: "orange.300" }}
+                      _hover={{ color: "orange.500" }}
                     >
                       see full report
                     </Text>

@@ -18,7 +18,6 @@ import {
   Text,
   Alert,
   AlertIcon,
-  useColorModeValue,
 } from "@chakra-ui/react";
 
 import AuthContext from "../context/auth-context";
@@ -42,20 +41,8 @@ const Signin = () => {
   });
 
   return (
-    <Flex
-      minH="100vh"
-      align="center"
-      justify="center"
-      bg={useColorModeValue("gray.50", "gray.800")}
-    >
-      <Stack
-        spacing={6}
-        mx="auto"
-        maxW="lg"
-        color="gray.700"
-        py={12}
-        px={6}
-      >
+    <Flex minH="100vh" align="center" justify="center" bg="gray.100">
+      <Stack spacing={6} mx="auto" maxW="lg" py={12} px={6}>
         {/* Header */}
         <Stack align="center">
           <Image src={siteLogoMD} maxW="200px" mb={2} />
@@ -67,7 +54,7 @@ const Signin = () => {
         {/* Form */}
         <Box
           rounded="lg"
-          bg={useColorModeValue("white", "gray.700")}
+          bg="white"
           boxShadow="lg"
           width={{ base: 350, md: 400 }}
           p={8}
@@ -96,10 +83,9 @@ const Signin = () => {
                   <Input type={show ? "text" : "password"} />
                   <InputRightElement width="3rem">
                     <Button
-                      onClick={() =>
-                        setShow((show) => !show)
-                      }
+                      onClick={() => setShow((show) => !show)}
                       variant="ghost"
+                      color="gray.700"
                       _hover={{
                         color: "gray.600",
                       }}
@@ -116,23 +102,21 @@ const Signin = () => {
                   justify={"space-between"}
                 >
                   <Checkbox colorScheme="orange">Remember me</Checkbox>
-                  <Link color={"orange.400"}>Forgot password?</Link>
+                  <Link
+                  >
+                    Forgot password?
+                  </Link>
                 </Stack>
-                <Button
-                  bg={"orange.400"}
-                  color={"white"}
-                  _hover={{
-                    bg: "orange.500",
-                  }}
-                  type={"submit"}
-                >
-                  Sign in
-                </Button>
+                <Button>Sign in</Button>
               </Stack>
             </form>
             <Text as="span" textAlign="center" pt={2}>
               Don't have an account?
-              <Link as={ReactLink} to="/signup" color={"orange.400"} ps={1}>
+              <Link
+                as={ReactLink}
+                to="/signup"
+                ps={1}
+              >
                 Sign up
               </Link>
             </Text>

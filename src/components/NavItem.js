@@ -27,7 +27,7 @@ export default function NavItem({ icon, title, click, link, active, navSize }) {
           borderRadius={8}
           _hover={{
             textDecor: "none",
-            backgroundColor: "gray.200",
+            backgroundColor: "gray.300",
             color: "gray.800",
           }}
           w={navSize == "large" && "100%"}
@@ -40,7 +40,7 @@ export default function NavItem({ icon, title, click, link, active, navSize }) {
                 // xl
                 color={active ? "gray.800" : "gray.500"}
               />
-              <Text ml={5} display={navSize == "small" ? "none" : "flex"}>
+              <Text ml={5} color="white" display={navSize == "small" ? "none" : "flex"}>
                 {title}
               </Text>
             </Flex>

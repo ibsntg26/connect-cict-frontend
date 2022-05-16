@@ -2,6 +2,8 @@ import React, { useContext, useEffect, useState } from "react";
 import dayjs from "dayjs";
 import { Link } from "react-router-dom";
 
+import { BsForwardFill, BsCheckLg } from "react-icons/bs";
+
 import {
   Flex,
   Button,
@@ -22,6 +24,8 @@ import {
   TabList,
   TabPanels,
   TabPanel,
+  Tooltip,
+  Divider,
   Thead,
   Tbody,
   Tr,
@@ -35,6 +39,7 @@ import {
 } from "@chakra-ui/react";
 
 import UserLayout from "../../components/UserLayout";
+import TicketItem from "../../components/TicketItem";
 
 import AuthContext from "../../context/auth-context";
 import useAxios from "../../utils/axios";
@@ -66,27 +71,31 @@ const Tickets = () => {
 
   return (
     <UserLayout>
-      <Grid minH="95vh" p={3}>
-        <HStack w="full" spacing={2} bg="yellow.50" align="flex-start">
-          <VStack align="flex-start" h="full">
-            <Box w={325} h="full" bg="green.200" padding={4}>
-              <Button colorScheme="teal" size="md" w="full">
-                Open new ticket
-              </Button>
+      <Grid maxH="95vh" p={3}>
+        <HStack w="full" spacing={2} align="flex-start">
+          <VStack align="flex-start" h="full" borderRight="2px solid #ddd">
+            <Box w={325} h="full" py={4}>
+              {/* w={325} or {40vh} */}
+              <Box px={4}>
+                <Link to="/tickets/new">
+                  <Button colorScheme="orange" size="md" w="full">
+                    Open new ticket
+                  </Button>
+                </Link>
+              </Box>
               <Box mt={5}>
-                <Tabs isFitted variant="enclosed">
+                <Tabs isFitted variant="enclosed" colorScheme="orange">
                   <TabList mb="1em">
                     <Tab>All Tickets</Tab>
                     <Tab>My Tickets</Tab>
                   </TabList>
                   <TabPanels>
-                    <TabPanel>
-                      <Box>
-                        sksksksk
-                      </Box>
+                    <TabPanel px={0} py={0}>
+                      <TicketItem id="1" label="sample sample" />
+                      {/* <p>All tixx</p> */}
                     </TabPanel>
                     <TabPanel>
-                      <p>two!</p>
+                      <p>My tixx</p>
                     </TabPanel>
                   </TabPanels>
                 </Tabs>
@@ -94,7 +103,84 @@ const Tickets = () => {
             </Box>
           </VStack>
           <VStack w="full" h="full">
-            <Box h="full" w="full" bg="red.500" />
+            <Box h="full" w="full">
+              <Box w="full" p={8}>
+                <Flex justifyContent="space-between">
+                  <Heading fontSize="2xl">Ticket #</Heading>
+                  <Box>
+                    <Tooltip hasArrow label="Forward to local registrar">
+                      <Button
+                        size="sm"
+                        fontSize="2xl"
+                        variant="ghost"
+                        color="gray.800"
+                        _hover={{
+                          color: "gray.600",
+                        }}
+                      >
+                        <BsForwardFill />
+                      </Button>
+                    </Tooltip>
+                    <Tooltip hasArrow label="Close report">
+                      <Button
+                        size="sm"
+                        fontSize="xl"
+                        variant="ghost"
+                        color="gray.800"
+                        _hover={{
+                          color: "gray.600",
+                        }}
+                      >
+                        <BsCheckLg />
+                      </Button>
+                    </Tooltip>
+                  </Box>
+                </Flex>
+                <SimpleGrid columns={3} gap={5} mt={5}>
+                  <Box>
+                    <Text fontSize="sm">Student</Text>
+                    <Text as="b" fontSize="large">
+                      John Doe
+                    </Text>
+                  </Box>
+                  <Box>
+                    <Text fontSize="sm">Evaluator</Text>
+                    <Text as="b" fontSize="large">
+                      Jane Doe
+                    </Text>
+                  </Box>
+                  <Box>
+                    <Text fontSize="sm">Date opened</Text>
+                    <Text as="b" fontSize="large">
+                      May 16, 2022
+                    </Text>
+                  </Box>
+                  <Box>
+                    <Text fontSize="sm">Status</Text>
+                    <Text>
+                      <Tag size="lg" colorScheme="orange" borderRadius="full">
+                        <TagLabel textTransform="capitalize">Open</TagLabel>
+                      </Tag>
+                    </Text>
+                  </Box>
+                  <Box>Tag</Box>
+                </SimpleGrid>
+
+                <Box w="full" mt={5}>
+                  <Text fontSize="sm">Description</Text>
+                  <Text fontWeight={600}>
+                    Lorem ipsum, dolor sit amet consectetur adipisicing elit.
+                    Dignissimos ad repellat illum quo nisi tempora molestias.
+                    Vero at quidem voluptas voluptates! Facere, a nesciunt!
+                    Cupiditate totam hic vero id rem!
+                  </Text>
+                </Box>
+                <Divider mt={8} />
+                <Box h="full" w="full" mt={4}>
+                  Message goes here
+                </Box>
+              </Box>
+            </Box>
           </VStack>
         </HStack>
       </Grid>

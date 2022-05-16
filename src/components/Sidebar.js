@@ -27,8 +27,13 @@ import AuthContext from "../context/auth-context";
 import LayoutContext from "../context/layout-context";
 
 export default function Sidebar({ children, user, role }) {
-  const { siteLogoXS ,navSize, sidebarWidth, changeNavSize, changeSidebarWidth } =
-    useContext(LayoutContext);
+  const {
+    siteLogoXS,
+    navSize,
+    sidebarWidth,
+    changeNavSize,
+    changeSidebarWidth,
+  } = useContext(LayoutContext);
   const { isOpen, onOpen, onClose } = useDisclosure();
   const { logoutUser } = useContext(AuthContext);
 
@@ -88,8 +93,9 @@ export default function Sidebar({ children, user, role }) {
               }}
             />
             <Tooltip
+              hasArrow
               label="CONNECT: CICT Registrar Help Center"
-              placement="auto-start"
+              placement="right"
             >
               <Link to="/dashboard">
                 <Image
@@ -141,11 +147,7 @@ export default function Sidebar({ children, user, role }) {
                 ml={4}
                 display={navSize === "small" ? "none" : "flex"}
               >
-                {/* <Heading as="h3" size="sm">
-                  {user.email}
-                </Heading>
-                <Text color="gray">{role}</Text> */}
-                <Text as="b">Help Center</Text>
+                <Text as="b" color="white">Help Center</Text>
               </Flex>
             </Flex>
           </Link>

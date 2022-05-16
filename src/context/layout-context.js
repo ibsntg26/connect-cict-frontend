@@ -5,8 +5,8 @@ export default LayoutContext;
 export const LayoutProvider = ({ children }) => {
   const [siteLogoMD, setSiteLogoMD] = useState("");
   const [siteLogoXS, setSiteLogoXS] = useState("");
-  const [sidebarWidth, changeSidebarWidth] = useState("30vh");
-  const [navSize, changeNavSize] = useState("large");
+  const [sidebarWidth, changeSidebarWidth] = useState("10vh");
+  const [navSize, changeNavSize] = useState("small");
   const axios = require('axios');
 
   useEffect(() => {

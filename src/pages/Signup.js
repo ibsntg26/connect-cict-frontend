@@ -19,7 +19,6 @@ import {
   Switch,
   Alert,
   AlertIcon,
-  useColorModeValue,
   useToast,
 } from "@chakra-ui/react";
 
@@ -139,12 +138,7 @@ const Signup = () => {
   };
 
   return (
-    <Flex
-      minH="100vh"
-      align="center"
-      justify="center"
-      bg={useColorModeValue("gray.50", "gray.800")}
-    >
+    <Flex minH="100vh" align="center" justify="center" bg="gray.100">
       <Stack spacing={6} mx="auto" maxW="lg" color="gray.700" py={12} px={6}>
         {/* Header */}
         <Stack align="center">
@@ -155,12 +149,7 @@ const Signup = () => {
         </Stack>
 
         {/* Form */}
-        <Box
-          rounded="lg"
-          bg={useColorModeValue("white", "gray.700")}
-          boxShadow="lg"
-          p={8}
-        >
+        <Box rounded="lg" bg="white" boxShadow="lg" p={8}>
           {/* {error && (
             <Alert
               status="error"
@@ -274,11 +263,6 @@ const Signup = () => {
 
               <Stack spacing={10}>
                 <Button
-                  bg={"orange.400"}
-                  color={"white"}
-                  _hover={{
-                    bg: "orange.500",
-                  }}
                   type={"submit"}
                   isLoading={isSubmitting}
                 >
@@ -289,7 +273,11 @@ const Signup = () => {
 
             <Text as="span" textAlign="center" pt={2}>
               Already have an account?
-              <Link as={ReactLink} to="/signin" color={"orange.400"} px={1}>
+              <Link
+                as={ReactLink}
+                to="/signin"
+                px={1}
+              >
                 Sign in
               </Link>
               instead.

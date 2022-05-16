@@ -30,7 +30,7 @@ const HelpCenter = () => {
         <Box>
           <Center bg="orange.400" h="200" color="white">
             <Stack spacing={4}>
-              <FormLabel fontSize="30px" ml="15">
+              <FormLabel fontSize="30px" ml="15" color="white">
                 What can we help you?{" "}
               </FormLabel>
               <InputGroup>
