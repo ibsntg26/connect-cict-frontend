@@ -1,17 +1,26 @@
 import React from "react";
+import dayjs from "dayjs";
 import { useNavigate } from "react-router-dom";
 import {
   Flex,
-  Box,
   Text,
   Avatar,
   Link,
   Menu,
   MenuButton,
-  VStack,
+  Tag,
+  TagLabel,
 } from "@chakra-ui/react";
 
-export default function TicketItem({ id, click, label, pic, name }) {
+export default function StudentTicket({
+  id,
+  click,
+  label,
+  pic,
+  name,
+  date,
+  status,
+}) {
   const navigate = useNavigate();
 
   return (
@@ -23,7 +32,8 @@ export default function TicketItem({ id, click, label, pic, name }) {
       onClick={
         id
           ? () => {
-              navigate(id);
+            window.location.href.indexOf("tickets")>-1 ? navigate(`/t%C3%ADckets/${id}`) : navigate(`/tickets/${id}`)
+              // window.location.replace(`/tickets/${id}`);
             }
           : click
       }
@@ -42,12 +52,20 @@ export default function TicketItem({ id, click, label, pic, name }) {
           <MenuButton w="100%">
             <Flex>
               <Flex align="center" justify="center" me={3}>
-                <Avatar name="Dan Abrahmov" src="https://bit.ly/dan-abramov" />
+                <Avatar name={name} src={pic} />
               </Flex>
-              <Flex direction="column">
-                <Text>{label}</Text>
-                <Text>{label}</Text>
-                <Text>{label}</Text>
+              <Flex direction="column" textAlign="start">
+                <Text as="b" noOfLines={1}>
+                  #{id} - {label}
+                </Text>
+                <Text as="i" fontSize="small" mb={1}>
+                  Reported on {dayjs(date).format("MMMM D, YYYY")}
+                </Text>
+                <Text>
+                  <Tag colorScheme="orange" borderRadius="full">
+                    <TagLabel textTransform="capitalize">{status}</TagLabel>
+                  </Tag>
+                </Text>
               </Flex>
             </Flex>
           </MenuButton>

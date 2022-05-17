@@ -107,7 +107,7 @@ const Signin = () => {
                     Forgot password?
                   </Link>
                 </Stack>
-                <Button>Sign in</Button>
+                <Button type="submit">Sign in</Button>
               </Stack>
             </form>
             <Text as="span" textAlign="center" pt={2}>

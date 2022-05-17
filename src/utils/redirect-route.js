@@ -6,6 +6,7 @@ import Notifications from "../pages/student/Notifications";
 import Profile from "../pages/student/Profile";
 import Tickets from "../pages/student/Tickets";
 import Ticket from "../pages/student/Ticket";
+import TicketAlt from "../pages/student/Ticket-alt";
 import UpdateProfile from "../pages/student/UpdateProfile";
 import ChangePassword from "../pages/student/ChangePassword";
 
@@ -31,6 +32,8 @@ export default function RedirectRoute({ page }) {
       return role === "student" ? <Tickets /> : null;
     case "ticket":
       return role === "student" ? <Ticket /> : null;
+    case "ticket-alt":
+      return role === "student" ? <TicketAlt /> : null;
     case "updateprofile":
       return role === "student" ? <UpdateProfile /> : null;
     case "changepassword":

@@ -247,10 +247,10 @@ const NewTicket = () => {
         </Stack>
       ) : (
         <Stack m={5} spacing={5}>
-          <Heading fontSize="2xl">
-            You currently have 1 ongoing ticket. Please wait for the resolution
+          <Text fontWeight={600} textAlign="center" fontSize="xl" color="gray.500" w="full">
+            You currently have 1 ongoing ticket.<br /> Please wait for the resolution
             before submitting a new one.
-          </Heading>
+          </Text>
         </Stack>
       )}
     </UserLayout>

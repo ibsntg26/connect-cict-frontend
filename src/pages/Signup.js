@@ -263,7 +263,7 @@ const Signup = () => {
 
               <Stack spacing={10}>
                 <Button
-                  type={"submit"}
+                  type="submit"
                   isLoading={isSubmitting}
                 >
                   Sign up

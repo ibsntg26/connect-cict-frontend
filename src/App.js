@@ -14,8 +14,6 @@ import Demo from "./pages/Demo";
 import NewTicket from "./pages/student/NewTicket";
 import HelpCenter from "./pages/student/HelpCenter";
 
-import TicketSample from "./pages/student/TicketSample";
-
 function App() {
   return (
     <AuthProvider>
@@ -26,16 +24,6 @@ function App() {
           <Route path="/signup" element={<Signup />} />
 
           <Route path="/demo" element={<Demo />} />
-
-          <Route
-            path="/ticketsample"
-            element={
-              <ProtectedRoute>
-                <TicketSample />
-              </ProtectedRoute>
-            }
-          />
-
 
           <Route
             path="/dashboard"
@@ -64,7 +52,7 @@ function App() {
             }
           />
 
-             <Route
+          <Route
             path="/updateprofile"
             element={
               <ProtectedRoute>
@@ -73,8 +61,7 @@ function App() {
             }
           />
 
-          
-            <Route
+          <Route
             path="/changepassword"
             element={
               <ProtectedRoute>
@@ -97,6 +84,16 @@ function App() {
             element={
               <ProtectedRoute>
                 <RedirectRoute page="ticket" />
+              </ProtectedRoute>
+            }
+          />
+
+          {/* magic */}
+          <Route
+            path="/t%C3%ADckets/:ticketId"
+            element={
+              <ProtectedRoute>
+                <RedirectRoute page="ticket-alt" />
               </ProtectedRoute>
             }
           />
