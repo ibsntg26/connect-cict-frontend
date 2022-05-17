@@ -59,11 +59,11 @@ const Profile = () => {
           lineHeight={1.25}
           paddingBottom={40}
         >
-          <Box bg="white" borderRadius="10px" box-shadow="md" padding={10}>
+          <Box bg="white" h="50vh" borderRadius="10px" box-shadow="md" padding={10}>
             <Flex justifyContent="center">
               <Image
                 borderRadius="full"
-                boxSize="300px"
+                boxSize="200px"
                 mb={4}
                 src={userInfo.profile_picture}
                 alt={userInfo.name}
@@ -85,7 +85,7 @@ const Profile = () => {
             </Flex>
           </Box>
           <Box bg="white" borderRadius="10px" box-shadow="md" padding={8}>
-            <SimpleGrid columns={2} spacingY="31px">
+            <SimpleGrid column={2} spacingY="20px">
               <Text as="b" fontSize="lg">
                 Student Number
               </Text>
