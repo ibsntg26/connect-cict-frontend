@@ -197,10 +197,10 @@ const NewTicket = () => {
                     <FormControl isRequired>
                       <FormLabel>{detailsLabel}</FormLabel>
                       <Textarea
-                        placeholder="Please describe your concern in no more than 200 characters."
+                        placeholder="Please describe your concern in no more than 500 characters."
                         onChange={changeHandler}
                         name="message"
-                        maxLength={200}
+                        maxLength={500}
                         rows={10}
                       ></Textarea>
                     </FormControl>

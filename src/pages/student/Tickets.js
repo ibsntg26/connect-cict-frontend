@@ -23,7 +23,7 @@ import StudentTicketsLayout from "../../components/student/TicketsLayout";
 const Tickets = () => {
   return (
     <StudentTicketsLayout>
-      <Text fontWeight={600} fontSize="lg" color="gray.500">Select a ticket to view.</Text>
+      <Text fontWeight={600} fontSize="lg" color="gray.400" marginTop={5}>Select a ticket to view.</Text>
     </StudentTicketsLayout>
   );
 };

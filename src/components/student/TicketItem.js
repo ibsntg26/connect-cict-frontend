@@ -8,8 +8,7 @@ import {
   Link,
   Menu,
   MenuButton,
-  Tag,
-  TagLabel,
+  Badge
 } from "@chakra-ui/react";
 
 export default function StudentTicket({
@@ -29,6 +28,8 @@ export default function StudentTicket({
       flexDir="column"
       w="100%"
       alignItems="flex-start"
+      backgroundColor={window.location.href.indexOf(id)>-1 && "gray.200"}
+      borderRadius="10px"
       onClick={
         id
           ? () => {
@@ -46,6 +47,7 @@ export default function StudentTicket({
             textDecor: "none",
             backgroundColor: "gray.200",
             color: "gray.800",
+            borderRadius: "10px",
           }}
           w={"100%"}
         >
@@ -62,9 +64,7 @@ export default function StudentTicket({
                   Reported on {dayjs(date).format("MMMM D, YYYY")}
                 </Text>
                 <Text>
-                  <Tag colorScheme="orange" borderRadius="full">
-                    <TagLabel textTransform="capitalize">{status}</TagLabel>
-                  </Tag>
+                  <Badge colorScheme={status === 'closed' ? 'red' : 'green' }>{status}</Badge>
                 </Text>
               </Flex>
             </Flex>

@@ -67,7 +67,7 @@ export default function StudentTicketsLayout({ children }) {
   return (
     <UserLayout>
       <Grid maxH="95vh" p={3}>
-        <HStack w="full" spacing={2} align="flex-start">
+        <HStack w="full" spacing={0} align="flex-start">
           <VStack align="flex-start" h="full" borderRight="2px solid #ddd">
             <Box w={325} h="full" py={4}>
               <Box px={4} mb={2}>
@@ -81,7 +81,7 @@ export default function StudentTicketsLayout({ children }) {
               </Box>
               <Heading size="lg" mb={2}>Tickets</Heading>
               <Divider borderBottom="2px solid #ddd" />
-              <Box mt={5}>
+              <Box mt={5} me={5}>
                 {/* {tickets.length > 0 ? (
                   tickets.map((ticket) => (
                     <StudentTicket
@@ -114,7 +114,7 @@ export default function StudentTicketsLayout({ children }) {
               </Box>
             </Box>
           </VStack>
-          <VStack w="full" h="full">
+          <VStack w="full" h="full" bg="gray.100">
             {children}
           </VStack>
         </HStack>

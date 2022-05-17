@@ -10,6 +10,7 @@ import Signin from "./pages/Signin";
 import Signup from "./pages/Signup";
 
 import Demo from "./pages/Demo";
+import AdminDashboard from "./pages/admin/Dashboard";
 
 import NewTicket from "./pages/student/NewTicket";
 import HelpCenter from "./pages/student/HelpCenter";
@@ -24,6 +25,8 @@ function App() {
           <Route path="/signup" element={<Signup />} />
 
           <Route path="/demo" element={<Demo />} />
+          <Route path="/admin-dashboard" element={<AdminDashboard />} />
+
 
           <Route
             path="/dashboard"

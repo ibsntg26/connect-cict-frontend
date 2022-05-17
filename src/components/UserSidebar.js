@@ -13,8 +13,7 @@ import Sidebar from "./Sidebar";
 import NavItem from "./NavItem";
 
 export default function UserSidebar({ children }) {
-  const {navSize, sidebarWidth, changeNavSize, changeSidebarWidth} =
-    useContext(LayoutContext);
+  const { navSize } = useContext(LayoutContext);
 
   return (
     <Sidebar>
