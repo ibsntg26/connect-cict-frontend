@@ -17,7 +17,8 @@ export default function StudentTicket({
   label,
   pic,
   name,
-  date,
+  date_created,
+  date_updated,
   status,
 }) {
   const navigate = useNavigate();
@@ -61,7 +62,7 @@ export default function StudentTicket({
                   #{id} - {label}
                 </Text>
                 <Text as="i" fontSize="small" mb={1}>
-                  Reported on {dayjs(date).format("MMMM D, YYYY")}
+                  {dayjs(date_created).diff(dayjs(date_updated)) === 0 ? `Reported on ${dayjs(date_created).format("MMMM D, YYYY")}` : `Updated on ${dayjs(date_updated).format("MMMM D, YYYY")}`}
                 </Text>
                 <Text>
                   <Badge colorScheme={status === 'closed' ? 'red' : 'green' }>{status}</Badge>

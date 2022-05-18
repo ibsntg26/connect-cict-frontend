@@ -45,7 +45,7 @@ export default function StudentTicketsLayout({ children }) {
         // console.log(res);
       })
       .catch((e) => {
-        alert(e.message);
+        console.log(e.message);
       });
 
       const getCanReportPerm = async () => {
@@ -58,7 +58,7 @@ export default function StudentTicketsLayout({ children }) {
           setCanReport(res["report_perm"] ? res["report_perm"] : false);
         })
         .catch((e) => {
-          alert(e.message);
+          console.log(e.message);
         });
 
     setIsLoading(false);
@@ -106,7 +106,8 @@ export default function StudentTicketsLayout({ children }) {
                     label={ticket.subject}
                     name={user.name}
                     pic={user.picture}
-                    date={ticket.date_created}
+                    date_created={ticket.date_created}
+                    date_updated={ticket.date_updated}
                     status={ticket.status}
                   />
                 ))

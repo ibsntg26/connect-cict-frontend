@@ -1,5 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
-import { Link,useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import { useForm } from "react-hook-form";
 
 import {
   Flex,
@@ -12,21 +13,25 @@ import {
   Image,
   Input,
   Button,
-  Select
+  Select,
 } from "@chakra-ui/react";
 
-import UserLayout from "../../components/UserLayout";
+import axios from "axios";
 
+import UserLayout from "../../components/UserLayout";
 import AuthContext from "../../context/auth-context";
 import useAxios from "../../utils/axios";
-
-
 
 const UpdateProfile = () => {
   const { user } = useContext(AuthContext);
   const [userInfo, setUserInfo] = useState("");
   const [studentInfo, setStudentInfo] = useState("");
+  const [formData, updateFormData] = useState({});
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
   const api = useAxios();
+  const navigate = useNavigate();
+  const year_levels = ["1st", "2nd", "3rd", "4th"];
 
   const getUserProfile = async () => {
     const response = await api.get(
@@ -34,13 +39,80 @@ const UpdateProfile = () => {
     );
     return response.data;
   };
+
+  const changeHandler = (e) => {
+    if (e.target.name == "profile_picture") {
+      updateFormData({
+        ...formData,
+        'profile_picture': e.target.files[0],
+      });
+    } else {
+      updateFormData({
+        ...formData,
+        [e.target.name]: e.target.value.trim(),
+      });
+    }
+  };
+
+  const submitHandler = async (e) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+    console.log(formData);
+
+    axios
+      .put(
+        `http://127.0.0.1:8000/api/user/student/${user.student_id}/`,
+        {
+          profile_picture: formData.profile_picture,
+          email: formData.email,
+          first_name: formData.first_name,
+          middle_initial: formData.middle_initial,
+          last_name: formData.last_name,
+          year_level: formData.year_level,
+          section: formData.section,
+        },
+        {
+          headers: { "content-type": "multipart/form-data" },
+        }
+      )
+      .then((res) => {
+        navigate("/profile");
+        // console.log(res.data);
+      })
+      .catch((err) => {
+        console.log(err.response.data);
+      });
+  };
+
   useEffect(() => {
     document.title = "CONNECT | Update Profile";
+
+    getUserProfile()
+      .then((res) => {
+        let student = res;
+        let account = res.account;
+        delete student.account;
+        setStudentInfo(student);
+        setUserInfo(account);
+
+        updateFormData({
+          profile_picture: null,
+          email: account.email,
+          first_name: account.first_name,
+          middle_initial: account.middle_initial,
+          last_name: account.last_name,
+          year_level: student.year_level,
+          section: student.section,
+        });
+      })
+      .catch((e) => {
+        console.log(e.message);
+      });
   }, []);
-  const navigate = useNavigate();
+
   return (
-  <UserLayout>
-    <Stack m={5} spacing={5}>
+    <UserLayout>
+      <Stack m={5} spacing={5}>
         <SimpleGrid
           minChildWidth="300px"
           spacing={5}
@@ -60,12 +132,20 @@ const UpdateProfile = () => {
             <Flex justifyContent="center">
               <Stack direction={["row"]} spacing="100px">
                 <Box>
-                  <Button onClick={() => navigate("/profile")} colorScheme="red" >
+                  <Button
+                    onClick={() => navigate("/profile")}
+                    colorScheme="red"
+                  >
                     Cancel
                   </Button>
                 </Box>
                 <Box>
-                  <Button onClick={() => navigate("/profile")} colorScheme="green" >
+                  <Button
+                    onClick={() => {
+                      document.getElementById("updateSubmit").click();
+                    }}
+                    colorScheme="green"
+                  >
                     Save Changes
                   </Button>
                 </Box>
@@ -73,79 +153,105 @@ const UpdateProfile = () => {
             </Flex>
           </Box>
           <Box bg="white" borderRadius="10px" box-shadow="md" padding={8}>
-            <SimpleGrid columns={2} spacingY="18px" >
-              <Text as="b" fontSize="lg">
-                Student Number
-              </Text>
-              <FormControl>
-                <FormLabel>{studentInfo.student_id}</FormLabel>
-              </FormControl>
+            <form onSubmit={submitHandler}>
+              <SimpleGrid columns={2} spacingY="18px">
+                <Text as="b" fontSize="lg">
+                  Student Number
+                </Text>
+                <FormControl>
+                  <FormLabel>{studentInfo.student_id}</FormLabel>
+                </FormControl>
 
-              <Text as="b" fontSize="lg">
-                First Name
-              </Text>
-              <FormControl>
-              <Input size='sm' type="firstname" />
-                <FormLabel fontSize="lg">{userInfo.first_name}</FormLabel>
-              </FormControl>
+                <Text as="b" fontSize="lg">
+                  Profile Picture
+                </Text>
+                <FormControl>
+                  <Input
+                    type="file"
+                    name="profile_picture"
+                    accept="image/*"
+                    onChange={changeHandler}
+                  />
+                </FormControl>
 
-              <Text as="b" fontSize="lg">
-                Middle Initial
-              </Text>
-              <FormControl>
-              <Input size='sm' name="middle_initial" />
-                <FormLabel fontSize="lg">
-                  {userInfo.middle_initial ? userInfo.middle_initial : ""}
-                </FormLabel>
-              </FormControl>
+                <Text as="b" fontSize="lg">
+                  Email Address
+                </Text>
+                <FormControl isRequired>
+                  <Input
+                    type="email"
+                    name="email"
+                    defaultValue={userInfo.email}
+                    onChange={changeHandler}
+                  />
+                </FormControl>
 
-              <Text as="b" fontSize="lg">
-                Last Name
-              </Text>
-              <FormControl>
-              <Input size='sm' name="lastname" />
-                <FormLabel fontSize="lg">{userInfo.last_name}</FormLabel>
-              </FormControl>
+                <Text as="b" fontSize="lg">
+                  First Name
+                </Text>
+                <FormControl isRequired>
+                  <Input
+                    type="text"
+                    name="first_name"
+                    defaultValue={userInfo.first_name}
+                    onChange={changeHandler}
+                  />
+                </FormControl>
 
-              <Text as="b" fontSize="lg">
-                Year and Section
-              </Text>
-              <FormControl>
-              <SimpleGrid columns={2} spacingX="1px">
-                  <Select width={"7vw"} height="3.5vh">
-                      <option value='1st'>1st</option>
-                      <option value='2nd'>2nd</option>
-                      <option value='3rd'>3rd</option>
-                      <option value='4th'>4th</option>
-                  </Select>
-                <Input size='sm' name="year_and_sec" /> 
-                </SimpleGrid>
-                <FormLabel fontSize="lg">
-                  {studentInfo.year_level ? (studentInfo.year_level).charAt(0) : studentInfo.year_level}{studentInfo.section}
-                </FormLabel>
-              </FormControl>
+                <Text as="b" fontSize="lg">
+                  Middle Initial
+                </Text>
+                <FormControl>
+                  <Input
+                    type="text"
+                    name="middle_initial"
+                    defaultValue={userInfo.middle_initial}
+                    onChange={changeHandler}
+                  />
+                </FormControl>
 
-              <Text as="b" fontSize="lg">
-                Email Address
-              </Text>
-              <FormControl>
-              <Input size='sm' name="emailadd" />
-                <FormLabel fontSize="lg">{userInfo.email}</FormLabel>
-              </FormControl>
+                <Text as="b" fontSize="lg">
+                  Last Name
+                </Text>
+                <FormControl isRequired>
+                  <Input
+                    type="text"
+                    name="last_name"
+                    defaultValue={userInfo.last_name}
+                    onChange={changeHandler}
+                  />
+                </FormControl>
 
-              <Text as="b" fontSize="lg">
-                Home Address
-              </Text>
-              <FormControl>
-              <Input size='sm' name="homeaddress" />
-                <FormLabel fontSize="lg">{userInfo.homeaddress}</FormLabel>
-              </FormControl>
-            </SimpleGrid>
+                <Text as="b" fontSize="lg">
+                  Year and Section
+                </Text>
+                <FormControl isRequired>
+                  <SimpleGrid columns={2} spacingX="1px">
+                    <Select name="year_level" onChange={changeHandler}>
+                      {/* value={studentInfo.year_level} */}
+                      {year_levels.map((year) => (
+                        <option value={year} key={year}>
+                          {year}
+                        </option>
+                      ))}
+                    </Select>
+                    <Input
+                      type="text"
+                      name="section"
+                      maxLength={1}
+                      defaultValue={studentInfo.section}
+                      onChange={changeHandler}
+                    />
+                  </SimpleGrid>
+                </FormControl>
+              </SimpleGrid>
+              <Input type="submit" id="updateSubmit" display="none" />
+            </form>
           </Box>
         </SimpleGrid>
       </Stack>
-
-  </UserLayout>);
+    </UserLayout>
+  );
 };
 
 export default UpdateProfile;

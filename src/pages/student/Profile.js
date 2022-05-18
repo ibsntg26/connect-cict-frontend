@@ -22,7 +22,9 @@ const Profile = () => {
   const { user } = useContext(AuthContext);
   const [userInfo, setUserInfo] = useState("");
   const [studentInfo, setStudentInfo] = useState("");
+  
   const api = useAxios();
+  const navigate = useNavigate();
 
   const getUserProfile = async () => {
     const response = await api.get(
@@ -48,8 +50,6 @@ const Profile = () => {
       });
   }, []);
 
-
-  const navigate = useNavigate();
   return (
     <UserLayout>
       <Stack m={5} spacing={5}>
@@ -57,9 +57,8 @@ const Profile = () => {
           minChildWidth="300px"
           spacing={5}
           lineHeight={1.25}
-          paddingBottom={40}
         >
-          <Box bg="white" h="50vh" borderRadius="10px" box-shadow="md" padding={10}>
+          <Box bg="white" h="50vh" borderRadius="10px" box-shadow="md">
             <Flex justifyContent="center">
               <Image
                 borderRadius="full"
@@ -130,13 +129,6 @@ const Profile = () => {
               </Text>
               <FormControl>
                 <FormLabel fontSize="lg">{userInfo.email}</FormLabel>
-              </FormControl>
-
-              <Text as="b" fontSize="lg">
-                Home Address
-              </Text>
-              <FormControl>
-                <FormLabel fontSize="lg">N/A</FormLabel>
               </FormControl>
             </SimpleGrid>
           </Box>

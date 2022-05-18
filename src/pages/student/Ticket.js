@@ -1,8 +1,9 @@
 import React, { useContext, useEffect, useState } from "react";
 import dayjs from "dayjs";
-import { useParams, Link } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
+import { useForm } from "react-hook-form";
 
-import { BsCheckLg } from "react-icons/bs";
+import { BsCheckLg, BsPaperclip } from "react-icons/bs";
 
 import {
   Flex,
@@ -13,10 +14,12 @@ import {
   VStack,
   Text,
   Tooltip,
+  Input,
   Badge,
   Divider,
   FormControl,
-  FormLabel,
+  FormHelperText,
+  FormErrorMessage,
   Image,
   Center,
   Textarea,
@@ -25,8 +28,10 @@ import {
   ModalBody,
   ModalContent,
   ModalHeader,
+  ModalFooter,
   ModalCloseButton,
   useDisclosure,
+  HStack,
 } from "@chakra-ui/react";
 
 import StudentTicketsLayout from "../../components/student/TicketsLayout";
@@ -40,20 +45,91 @@ const Ticket = () => {
   const [ticketInfo, setTicketInfo] = useState("");
   const [ticketType, setTicketType] = useState("");
   const [ticketReplies, setTicketReplies] = useState([]);
+  const [hasAttachment, setHasAttachment] = useState(false);
+  const {
+    handleSubmit,
+    register,
+    setError,
+    formState: { errors, isSubmitting },
+  } = useForm();
 
   const api = useAxios();
   const { ticketId } = useParams();
+  const navigate = useNavigate();
 
+  const {
+    isOpen: isAttachmentOpen,
+    onOpen: onAttachmentOpen,
+    onClose: onAttachmentClose,
+  } = useDisclosure();
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   const getTicketDetails = async () => {
-    const response = await api.get(`/api/student-ticket/${ticketId}/`);
-    return response.data;
+    const res = await api.get(`/api/student-ticket/${ticketId}/`);
+    return res.data;
+  };
+
+  const closeTicket = async () => {
+    await api
+      .patch(`/api/student-ticket/${ticketId}/`)
+      .then((res) => {
+        window.location.href.indexOf("tickets") > -1
+          ? navigate(`/t%C3%ADckets/${ticketId}`)
+          : navigate(`/tickets/${ticketId}`);
+      })
+      .catch((err) => {
+        console.log(err.response.data);
+      });
   };
 
   const getTicketReplies = async () => {
-    const response = await api.get(`/api/ticket-reply/?ticket=${ticketId}`);
-    return response.data;
+    const res = await api.get(`/api/ticket-reply/?ticket=${ticketId}`);
+    return res.data;
+  };
+
+  const populateTicketReplies = () => {
+    getTicketReplies()
+      .then((res) => {
+        setTicketReplies(res);
+      })
+      .catch((e) => {
+        console.log(e.message);
+      });
+  };
+
+  const sendReply = async (data) => {
+    let flag = true;
+
+    if (data.attachment[0] !== undefined) {
+      if (!data.attachment[0].name.match(/\.(jpg|jpeg|png|gif)$/)) {
+        alert("Select a valid image");
+        flag = false;
+      }
+    }
+
+    if (flag) {
+      api
+        .post(
+          `/api/ticket-reply/?ticket=${ticketInfo.id}`,
+          {
+            message: data.message,
+            attachment: data.attachment[0],
+          },
+          {
+            headers: { "content-type": "multipart/form-data" },
+          }
+        )
+        .then((res) => {
+          document.getElementById("replyForm").reset();
+          populateTicketReplies();
+          alert("Reply has been sent!");
+        })
+        .catch((err) => {
+          console.log(err.response.data);
+        });
+
+      setHasAttachment(false);
+    }
   };
 
   useEffect(() => {
@@ -68,35 +144,61 @@ const Ticket = () => {
 
         setTicketInfo(ticket);
         setTicketType(type);
-        // console.log(ticketInfo);
       })
       .catch((e) => {
-        alert(e.message);
+        console.log(e.message);
       });
 
-    getTicketReplies()
-      .then((res) => {
-        setTicketReplies(res);
-      })
-      .catch((e) => {
-        alert(e.message);
-      });
+    populateTicketReplies();
   }, []);
 
   return (
     <>
-      <Modal onClose={onClose} size="md" isOpen={isOpen}>
-        <ModalOverlay />
-        <ModalContent>
-          <ModalHeader>Attached File</ModalHeader>
-          <ModalCloseButton />
-          <ModalBody>
-            <Center>
-              <Image src={ticketInfo.attachment} alt={ticketInfo.subject} />
-            </Center>
-          </ModalBody>
-        </ModalContent>
-      </Modal>
+      {ticketInfo.attachment && (
+        <Modal
+          onClose={onAttachmentClose}
+          size="md"
+          isOpen={isAttachmentOpen}
+          motionPreset="slideInBottom"
+        >
+          <ModalOverlay />
+          <ModalContent>
+            <ModalHeader>Attached File</ModalHeader>
+            <ModalCloseButton />
+            <ModalBody>
+              <Center>
+                <Image src={ticketInfo.attachment} alt={ticketInfo.subject} />
+              </Center>
+            </ModalBody>
+          </ModalContent>
+        </Modal>
+      )}
+
+      {ticketInfo.status !== "closed" && (
+        <Modal
+          onClose={onClose}
+          size="md"
+          isOpen={isOpen}
+          motionPreset="slideInBottom"
+        >
+          <ModalOverlay />
+          <ModalContent>
+            <ModalHeader>Close Ticket Report</ModalHeader>
+            <ModalCloseButton />
+            <ModalBody>
+              <Text>Are you sure you want to close this report?</Text>
+            </ModalBody>
+            <ModalFooter>
+              <Button variant="ghost" mr={3} onClick={onClose}>
+                No
+              </Button>
+              <Button variant="ghost" color="orange.400" onClick={closeTicket}>
+                Yes
+              </Button>
+            </ModalFooter>
+          </ModalContent>
+        </Modal>
+      )}
 
       <StudentTicketsLayout>
         <VStack w="full" h="full">
@@ -109,7 +211,7 @@ const Ticket = () => {
                   </Heading>
                   <Text as="span">
                     <Badge
-                    fontSize="md"
+                      fontSize="md"
                       colorScheme={
                         ticketInfo.status === "closed" ? "red" : "green"
                       }
@@ -131,6 +233,7 @@ const Ticket = () => {
                         _hover={{
                           color: "green.700",
                         }}
+                        onClick={() => onOpen()}
                       >
                         <BsCheckLg />
                       </Button>
@@ -148,7 +251,9 @@ const Ticket = () => {
                 <Box>
                   <Text fontSize="sm">Date opened</Text>
                   <Text as="b" fontSize="large">
-                    {dayjs(ticketInfo.date).format("MMMM D, YYYY")}
+                    {dayjs(ticketInfo.date_created).format(
+                      "MMMM D, YYYY h:mm a"
+                    )}
                   </Text>
                 </Box>
 
@@ -156,29 +261,30 @@ const Ticket = () => {
                   <Box>
                     <Text fontSize="sm">Date closed</Text>
                     <Text as="b" fontSize="large">
-                      {dayjs(ticketInfo.date).format("MMMM D, YYYY")}
+                      {dayjs(ticketInfo.date_completed).format(
+                        "MMMM D, YYYY h:mm a"
+                      )}
                     </Text>
                   </Box>
                 )}
-                <Box>
-                  <Text fontSize="sm">Attachment</Text>
-                  {/* <a href={ticketInfo.attachment} target="_blank">
-                    <Text noOfLines={1}>See attached file</Text>
-                  </a> */}
+                {ticketInfo.attachment && (
                   <Box>
-                    <Text
-                      as="span"
-                      onClick={() => onOpen()}
-                      cursor="pointer"
-                      color="orange.400"
-                      _hover={{
-                        color: "orange.500",
-                      }}
-                    >
-                      See attached file
-                    </Text>
+                    <Text fontSize="sm">Attachment</Text>
+                    <Box>
+                      <Text
+                        as="span"
+                        onClick={() => onAttachmentOpen()}
+                        cursor="pointer"
+                        color="orange.400"
+                        _hover={{
+                          color: "orange.500",
+                        }}
+                      >
+                        See attached file
+                      </Text>
+                    </Box>
                   </Box>
-                </Box>
+                )}
               </SimpleGrid>
               <Box mt={8}>
                 <Text fontSize="sm">Description</Text>
@@ -188,8 +294,9 @@ const Ticket = () => {
               <Box
                 h="full"
                 mt={4}
-                minH="35vh"
-                maxHeight="35vh"
+                p={2}
+                minH="32vh"
+                maxHeight="32vh"
                 mb={4}
                 overflow="auto"
               >
@@ -198,21 +305,74 @@ const Ticket = () => {
                     key={reply.id}
                     userFlag={reply.user === user.user_id}
                     message={reply.message}
+                    date={reply.date_created}
+                    attachment={reply.attachment}
                     resolutionFlag={reply.is_resolution}
                   />
                 ))}
               </Box>
               <Box>
-                <FormControl isRequired>
-                  <Textarea
-                    placeholder="Type your reply here"
-                    // onChange={changeHandler}
-                    name="message"
-                    maxLength={200}
-                    rows={5}
-                    bg="white"
-                  ></Textarea>
-                </FormControl>
+                <form id="replyForm" onSubmit={handleSubmit(sendReply)}>
+                  <Flex>
+                    <FormControl isInvalid={errors.message} me={5}>
+                      {hasAttachment === true && (
+                        <FormHelperText mb={2}>Attachments (1)</FormHelperText>
+                      )}
+                      <Textarea
+                        {...register("message", {
+                          required: "A message is required.",
+                        })}
+                        placeholder="Type your reply here"
+                        name="message"
+                        maxLength={500}
+                        rows={5}
+                        bg="white"
+                        disabled={ticketInfo.status === "closed"}
+                      />
+                      <FormErrorMessage mb={3} textAlign="right">
+                        {errors.message && errors.message.message}
+                      </FormErrorMessage>
+                    </FormControl>
+
+                    <VStack verticalAlign="top" maxW="15vh">
+                      <FormControl>
+                        {/* <FormLabel>Attachment</FormLabel> */}
+                        <Input
+                          type="file"
+                          name="attachment"
+                          accept="image/*"
+                          {...register("attachment")}
+                          display="none"
+                          id="fileInput"
+                          disabled={ticketInfo.status === "closed"}
+                        />
+                      </FormControl>
+
+                      <Button
+                        w={100}
+                        variant="link"
+                        onClick={() => {
+                          document.getElementById("fileInput").click();
+                          setHasAttachment(true);
+                        }}
+                        disabled={ticketInfo.status === "closed"}
+                      >
+                        <BsPaperclip />
+                        Attach file
+                      </Button>
+
+                      <Button
+                        w={100}
+                        size="lg"
+                        type={"submit"}
+                        isLoading={isSubmitting}
+                        disabled={ticketInfo.status === "closed"}
+                      >
+                        Send
+                      </Button>
+                    </VStack>
+                  </Flex>
+                </form>
               </Box>
             </Box>
           </Box>

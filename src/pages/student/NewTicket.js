@@ -234,7 +234,7 @@ const NewTicket = () => {
                       _hover={{
                         bg: "orange.500",
                       }}
-                      type={"submit"}
+                      type="submit"
                       // isLoading={isSubmitting}
                     >
                       Submit

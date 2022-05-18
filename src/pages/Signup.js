@@ -120,7 +120,6 @@ const Signup = () => {
       })
       .then((res) => {
         // navigate('/');
-        // console.log(res);
         toast({
           title: "Sign up success!",
           description: "You can now log in to your account.",
@@ -129,7 +128,7 @@ const Signup = () => {
           duration: 5000,
           isClosable: true,
         });
-        console.log(res.data);
+        // console.log(res.data);
         // e.target.reset();
       })
       .catch((err) => {

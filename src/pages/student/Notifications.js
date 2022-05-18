@@ -1,6 +1,8 @@
 import React, { useContext, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
+import NotificationItem from "../../components/NotificationItem";
+
 import {
   Flex,
   Center,
@@ -19,131 +21,50 @@ import AuthContext from "../../context/auth-context";
 import useAxios from "../../utils/axios";
 
 const Notifications = () => {
+  const [userNotifications, setUserNotifications] = useState([]);
+  const api = useAxios();
+
+  const getNotifications = async () => {
+    const response = await api.get(`/api/notification/`);
+    return response.data;
+  };
+
+  useEffect(() => {
+    document.title = "CONNECT | Notifications";
+    getNotifications()
+      .then((res) => {
+        setUserNotifications(res);
+      })
+      .catch((e) => {
+        alert(e.message);
+      });
+  }, []);
+
   return (
     <UserLayout>
-       <Stack m={5} spacing={5}>
-     <Flex as="b" fontSize="3xl" paddingTop={10} >Notifications</Flex>
+      <Stack m={3} spacing={5}>
+        <Flex as="b" fontSize="3xl" paddingTop={5}>
+          Notifications
+        </Flex>
+        <SimpleGrid spacingY="10px">
+          {userNotifications.map((notification) => (
+            <NotificationItem
+              key={notification.id}
+              pic={notification.receiver.profile_picture}
+              name={
+                notification.receiver.first_name +
+                " " +
+                notification.receiver.last_name
+              }
+              message={notification.message}
+              date={notification.date_created}
+              ticket ={notification.ticket && (notification.ticket)}
+            />
+          ))}
+        </SimpleGrid>
+      </Stack>
+    </UserLayout>
+  );
+};
 
-<SimpleGrid spacingY="10px">    
- <Box  borderLeftWidth="3px" borderColor="skyblue" boxShadow='sm' h="15vh" w="90vw" p='6'  rounded='md' bg='white'>
-  <Center justifyContent="left">
-    <Image
-      borderRadius='full'
-      boxSize='80px'
-      src='https://bit.ly/dan-abramov'
-      alt='Dan Abramov'
-    />
-    <SimpleGrid paddingLeft="20px" >
-      <HStack>
-        <FormLabel fontWeight="bold" fontSize="lg">John Doe {/* {userInfo.username} */}</FormLabel>
-        <FormLabel paddingBottom="10px"fontSize="md">reacted to your post {/* {userInfo.username} */}</FormLabel>
-      </HStack>
-         
-      <FormControl>
-         <FormLabel color="gray.600" fontSize="md">Lorem ipsum dolor sit amet, consectetur adipiscing elit, 
-         sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.{/* {userInfo.info} */}</FormLabel>
-         <FormLabel fontSize="sm">10 mins ago{/* {userInfo.time} */}</FormLabel>
-      </FormControl>
-    </SimpleGrid>
-   </Center>
-  </Box>
- 
-  <Box  borderLeftWidth="3px" borderColor="skyblue" boxShadow='sm' h="15vh" w="90vw" p='6'  rounded='md' bg='white'>
-  <Center justifyContent="left">
-    <Image
-      borderRadius='full'
-      boxSize='80px'
-      src='https://bit.ly/dan-abramov'
-      alt='Dan Abramov'
-    />
-    <SimpleGrid paddingLeft="20px" >
-      <HStack>
-        <FormLabel fontWeight="bold" fontSize="lg">John Doe {/* {userInfo.username} */}</FormLabel>
-        <FormLabel paddingBottom="10px"fontSize="md">reacted to your post {/* {userInfo.username} */}</FormLabel>
-      </HStack>
-         
-      <FormControl>
-         <FormLabel color="gray.600" fontSize="md">Lorem ipsum dolor sit amet, consectetur adipiscing elit, 
-         sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.{/* {userInfo.info} */}</FormLabel>
-         <FormLabel fontSize="sm">10 mins ago{/* {userInfo.time} */}</FormLabel>
-      </FormControl>
-    </SimpleGrid>
-   </Center>
-  </Box>
-
-    <Box  borderLeftWidth="3px" borderColor="skyblue" boxShadow='sm' h="15vh" w="90vw" p='6'  rounded='md' bg='white'>
-  <Center justifyContent="left">
-    <Image
-      borderRadius='full'
-      boxSize='80px'
-      src='https://bit.ly/dan-abramov'
-      alt='Dan Abramov'
-    />
-    <SimpleGrid paddingLeft="20px" >
-      <HStack>
-        <FormLabel fontWeight="bold" fontSize="lg">John Doe {/* {userInfo.username} */}</FormLabel>
-        <FormLabel paddingBottom="10px"fontSize="md">reacted to your post {/* {userInfo.username} */}</FormLabel>
-      </HStack>
-         
-      <FormControl>
-         <FormLabel color="gray.600" fontSize="md">Lorem ipsum dolor sit amet, consectetur adipiscing elit, 
-         sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.{/* {userInfo.info} */}</FormLabel>
-         <FormLabel fontSize="sm">10 mins ago{/* {userInfo.time} */}</FormLabel>
-      </FormControl>
-    </SimpleGrid>
-   </Center>
-  </Box>
-
-   <Box  borderLeftWidth="3px" borderColor="skyblue" boxShadow='sm' h="15vh" w="90vw" p='6'  rounded='md' bg='white'>
-  <Center justifyContent="left">
-    <Image
-      borderRadius='full'
-      boxSize='80px'
-      src='https://bit.ly/dan-abramov'
-      alt='Dan Abramov'
-    />
-    <SimpleGrid paddingLeft="20px" >
-      <HStack>
-        <FormLabel fontWeight="bold" fontSize="lg">John Doe {/* {userInfo.username} */}</FormLabel>
-        <FormLabel paddingBottom="10px"fontSize="md">reacted to your post {/* {userInfo.username} */}</FormLabel>
-      </HStack>
-         
-      <FormControl>
-         <FormLabel color="gray.600" fontSize="md">Lorem ipsum dolor sit amet, consectetur adipiscing elit, 
-         sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.{/* {userInfo.info} */}</FormLabel>
-         <FormLabel fontSize="sm">10 mins ago{/* {userInfo.time} */}</FormLabel>
-      </FormControl>
-    </SimpleGrid>
-   </Center>
-  </Box>
-
-   <Box  borderLeftWidth="3px" borderColor="skyblue" boxShadow='sm' h="15vh" w="90vw" p='6'  rounded='md' bg='white'>
-  <Center justifyContent="left">
-    <Image
-      borderRadius='full'
-      boxSize='80px'
-      src='https://bit.ly/dan-abramov'
-      alt='Dan Abramov'
-    />
-    <SimpleGrid paddingLeft="20px" >
-      <HStack>
-        <FormLabel fontWeight="bold" fontSize="lg">John Doe {/* {userInfo.username} */}</FormLabel>
-        <FormLabel paddingBottom="10px"fontSize="md">reacted to your post {/* {userInfo.username} */}</FormLabel>
-      </HStack>
-         
-      <FormControl>
-         <FormLabel color="gray.600" fontSize="md">Lorem ipsum dolor sit amet, consectetur adipiscing elit, 
-         sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.{/* {userInfo.info} */}</FormLabel>
-         <FormLabel fontSize="sm">10 mins ago{/* {userInfo.time} */}</FormLabel>
-      </FormControl>
-    </SimpleGrid>
-   </Center>
-  </Box>
-
-</SimpleGrid>
-   </Stack>
-     </UserLayout>
-  )
-}
-
-export default Notifications
+export default Notifications;
