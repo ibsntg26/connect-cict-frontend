@@ -1,290 +1,289 @@
 import React, { useContext, useState, useEffect } from "react";
-import { Link as ReactLink } from "react-router-dom";
-import {
-  Flex,
-  Box,
-  HStack,
-  FormControl,
-  FormHelperText,
-  FormLabel,
-  Image,
-  Input,
-  Select,
-  Checkbox,
-  Stack,
-  Link,
-  Button,
-  Heading,
-  Text,
-  Switch,
-  Alert,
-  AlertIcon,
-  useToast,
-} from "@chakra-ui/react";
+import { Link as ReactLink, useNavigate } from "react-router-dom";
+import { useForm } from "react-hook-form";
+import { Flex, Box, HStack, FormControl, FormHelperText, FormLabel, Image, Input, Select, Stack, Link, Button, Heading, Text, Switch, Modal, ModalOverlay, ModalBody, ModalContent, ModalCloseButton, ModalHeader, ModalFooter, FormErrorMessage, useDisclosure, } from "@chakra-ui/react";
 
 import axios from "axios";
 import LayoutContext from "../context/layout-context";
 
 const Signup = () => {
   const { siteLogoMD } = useContext(LayoutContext);
-  const [formData, updateFormData] = useState({
-    email: "",
-    password: "",
-    password2: "",
-    first_name: "",
-    middle_initial: "",
-    last_name: "",
-    student_id: "",
-    year_level: "1st",
-    section: "",
+  const {
+    handleSubmit,
+    register,
+    setError,
+    formState: { errors, isSubmitting },
+  } = useForm({
+    mode: "onChange",
+    defaultValues: {
+      email: "",
+      password: "",
+      password2: "",
+      first_name: "",
+      middle_initial: "",
+      last_name: "",
+      student_id: "",
+      year_level: "1st",
+      section: "",
+    },
   });
 
-  // const [passwordError, setPasswordError] = useState();
   const [show, setShow] = useState(false);
-  const [isSubmitting, setIsSubmitting] = useState(false);
-
-  const toast = useToast();
+  const navigate = useNavigate();
+  const { isOpen, onOpen, onClose } = useDisclosure();
   const year_levels = ["1st", "2nd", "3rd", "4th"];
 
   useEffect(() => {
     document.title = "CONNECT | Sign Up";
   });
 
-  const changeHandler = (e) => {
-    updateFormData({
-      ...formData,
-      [e.target.name]: e.target.value.trim(),
-    });
-  };
+  const registerUser = async (data) => {
+    data = {
+      ...data,
+      student: {
+        student_id: data.student_id,
+        year_level: data.year_level,
+        section: data.section,
+      },
+    };
 
-  setTimeout(() => {
-    setIsSubmitting(false);
-  }, 1000);
-
-  const submitHandler = async (e) => {
-    e.preventDefault();
-    setIsSubmitting(true);
-
-    //   const response = await fetch("http://127.0.0.1:8000/api/user/student/", {
-    //     method: "POST",
-    //     headers: {
-    //       "Content-Type": "application/json",
-    //     },
-    //     body: JSON.stringify({
-    //       email: formData.email,
-    //       password: formData.password,
-    //       password2: formData.password2,
-    //       first_name: formData.first_name,
-    //       middle_initial: formData.middle_initial,
-    //       last_name: formData.last_name,
-    //       student: {
-    //         student_id: formData.student_id,
-    //         year_level: formData.year_level,
-    //         section: formData.section,
-    //       },
-    //     }),
-    //   });
-
-    //   const data = await response.json();
-    //   if (!response) alert("No server response");
-    //   else {
-    //     if (response.status === 201) {
-    //       toast({
-    //         title: "Sign up success!",
-    //         description: "You can now log in to your account.",
-    //         status: "success",
-    //         position: "top",
-    //         duration: 5000,
-    //         isClosable: true,
-    //       });
-    //     } else if (response.status === 400) {
-    //       console.log(data);
-    //       if (data.email) alert("error sa email!");
-    //     } else alert("Signup failed.");
-    //   }
-    // };
+    delete data.student_id;
+    delete data.year_level;
+    delete data.section;
 
     axios
-      .post(`http://127.0.0.1:8000/api/user/student/`, {
-        email: formData.email,
-        password: formData.password,
-        password2: formData.password2,
-        first_name: formData.first_name,
-        middle_initial: formData.middle_initial,
-        last_name: formData.last_name,
-        student: {
-          student_id: formData.student_id,
-          year_level: formData.year_level,
-          section: formData.section,
-        },
-      })
+      .post("/api/user/student/", data)
       .then((res) => {
-        // navigate('/');
-        toast({
-          title: "Sign up success!",
-          description: "You can now log in to your account.",
-          status: "success",
-          position: "top",
-          duration: 5000,
-          isClosable: true,
-        });
-        // console.log(res.data);
-        // e.target.reset();
+        onOpen();
       })
       .catch((err) => {
-        console.log(err.response.data);
+        const err_data = err.response.data;
+        if (err_data.student !== undefined) {
+          setError("student_id", {
+            message: err_data.student.student_id[0],
+          });
+        }
+        if (err_data.email !== undefined) {
+          setError("email", {
+            message: err_data.email[0],
+          });
+        }
+        if (err_data.password !== undefined) {
+          setError("password", {
+            message: err_data.password[0],
+          });
+        }
       });
   };
 
   return (
-    <Flex minH="100vh" align="center" justify="center" bg="gray.100">
-      <Stack spacing={6} mx="auto" maxW="lg" color="gray.700" py={12} px={6}>
-        {/* Header */}
-        <Stack align="center">
-          <Image src={siteLogoMD} maxW="200px" mb={2} />
-          <Heading fontSize={{ base: "2xl", md: "3xl" }}>
-            Create your account to start now
-          </Heading>
-        </Stack>
+    <>
+      <Modal
+        onClose={onClose}
+        size="md"
+        isOpen={isOpen}
+        motionPreset="slideInBottom"
+      >
+        <ModalOverlay />
+        <ModalContent>
+          <ModalHeader>Sign up success!</ModalHeader>
+          <ModalCloseButton />
+          <ModalBody>
+            <Text>You can now log in to your account</Text>
+          </ModalBody>
+          <ModalFooter>
+            <Button variant="ghost" color="orange.400" onClick={() => navigate('/signin')}>
+              OK
+            </Button>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
 
-        {/* Form */}
-        <Box rounded="lg" bg="white" boxShadow="lg" p={8}>
-          {/* {error && (
-            <Alert
-              status="error"
-              alignItems="center"
-              justifyContent="center"
-              textAlign="center"
-              mb={5}
-            >
-              <AlertIcon />
-              {error}
-            </Alert>
-          )} */}
-          <Stack spacing={4}>
-            <form onSubmit={submitHandler}>
-              <Stack spacing={4} mb={10}>
-                <FormControl id="firstName" isRequired>
-                  <FormLabel>First Name</FormLabel>
-                  <Input
-                    type="text"
-                    name="first_name"
-                    onChange={changeHandler}
-                  />
-                </FormControl>
-
-                <HStack>
-                  <FormControl id="middleInitial" maxWidth={110}>
-                    <FormLabel>Middle initial</FormLabel>
-                    <Input
-                      type="text"
-                      name="middle_initial"
-                      onChange={changeHandler}
-                      maxLength={2}
-                    />
-                  </FormControl>
-                  <FormControl id="lastName" isRequired>
-                    <FormLabel>Last Name</FormLabel>
-                    <Input
-                      type="text"
-                      name="last_name"
-                      onChange={changeHandler}
-                    />
-                  </FormControl>
-                </HStack>
-
-                <FormControl id="studentId" isRequired>
-                  <FormLabel>Student ID number</FormLabel>
-                  <Input
-                    type="number"
-                    name="student_id"
-                    onChange={changeHandler}
-                  />
-                </FormControl>
-
-                <HStack>
-                  <FormControl id="yearLevel" maxWidth={110} isRequired>
-                    <FormLabel>Year level</FormLabel>
-                    <Select name="year_level" onChange={changeHandler}>
-                      {year_levels.map((year) => (
-                        <option value={year} key={year}>
-                          {year}
-                        </option>
-                      ))}
-                    </Select>
-                  </FormControl>
-                  <FormControl id="section" isRequired>
-                    <FormLabel>Section</FormLabel>
-                    <Input
-                      type="text"
-                      name="section"
-                      onChange={changeHandler}
-                      maxLength={1}
-                    />
-                  </FormControl>
-                </HStack>
-
-                <FormControl id="email" mb={2} isRequired>
-                  <FormLabel>Email address</FormLabel>
-                  <Input type="email" name="email" onChange={changeHandler} />
-                </FormControl>
-
-                <FormControl id="password" mb={2} isRequired>
-                  <FormLabel>Password</FormLabel>
-                  <Input
-                    type={show ? "text" : "password"}
-                    name="password"
-                    onChange={changeHandler}
-                    minLength={8}
-                  />
-                  <FormHelperText>
-                    Your password must contain at least 8 characters.
-                  </FormHelperText>
-                </FormControl>
-
-                <FormControl id="password2" mb={2} isRequired>
-                  <FormLabel>Confirm password</FormLabel>
-                  <Input
-                    type={show ? "text" : "password"}
-                    name="password2"
-                    onChange={changeHandler}
-                    minLength={8}
-                  />
-                </FormControl>
-
-                <Switch
-                  colorScheme="orange"
-                  onChange={() => setShow((show) => !show)}
-                >
-                  Show password
-                </Switch>
-              </Stack>
-
-              <Stack spacing={10}>
-                <Button
-                  type="submit"
-                  isLoading={isSubmitting}
-                >
-                  Sign up
-                </Button>
-              </Stack>
-            </form>
-
-            <Text as="span" textAlign="center" pt={2}>
-              Already have an account?
-              <Link
-                as={ReactLink}
-                to="/signin"
-                px={1}
-              >
-                Sign in
-              </Link>
-              instead.
-            </Text>
+      <Flex minH="100vh" align="center" justify="center" bg="gray.100">
+        <Stack spacing={6} mx="auto" maxW="lg" color="gray.700" py={12} px={6}>
+          {/* Header */}
+          <Stack align="center">
+            <Image src={siteLogoMD} maxW="200px" mb={2} />
+            <Heading fontSize={{ base: "2xl", md: "3xl" }}>
+              Create your account to start now
+            </Heading>
           </Stack>
-        </Box>
-      </Stack>
-    </Flex>
+
+          {/* Form */}
+          <Box rounded="lg" bg="white" boxShadow="lg" p={8}>
+            <Stack spacing={4}>
+              <form onSubmit={handleSubmit(registerUser)}>
+                <Stack spacing={4} mb={10}>
+                  <FormControl isInvalid={errors.first_name}>
+                    <FormLabel>First Name</FormLabel>
+                    <Input
+                      type="text"
+                      name="first_name"
+                      {...register("first_name", {
+                        required: "Enter your first name",
+                      })}
+                    />
+                    <FormErrorMessage>
+                      {errors.first_name && errors.first_name.message}
+                    </FormErrorMessage>
+                  </FormControl>
+
+                  <HStack>
+                    <FormControl
+                      maxWidth={110}
+                      isInvalid={errors.middle_initial}
+                    >
+                      <FormLabel>Middle initial</FormLabel>
+                      <Input type="text" name="middle_initial" maxLength={3} />
+                    </FormControl>
+
+                    <FormControl isInvalid={errors.last_name}>
+                      <FormLabel>Last Name</FormLabel>
+                      <Input
+                        type="text"
+                        name="last_name"
+                        {...register("last_name", {
+                          required: "Enter your last name",
+                        })}
+                      />
+                      <FormErrorMessage>
+                        {errors.last_name && errors.last_name.message}
+                      </FormErrorMessage>
+                    </FormControl>
+                  </HStack>
+
+                  <FormControl isInvalid={errors.student_id}>
+                    <FormLabel>Student ID number</FormLabel>
+                    <Input
+                      type="number"
+                      name="student_id"
+                      {...register("student_id", {
+                        required: "Enter your student number",
+                        valueAsNumber: true,
+                      })}
+                    />
+                    <FormErrorMessage mb={3}>
+                      {errors.student_id && errors.student_id.message}
+                    </FormErrorMessage>
+                    <FormHelperText>Use the format 2022XXXXXX</FormHelperText>
+                  </FormControl>
+
+                  <HStack>
+                    <FormControl maxWidth={110} isInvalid={errors.year_level}>
+                      <FormLabel>Year level</FormLabel>
+                      <Select
+                        name="year_level"
+                        {...register("year_level", {
+                          required: "Select your year level",
+                        })}
+                      >
+                        {year_levels.map((year) => (
+                          <option value={year} key={year}>
+                            {year}
+                          </option>
+                        ))}
+                      </Select>
+                      <FormErrorMessage mb={3}>
+                        {errors.year_level && errors.year_level.message}
+                      </FormErrorMessage>
+                    </FormControl>
+
+                    <FormControl isInvalid={errors.section}>
+                      <FormLabel>Section</FormLabel>
+                      <Input
+                        type="text"
+                        name="section"
+                        {...register("section", {
+                          required: "Enter your section",
+                          maxLength: { value: 1, message: "Exceeded maximum" },
+                        })}
+                      />
+                      <FormErrorMessage mb={3}>
+                        {errors.section && errors.section.message}
+                      </FormErrorMessage>
+                    </FormControl>
+                  </HStack>
+
+                  <FormControl mb={2} isInvalid={errors.email}>
+                    <FormLabel>Email address</FormLabel>
+                    <Input
+                      type="email"
+                      name="email"
+                      {...register("email", {
+                        required: "Enter your email",
+                      })}
+                    />
+                    <FormErrorMessage mb={3}>
+                      {errors.email && errors.email.message}
+                    </FormErrorMessage>
+                  </FormControl>
+
+                  <FormControl mb={2} isInvalid={errors.password}>
+                    <FormLabel>Password</FormLabel>
+                    <Input
+                      type={show ? "text" : "password"}
+                      name="password"
+                      {...register("password", {
+                        required: "Enter a password",
+                        minLength: {
+                          value: 8,
+                          message: "Enter 8 characters or longer",
+                        },
+                      })}
+                    />
+                    <FormErrorMessage mb={3}>
+                      {errors.password && errors.password.message}
+                    </FormErrorMessage>
+                    <FormHelperText>
+                      Your password must contain at least 8 characters.
+                    </FormHelperText>
+                  </FormControl>
+
+                  <FormControl mb={2} isInvalid={errors.password2}>
+                    <FormLabel>Confirm password</FormLabel>
+                    <Input
+                      type={show ? "text" : "password"}
+                      name="password2"
+                      {...register("password2", {
+                        required: "Re-type your password",
+                        minLength: {
+                          value: 8,
+                          message: "Enter 8 characters or longer",
+                        },
+                      })}
+                    />
+                    <FormErrorMessage mb={3}>
+                      {errors.password2 && errors.password2.message}
+                    </FormErrorMessage>
+                  </FormControl>
+
+                  <Switch
+                    colorScheme="orange"
+                    onChange={() => setShow((show) => !show)}
+                  >
+                    Show password
+                  </Switch>
+                </Stack>
+
+                <Stack spacing={10}>
+                  <Button type="submit" isLoading={isSubmitting}>
+                    Sign up
+                  </Button>
+                </Stack>
+              </form>
+
+              <Text as="span" textAlign="center" pt={2}>
+                Already have an account?
+                <Link as={ReactLink} to="/signin" px={1}>
+                  Sign in
+                </Link>
+                instead.
+              </Text>
+            </Stack>
+          </Box>
+        </Stack>
+      </Flex>
+    </>
   );
 };
 

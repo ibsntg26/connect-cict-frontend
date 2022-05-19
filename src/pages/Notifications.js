@@ -1,24 +1,13 @@
 import React, { useContext, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
-import NotificationItem from "../../components/NotificationItem";
+import { Flex, Center, SimpleGrid, Box, Stack, FormControl, FormLabel, Image, HStack, } from "@chakra-ui/react";
 
-import {
-  Flex,
-  Center,
-  SimpleGrid,
-  Box,
-  Stack,
-  FormControl,
-  FormLabel,
-  Image,
-  HStack,
-} from "@chakra-ui/react";
+import NotificationItem from "../components/NotificationItem"
+import UserLayout from "../components/UserLayout";
 
-import UserLayout from "../../components/UserLayout";
-
-import AuthContext from "../../context/auth-context";
-import useAxios from "../../utils/axios";
+import AuthContext from "../context/auth-context";
+import useAxios from "../utils/axios";
 
 const Notifications = () => {
   const [userNotifications, setUserNotifications] = useState([]);

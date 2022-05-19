@@ -31,7 +31,6 @@ import {
   ModalFooter,
   ModalCloseButton,
   useDisclosure,
-  HStack,
 } from "@chakra-ui/react";
 
 import StudentTicketsLayout from "../../components/student/TicketsLayout";
@@ -122,7 +121,7 @@ const Ticket = () => {
         .then((res) => {
           document.getElementById("replyForm").reset();
           populateTicketReplies();
-          alert("Reply has been sent!");
+          // alert("Reply has been sent!");
         })
         .catch((err) => {
           console.log(err.response.data);
@@ -186,7 +185,12 @@ const Ticket = () => {
             <ModalHeader>Close Ticket Report</ModalHeader>
             <ModalCloseButton />
             <ModalBody>
-              <Text>Are you sure you want to close this report?</Text>
+              <Text>
+                {ticketInfo.status == "open"
+                  ? "This ticket hasn't been evaluated yet."
+                  : "This ticket is still being processed by an evaluator."}{" "}
+                Are you sure you want to close this report?
+              </Text>
             </ModalBody>
             <ModalFooter>
               <Button variant="ghost" mr={3} onClick={onClose}>

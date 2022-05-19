@@ -57,7 +57,6 @@ const UpdateProfile = () => {
   const submitHandler = async (e) => {
     e.preventDefault();
     setIsSubmitting(true);
-    console.log(formData);
 
     axios
       .put(

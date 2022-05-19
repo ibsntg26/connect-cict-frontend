@@ -8,6 +8,7 @@ import { LayoutProvider } from "./context/layout-context";
 import Landing from "./pages/Landing";
 import Signin from "./pages/Signin";
 import Signup from "./pages/Signup";
+import Notifications from "./pages/Notifications";
 
 import Demo from "./pages/Demo";
 import AdminDashboard from "./pages/admin/Dashboard";
@@ -27,21 +28,12 @@ function App() {
           <Route path="/demo" element={<Demo />} />
           <Route path="/admin-dashboard" element={<AdminDashboard />} />
 
-
+          {/* Role-based routes start */}
           <Route
             path="/dashboard"
             element={
               <ProtectedRoute>
                 <RedirectRoute page="dashboard" />
-              </ProtectedRoute>
-            }
-          />
-
-          <Route
-            path="/notifications"
-            element={
-              <ProtectedRoute>
-                <RedirectRoute page="notifications" />
               </ProtectedRoute>
             }
           />
@@ -100,12 +92,22 @@ function App() {
               </ProtectedRoute>
             }
           />
+          {/* Role-based routes end */}
 
           <Route
             path="/tickets/new"
             element={
               <ProtectedRoute>
                 <NewTicket />
+              </ProtectedRoute>
+            }
+          />
+
+          <Route
+            path="/notifications"
+            element={
+              <ProtectedRoute>
+                <Notifications />
               </ProtectedRoute>
             }
           />

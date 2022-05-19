@@ -1,24 +1,7 @@
 import React, { useState, useContext, useEffect } from "react";
 import { Link as ReactLink } from "react-router-dom";
 import { BsFillEyeFill, BsFillEyeSlashFill } from "react-icons/bs";
-import {
-  Flex,
-  Box,
-  FormControl,
-  FormLabel,
-  Image,
-  Input,
-  InputGroup,
-  InputRightElement,
-  Checkbox,
-  Stack,
-  Link,
-  Button,
-  Heading,
-  Text,
-  Alert,
-  AlertIcon,
-} from "@chakra-ui/react";
+import { Flex, Box, FormControl, FormLabel, Image, Input, InputGroup, InputRightElement, Checkbox, Stack, Link, Button, Heading, Text, Alert, AlertIcon, } from "@chakra-ui/react";
 
 import AuthContext from "../context/auth-context";
 import LayoutContext from "../context/layout-context";
@@ -102,21 +85,14 @@ const Signin = () => {
                   justify={"space-between"}
                 >
                   <Checkbox colorScheme="orange">Remember me</Checkbox>
-                  <Link
-                  >
-                    Forgot password?
-                  </Link>
+                  <Link>Forgot password?</Link>
                 </Stack>
                 <Button type="submit">Sign in</Button>
               </Stack>
             </form>
             <Text as="span" textAlign="center" pt={2}>
               Don't have an account?
-              <Link
-                as={ReactLink}
-                to="/signup"
-                ps={1}
-              >
+              <Link as={ReactLink} to="/signup" ps={1}>
                 Sign up
               </Link>
             </Text>

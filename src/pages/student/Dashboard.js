@@ -33,7 +33,7 @@ import useAxios from "../../utils/axios";
 const Dashboard = () => {
   const { user, setCanReport } = useContext(AuthContext);
   const [recentTicket, updateRecentTicket] = useState([]);
-  const [ticketType, updateTicketType] = useState('');
+  const [ticketType, updateTicketType] = useState("");
 
   const api = useAxios();
 
@@ -55,7 +55,7 @@ const Dashboard = () => {
         setCanReport(res["report_perm"] ? res["report_perm"] : false);
       })
       .catch((e) => {
-        alert(e.message);
+        console.log(e.message);
       });
 
     getRecentTicket()
@@ -64,11 +64,10 @@ const Dashboard = () => {
         else {
           updateRecentTicket(res);
           updateTicketType(res.type.name);
-          // console.log(res);
         }
       })
       .catch((e) => {
-        alert(e.message);
+        console.log(e.message);
       });
   }, []);
 
@@ -81,7 +80,7 @@ const Dashboard = () => {
 
         <SimpleGrid minChildWidth="300px" spacing={5} lineHeight={1.25}>
           <Box bg="white" borderRadius="10px" box-shadow="md" padding={5}>
-            {recentTicket !== null ? (
+            {ticketType !== "" ? (
               <div>
                 <Flex justifyContent="space-between">
                   <Heading fontSize="lg">Recent Ticket Info</Heading>
@@ -102,7 +101,13 @@ const Dashboard = () => {
                     <Text fontWeight={600}>{ticketType}</Text>
                   </Box>
                   <Box>
-                    <Tag size="lg" colorScheme="orange" borderRadius="full">
+                    <Tag
+                      size="lg"
+                      colorScheme={
+                        recentTicket.status === "closed" ? "red" : "green"
+                      }
+                      borderRadius="full"
+                    >
                       <TagLabel textTransform="uppercase">
                         {recentTicket.status}
                       </TagLabel>
@@ -182,23 +187,6 @@ const Dashboard = () => {
           </TableContainer>
         </Box> */}
       </Stack>
-
-      {/* <Heading fontSize="4xl">
-       Lorem, ipsum dolor sit amet consectetur adipisicing elit. Corporis, hic corrupti aliquid eveniet quas quaerat, assumenda laboriosam, quae obcaecati velit maxime. Ipsa quidem optio aliquid nobis dolorum, amet laborum libero!
-       Lorem ipsum dolor, sit amet consectetur adipisicing elit. Omnis sunt voluptatum accusamus maxime illum eum et repellendus earum, deserunt explicabo recusandae quam commodi perspiciatis officiis consequatur esse, temporibus odio amet?
-     </Heading>
-     <Heading fontSize="4xl">
-       Lorem, ipsum dolor sit amet consectetur adipisicing elit. Corporis, hic corrupti aliquid eveniet quas quaerat, assumenda laboriosam, quae obcaecati velit maxime. Ipsa quidem optio aliquid nobis dolorum, amet laborum libero!
-       Lorem ipsum dolor, sit amet consectetur adipisicing elit. Omnis sunt voluptatum accusamus maxime illum eum et repellendus earum, deserunt explicabo recusandae quam commodi perspiciatis officiis consequatur esse, temporibus odio amet?
-     </Heading>
-     <Heading fontSize="4xl">
-       Lorem, ipsum dolor sit amet consectetur adipisicing elit. Corporis, hic corrupti aliquid eveniet quas quaerat, assumenda laboriosam, quae obcaecati velit maxime. Ipsa quidem optio aliquid nobis dolorum, amet laborum libero!
-       Lorem ipsum dolor, sit amet consectetur adipisicing elit. Omnis sunt voluptatum accusamus maxime illum eum et repellendus earum, deserunt explicabo recusandae quam commodi perspiciatis officiis consequatur esse, temporibus odio amet?
-     </Heading>
-     <Heading fontSize="4xl">
-       Lorem, ipsum dolor sit amet consectetur adipisicing elit. Corporis, hic corrupti aliquid eveniet quas quaerat, assumenda laboriosam, quae obcaecati velit maxime. Ipsa quidem optio aliquid nobis dolorum, amet laborum libero!
-       Lorem ipsum dolor, sit amet consectetur adipisicing elit. Omnis sunt voluptatum accusamus maxime illum eum et repellendus earum, deserunt explicabo recusandae quam commodi perspiciatis officiis consequatur esse, temporibus odio amet?
-     </Heading>  */}
     </UserLayout>
   );
 };

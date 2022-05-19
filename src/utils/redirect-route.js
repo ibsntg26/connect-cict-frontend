@@ -2,7 +2,7 @@ import { useContext } from "react";
 
 import AuthContext from "../context/auth-context";
 import Dashboard from "../pages/student/Dashboard";
-import Notifications from "../pages/student/Notifications";
+import EvaluatorDashboard from "../pages/evaluator/Dashboard";
 import Profile from "../pages/student/Profile";
 import Tickets from "../pages/student/Tickets";
 import Ticket from "../pages/student/Ticket";
@@ -23,9 +23,7 @@ export default function RedirectRoute({ page }) {
 
   switch (page) {
     case "dashboard":
-      return role === "student" ? <Dashboard /> : null;
-    case "notifications":
-      return role === "student" ? <Notifications /> : null;
+      return role === "student" ? <Dashboard /> : <EvaluatorDashboard />;
     case "profile":
       return role === "student" ? <Profile /> : null;
     case "tickets":
