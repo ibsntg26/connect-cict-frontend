@@ -39,7 +39,7 @@ const NewTicket = () => {
   });
 
   const [showSubjectField, setShowSubjectField] = useState(false);
-  const [showOtherInfoField, setShowOtherInfoField] = useState(true);
+  const [showOtherInfoField, setShowOtherInfoField] = useState(false);
   const [detailsLabel, setDetailsLabel] = useState("Reason");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const { canReport, setCanReport } = useContext(AuthContext);

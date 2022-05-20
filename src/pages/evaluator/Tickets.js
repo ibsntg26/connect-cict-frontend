@@ -2,16 +2,16 @@ import React, { useContext, useEffect, useState } from "react";
 
 import { Text } from "@chakra-ui/react";
 
-import StudentTicketsLayout from "../../components/student/TicketsLayout";
+import EvaluatorTicketsLayout from "../../components/evaluator/TicketsLayout";
 
-const Tickets = () => {
+const EvaluatorTickets = () => {
   return (
-    <StudentTicketsLayout>
+    <EvaluatorTicketsLayout>
       <Text fontWeight={600} fontSize="lg" color="gray.400" marginTop={5}>
         Select a ticket to view.
       </Text>
-    </StudentTicketsLayout>
+    </EvaluatorTicketsLayout>
   );
 };
 
-export default Tickets;
+export default EvaluatorTickets;

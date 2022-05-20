@@ -3,16 +3,42 @@ import dayjs from "dayjs";
 import { useNavigate, useParams } from "react-router-dom";
 import { useForm } from "react-hook-form";
 
-import { BsCheckLg, BsPaperclip } from "react-icons/bs";
-import { Flex, Button, SimpleGrid, Heading, Box, VStack, Text, Tooltip, Input, Badge, Divider, FormControl, FormHelperText, FormErrorMessage, Image, Center, Textarea, Modal, ModalOverlay, ModalBody, ModalContent, ModalHeader, ModalFooter, ModalCloseButton, useDisclosure, } from "@chakra-ui/react";
+import { BsCheckLg, BsForwardFill, BsPaperclip } from "react-icons/bs";
+import {
+  Flex,
+  Button,
+  SimpleGrid,
+  Heading,
+  Box,
+  VStack,
+  Text,
+  Tooltip,
+  Input,
+  Badge,
+  Divider,
+  FormControl,
+  FormHelperText,
+  FormErrorMessage,
+  Image,
+  Center,
+  Textarea,
+  Modal,
+  ModalOverlay,
+  ModalBody,
+  ModalContent,
+  ModalHeader,
+  ModalFooter,
+  ModalCloseButton,
+  useDisclosure,
+} from "@chakra-ui/react";
 
-import StudentTicketsLayout from "../../components/student/TicketsLayout";
+import EvaluatorTicketsLayout from "../../components/evaluator/TicketsLayout";
 import ReplyItem from "../../components/ReplyItem";
 
 import AuthContext from "../../context/auth-context";
 import useAxios from "../../utils/axios";
 
-const Ticket = () => {
+const EvaluatorTicket = () => {
   const { user } = useContext(AuthContext);
   const [ticketInfo, setTicketInfo] = useState("");
   const [ticketType, setTicketType] = useState("");
@@ -37,7 +63,7 @@ const Ticket = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   const getTicketDetails = async () => {
-    const res = await api.get(`/api/student-ticket/${ticketId}/`);
+    const res = await api.get(`/api/evaluator-ticket/${ticketId}/`);
     return res.data;
   };
 
@@ -177,7 +203,7 @@ const Ticket = () => {
         </Modal>
       )}
 
-      <StudentTicketsLayout>
+      <EvaluatorTicketsLayout>
         <VStack w="full" h="full">
           <Box h="full" w="full">
             <Box w="full" p={8}>
@@ -201,6 +227,19 @@ const Ticket = () => {
                 {ticketInfo.status === "open" ||
                 ticketInfo.status === "processing" ? (
                   <Box>
+                    <Tooltip hasArrow label="Forward to local registrar">
+                      <Button
+                        size="sm"
+                        fontSize="2xl"
+                        variant="ghost"
+                        color="gray.600"
+                        _hover={{
+                          color: "gray.400",
+                        }}
+                      >
+                        <BsForwardFill />
+                      </Button>
+                    </Tooltip>
                     <Tooltip hasArrow label="Close report">
                       <Button
                         size="sm"
@@ -354,9 +393,9 @@ const Ticket = () => {
             </Box>
           </Box>
         </VStack>
-      </StudentTicketsLayout>
+      </EvaluatorTicketsLayout>
     </>
   );
 };
 
-export default Ticket;
+export default EvaluatorTicket;

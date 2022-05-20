@@ -52,124 +52,120 @@ const HelpCenter = () => {
             </Stack>
           </Center>
           <Box p="6" rounded="xs">
-           <Accordion allowToggle>
+            <Accordion allowToggle>
               <AccordionItem>
                 <h2>
                   <AccordionButton>
-                    <Box flex='1' textAlign='left'>
-                        How to Create an Account?
+                    <Box flex="1" textAlign="left">
+                      How many tickets am I allowed to submit to the system?
                     </Box>
                     <AccordionIcon />
                   </AccordionButton>
                 </h2>
                 <AccordionPanel pb={4}>
-                Creating an Account for Incident Report will help the students to report
-                what is the problem they encounter at school, such as, adding or
-                changing subject, INC and more (can see at Incident Types).
+                  When sending tickets, there is a strict one-at-a-time rule:
+                  once you've sent one, you can't send another until the first
+                  has been resolved.
                 </AccordionPanel>
               </AccordionItem>
 
               <AccordionItem>
                 <h2>
                   <AccordionButton>
-                    <Box flex='1' textAlign='left'>
-                      Creating an Account for Student.
+                    <Box flex="1" textAlign="left">
+                      What if I have several issues?
                     </Box>
                     <AccordionIcon />
                   </AccordionButton>
                 </h2>
                 <AccordionPanel pb={4}>
-                Click the “LogIn/Register” button. If the user have an account, they
-                can proceed to the LogIn, and the user need to register if they
-                don't have an account.{' '}
+                  If you're having multiple issues, submit a ticket and explain
+                  your issues in the comment section so the evaluator is fully
+                  aware of your situation. You may also include pictures to
+                  demonstrate your issues. If it isn't applicable, you can send
+                  another ticket after your initial one has been resolved or
+                  closed.
                 </AccordionPanel>
               </AccordionItem>
 
               <AccordionItem>
                 <h2>
                   <AccordionButton>
-                    <Box flex='1' textAlign='left'>
-                    These are the information needed of the student to create an
-                    account:{' '}
+                    <Box flex="1" textAlign="left">
+                      What if my issue isn't resolved?
                     </Box>
                     <AccordionIcon />
                   </AccordionButton>
                 </h2>
                 <AccordionPanel pb={4}>
-                  <UnorderedList pl={3} pt={3}>
-                    <ListItem>Email address (used as username)</ListItem>
-                    <ListItem>Password</ListItem>
-                    <ListItem>Student Number</ListItem>
-                    <ListItem>First Name</ListItem>
-                    <ListItem>Last Name</ListItem>
-                    <ListItem>Middle Initial (Optional)</ListItem>
-                    <ListItem>Year Level</ListItem>
-                    <ListItem>Section</ListItem>
-                  </UnorderedList>
+                  Once the evaluator submits a resolution to your filed issue,
+                  you are also allowed to reply that your problem still needs to
+                  be addressed. If the student is not satisfied with the
+                  resolution, the ticket should not be closed.
                 </AccordionPanel>
               </AccordionItem>
 
               <AccordionItem>
                 <h2>
                   <AccordionButton>
-                    <Box flex='1' textAlign='left'>
-                    Creating an Account for Evaluator.
+                    <Box flex="1" textAlign="left">
+                      How long does it take to get a ticket resolved?
                     </Box>
                     <AccordionIcon />
                   </AccordionButton>
                 </h2>
                 <AccordionPanel pb={4}>
-                  Evaluator need to request an account from the admin or local registrar
-                  to manage and record the incident report of the students.
+                  The time it takes to resolve a ticket is determined by the
+                  nature of the issue and the availability of evaluators or the
+                  admin; it could take up to 1-2 working days if there are
+                  available personnel who are processing the pending requests.
                 </AccordionPanel>
               </AccordionItem>
 
               <AccordionItem>
                 <h2>
                   <AccordionButton>
-                    <Box flex='1' textAlign='left'>
-                      How to Create an Incident Report.
+                    <Box flex="1" textAlign="left">
+                      What if no specific ticket exists for my issue?
                     </Box>
                     <AccordionIcon />
                   </AccordionButton>
                 </h2>
                 <AccordionPanel pb={4}>
-                  Writing an Incident Report should be specific and direct to the point
-                  statement. Provide all the information needed to solve immediately.
+                  In the ticket area, there is an "other" option; select that
+                  option and then elaborate your problem in the comment section
+                  to thoroughly discuss your issue with the evaluator.
                 </AccordionPanel>
               </AccordionItem>
 
               <AccordionItem>
                 <h2>
                   <AccordionButton>
-                    <Box flex='1' textAlign='left'>
-                      Steps on Creating an Incident Report.
+                    <Box flex="1" textAlign="left">
+                      What if I have an issue but lack the necessary information
+                      to submit a ticket?
                     </Box>
                     <AccordionIcon />
                   </AccordionButton>
                 </h2>
                 <AccordionPanel pb={4}>
+                  Send your complaint to the local registrar by email them and
+                  wait for the response.
+                </AccordionPanel>
+              </AccordionItem>
 
-                <OrderedList>
-                  <ListItem>
-                    Click the “Submit an Incident” button to direct you to the file
-                    report.{' '}
-                  </ListItem>
-                  <ListItem pt={3}>
-                    You should select what incident type are you going to write. It
-                    should be correct and connected to the problem you encounter.{' '}
-                  </ListItem>
-                  <ListItem pt={3}>
-                    Write a clean and clear statement in the file report. Most of the
-                    mistake are due to misspelling and wrong grammar. Provide more
-                    specific on what’s the problem to avoid confusion. Always proofread
-                    your report to see the errors before you submit.
-                  </ListItem>
-                  <ListItem pt={3}>
-                    Please include if you have photos or files to be proof to your
-                    report
-                  </ListItem>
-                </OrderedList>
+              <AccordionItem>
+                <h2>
+                  <AccordionButton>
+                    <Box flex="1" textAlign="left">
+                      What if it takes so long to settle my submitted ticket?
+                    </Box>
+                    <AccordionIcon />
+                  </AccordionButton>
+                </h2>
+                <AccordionPanel pb={4}>
+                  Try waiting a little longer, and if that doesn't work, inform
+                  the local registrar about your filed ticket.
                 </AccordionPanel>
               </AccordionItem>
             </Accordion>

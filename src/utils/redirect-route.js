@@ -3,10 +3,19 @@ import { useContext } from "react";
 import AuthContext from "../context/auth-context";
 import Dashboard from "../pages/student/Dashboard";
 import EvaluatorDashboard from "../pages/evaluator/Dashboard";
+
 import Profile from "../pages/student/Profile";
+import EvaluatorProfile from "../pages/evaluator/Profile";
+
 import Tickets from "../pages/student/Tickets";
+import EvaluatorTickets from "../pages/evaluator/Tickets";
+
 import Ticket from "../pages/student/Ticket";
+import EvaluatorTicket from "../pages/evaluator/Ticket";
+
 import TicketAlt from "../pages/student/Ticket-alt";
+import EvaluatorTicketAlt from "../pages/evaluator/Ticket-alt";
+
 import UpdateProfile from "../pages/student/UpdateProfile";
 import ChangePassword from "../pages/student/ChangePassword";
 
@@ -25,13 +34,13 @@ export default function RedirectRoute({ page }) {
     case "dashboard":
       return role === "student" ? <Dashboard /> : <EvaluatorDashboard />;
     case "profile":
-      return role === "student" ? <Profile /> : null;
+      return role === "student" ? <Profile /> : <EvaluatorProfile />;
     case "tickets":
-      return role === "student" ? <Tickets /> : null;
+      return role === "student" ? <Tickets /> : <EvaluatorTickets />;
     case "ticket":
-      return role === "student" ? <Ticket /> : null;
+      return role === "student" ? <Ticket /> : <EvaluatorTicket />;
     case "ticket-alt":
-      return role === "student" ? <TicketAlt /> : null;
+      return role === "student" ? <TicketAlt /> : <EvaluatorTicketAlt />;
     case "updateprofile":
       return role === "student" ? <UpdateProfile /> : null;
     case "changepassword":

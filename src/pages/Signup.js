@@ -1,7 +1,32 @@
 import React, { useContext, useState, useEffect } from "react";
 import { Link as ReactLink, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
-import { Flex, Box, HStack, FormControl, FormHelperText, FormLabel, Image, Input, Select, Stack, Link, Button, Heading, Text, Switch, Modal, ModalOverlay, ModalBody, ModalContent, ModalCloseButton, ModalHeader, ModalFooter, FormErrorMessage, useDisclosure, } from "@chakra-ui/react";
+import {
+  Flex,
+  Box,
+  HStack,
+  FormControl,
+  FormHelperText,
+  FormLabel,
+  Image,
+  Input,
+  Select,
+  Stack,
+  Link,
+  Button,
+  Heading,
+  Text,
+  Switch,
+  Modal,
+  ModalOverlay,
+  ModalBody,
+  ModalContent,
+  ModalCloseButton,
+  ModalHeader,
+  ModalFooter,
+  FormErrorMessage,
+  useDisclosure,
+} from "@chakra-ui/react";
 
 import axios from "axios";
 import LayoutContext from "../context/layout-context";
@@ -171,10 +196,13 @@ const Signup = () => {
                         valueAsNumber: true,
                       })}
                     />
-                    <FormErrorMessage mb={3}>
-                      {errors.student_id && errors.student_id.message}
-                    </FormErrorMessage>
-                    <FormHelperText>Use the format 2022XXXXXX</FormHelperText>
+                    {errors.student_id ? (
+                      <FormErrorMessage mb={3}>
+                        {errors.student_id && errors.student_id.message}
+                      </FormErrorMessage>
+                    ) : (
+                      <FormHelperText>Use the format 2022XXXXXX</FormHelperText>
+                    )}
                   </FormControl>
 
                   <HStack>
@@ -199,7 +227,10 @@ const Signup = () => {
 
                     <FormControl isInvalid={errors.section}>
                       <FormLabel>Section</FormLabel>
-                      <Input type="text" name="section" maxLength={1}
+                      <Input
+                        type="text"
+                        name="section"
+                        maxLength={1}
                         {...register("section", {
                           required: "Enter your section",
                         })}
@@ -237,12 +268,15 @@ const Signup = () => {
                         },
                       })}
                     />
-                    <FormErrorMessage mb={3}>
-                      {errors.password && errors.password.message}
-                    </FormErrorMessage>
-                    <FormHelperText>
-                      Your password must contain at least 8 characters.
-                    </FormHelperText>
+                    {errors.password ? (
+                      <FormErrorMessage mb={3}>
+                        {errors.password && errors.password.message}
+                      </FormErrorMessage>
+                    ) : (
+                      <FormHelperText>
+                        Your password must contain at least 8 characters.
+                      </FormHelperText>
+                    )}
                   </FormControl>
 
                   <FormControl mb={2} isInvalid={errors.password2}>

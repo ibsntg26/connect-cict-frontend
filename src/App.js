@@ -16,6 +16,14 @@ import AdminDashboard from "./pages/admin/Dashboard";
 import NewTicket from "./pages/student/NewTicket";
 import HelpCenter from "./pages/student/HelpCenter";
 
+
+import AddEvaluator from "./pages/AddEvaluator";
+import PasswordReset from "./pages/PasswordReset";
+import PasswordResetForm from "./pages/PasswordResetForm";
+import StudentDashboard from "./pages/StudentDashboard";
+import UsersPage from "./pages/UsersPage";
+
+
 function App() {
   return (
     <AuthProvider>
@@ -27,6 +35,14 @@ function App() {
 
           <Route path="/demo" element={<Demo />} />
           <Route path="/admin-dashboard" element={<AdminDashboard />} />
+
+          <Route path="/add-evaluator" element={<AddEvaluator />} />
+          <Route path="/password-reset" element={<PasswordReset />} />
+          <Route path="/password-reset-form" element={<PasswordResetForm />} />
+          <Route path="/student-dashboard" element={<StudentDashboard />} />
+          <Route path="/users-page" element={<UsersPage />} />
+
+
 
           {/* Role-based routes start */}
           <Route

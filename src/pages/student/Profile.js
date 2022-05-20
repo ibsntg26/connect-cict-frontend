@@ -1,5 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
-import { Link as ReactLink, useNavigate } from "react-router-dom";
+import { Link as ReactLink } from "react-router-dom";
+import dayjs from "dayjs";
 
 import { Box, Button, Center, Flex, Image, SimpleGrid, Text, } from "@chakra-ui/react";
 
@@ -22,7 +23,6 @@ const Profile = () => {
   const { user } = useContext(AuthContext);
   const [userInfo, setUserInfo] = useState("");
   const [studentInfo, setStudentInfo] = useState("");
-
   const api = useAxios();
 
   const getUserProfile = async () => {
@@ -86,6 +86,7 @@ const Profile = () => {
           {userInfo.year_level ? renderInfo("Year and Section", `${(studentInfo.year_level).charAt(0)}${studentInfo.section}`) :
           renderInfo("Year and Section", `${studentInfo.year_level} | ${studentInfo.section}`)}
           {renderInfo("Email Address", `${userInfo.email}`)}
+          {renderInfo("Last Login", `${dayjs(userInfo.last_login).format('ddd, MMM D, YYYY h:mm A')}`)}
         </SimpleGrid>
       </Box>
     </UserProfileLayout>
