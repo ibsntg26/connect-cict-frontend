@@ -22,7 +22,7 @@ export default function NotificationItem({ pic, name, message, date, ticket }) {
       borderLeftWidth="5px"
       borderColor="orange.500"
       boxShadow="sm"
-      w="90vw"
+      w="50vw"
       p={4}
       rounded="md"
       bg="white"
