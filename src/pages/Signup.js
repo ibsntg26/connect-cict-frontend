@@ -52,7 +52,7 @@ const Signup = () => {
     delete data.section;
 
     axios
-      .post("/api/user/student/", data)
+      .post("http://localhost:8000/api/user/student/", data)
       .then((res) => {
         onOpen();
       })
@@ -92,7 +92,11 @@ const Signup = () => {
             <Text>You can now log in to your account</Text>
           </ModalBody>
           <ModalFooter>
-            <Button variant="ghost" color="orange.400" onClick={() => navigate('/signin')}>
+            <Button
+              variant="ghost"
+              color="orange.400"
+              onClick={() => navigate("/signin")}
+            >
               OK
             </Button>
           </ModalFooter>
@@ -134,7 +138,12 @@ const Signup = () => {
                       isInvalid={errors.middle_initial}
                     >
                       <FormLabel>Middle initial</FormLabel>
-                      <Input type="text" name="middle_initial" maxLength={3} />
+                      <Input
+                        type="text"
+                        name="middle_initial"
+                        maxLength={3}
+                        {...register("middle_initial")}
+                      />
                     </FormControl>
 
                     <FormControl isInvalid={errors.last_name}>
@@ -190,12 +199,9 @@ const Signup = () => {
 
                     <FormControl isInvalid={errors.section}>
                       <FormLabel>Section</FormLabel>
-                      <Input
-                        type="text"
-                        name="section"
+                      <Input type="text" name="section" maxLength={1}
                         {...register("section", {
                           required: "Enter your section",
-                          maxLength: { value: 1, message: "Exceeded maximum" },
                         })}
                       />
                       <FormErrorMessage mb={3}>

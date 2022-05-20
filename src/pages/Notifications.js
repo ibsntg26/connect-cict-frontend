@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
-import { Flex, Center, SimpleGrid, Box, Stack, FormControl, FormLabel, Image, HStack, } from "@chakra-ui/react";
+import { Flex, Center, SimpleGrid, Box, Stack, FormControl, FormLabel, Image, HStack, Heading, } from "@chakra-ui/react";
 
 import NotificationItem from "../components/NotificationItem"
 import UserLayout from "../components/UserLayout";
@@ -32,9 +32,9 @@ const Notifications = () => {
   return (
     <UserLayout>
       <Stack m={3} spacing={5}>
-        <Flex as="b" fontSize="3xl" paddingTop={5}>
+        <Heading fontSize="3xl" paddingTop={5}>
           Notifications
-        </Flex>
+        </Heading>
         <SimpleGrid spacingY="10px">
           {userNotifications.map((notification) => (
             <NotificationItem

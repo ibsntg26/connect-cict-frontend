@@ -1,30 +1,29 @@
 import React, { useContext, useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link as ReactLink, useNavigate } from "react-router-dom";
 
-import {
-  Flex,
-  SimpleGrid,
-  Box,
-  Stack,
-  Text,
-  FormControl,
-  FormLabel,
-  Image,
-  Button
-} from "@chakra-ui/react";
+import { Box, Button, Center, Flex, Image, SimpleGrid, Text, } from "@chakra-ui/react";
 
-import UserLayout from "../../components/UserLayout";
-
+import UserProfileLayout from "../../components/UserProfileLayout";
 import AuthContext from "../../context/auth-context";
 import useAxios from "../../utils/axios";
+
+function renderInfo(key, value) {
+  return (
+    <Box>
+      <Text>{key}</Text>
+      <Text as="b" fontSize="xl">
+        {value}
+      </Text>
+    </Box>
+  );
+}
 
 const Profile = () => {
   const { user } = useContext(AuthContext);
   const [userInfo, setUserInfo] = useState("");
   const [studentInfo, setStudentInfo] = useState("");
-  
+
   const api = useAxios();
-  const navigate = useNavigate();
 
   const getUserProfile = async () => {
     const response = await api.get(
@@ -43,7 +42,6 @@ const Profile = () => {
         delete student.account;
         setStudentInfo(student);
         setUserInfo(account);
-        // console.log(userInfo);
       })
       .catch((e) => {
         alert(e.message);
@@ -51,90 +49,46 @@ const Profile = () => {
   }, []);
 
   return (
-    <UserLayout>
-      <Stack m={5} spacing={5}>
-        <SimpleGrid
-          minChildWidth="300px"
-          spacing={5}
-          lineHeight={1.25}
-        >
-          <Box bg="white" h="50vh" borderRadius="10px" box-shadow="md">
-            <Flex justifyContent="center">
-              <Image
-                borderRadius="full"
-                boxSize="200px"
-                mb={4}
-                src={userInfo.profile_picture}
-                alt={userInfo.name}
-              />
-            </Flex>
-            <Flex justifyContent="center">
-              <Stack direction={["row"]} spacing="100px">
-                <Box>
-                  <Button onClick={() => navigate("/updateprofile")} colorScheme="orange" variant="ghost">
-                    Update Details
-                  </Button>
-                </Box>
-                <Box>
-                  <Button onClick={() => navigate("/changepassword")} colorScheme="orange" variant="ghost">
-                    Change Password
-                  </Button>
-                </Box>
-              </Stack>
-            </Flex>
-          </Box>
-          <Box bg="white" borderRadius="10px" box-shadow="md" padding={8}>
-            <SimpleGrid column={2} spacingY="20px">
-              <Text as="b" fontSize="lg">
-                Student Number
-              </Text>
-              <FormControl>
-                <FormLabel>{studentInfo.student_id}</FormLabel>
-              </FormControl>
+    <UserProfileLayout>
+      <Box bg="white" borderRadius="10px" boxShadow="md" padding={10}>
+        <Flex flexDir="row" justifyContent="center">
+          <Image
+            borderRadius="full"
+            border="1px"
+            borderColor="gray.200"
+            boxSize="200px"
+            mb={4}
+            src={userInfo.profile_picture}
+            alt={user.name}
+          />
+        </Flex>
+        <Box>
+          <Center>
+            <ReactLink to="/updateprofile">
+              <Button colorScheme="orange" variant="ghost">
+                Update Profile
+              </Button>
+            </ReactLink>
+            <Box me={10}></Box>
+            <ReactLink to="/changepassword">
+              <Button colorScheme="orange" variant="ghost">
+                Change Password
+              </Button>
+            </ReactLink>
+          </Center>
+        </Box>
+      </Box>
 
-              <Text as="b" fontSize="lg">
-                First Name
-              </Text>
-              <FormControl>
-                <FormLabel fontSize="lg">{userInfo.first_name}</FormLabel>
-              </FormControl>
-
-              <Text as="b" fontSize="lg">
-                Middle Initial
-              </Text>
-              <FormControl>
-                <FormLabel fontSize="lg">
-                  {userInfo.middle_initial ? userInfo.middle_initial : "_"}
-                </FormLabel>
-              </FormControl>
-
-              <Text as="b" fontSize="lg">
-                Last Name
-              </Text>
-              <FormControl>
-                <FormLabel fontSize="lg">{userInfo.last_name}</FormLabel>
-              </FormControl>
-
-              <Text as="b" fontSize="lg">
-                Year and Section
-              </Text>
-              <FormControl>
-                <FormLabel fontSize="lg">
-                  {studentInfo.year_level ? (studentInfo.year_level).charAt(0) : studentInfo.year_level}{studentInfo.section}
-                </FormLabel>
-              </FormControl>
-
-              <Text as="b" fontSize="lg">
-                Email Address
-              </Text>
-              <FormControl>
-                <FormLabel fontSize="lg">{userInfo.email}</FormLabel>
-              </FormControl>
-            </SimpleGrid>
-          </Box>
+      <Box bg="white" borderRadius="10px" boxShadow="md" padding={10}>
+        <SimpleGrid column={2} spacingY="15px">
+          {renderInfo("Student Number", `${studentInfo.student_id}`)}
+          {renderInfo("Full Name", `${userInfo.first_name} ${userInfo.middle_initial} ${userInfo.last_name}`)}
+          {userInfo.year_level ? renderInfo("Year and Section", `${(studentInfo.year_level).charAt(0)}${studentInfo.section}`) :
+          renderInfo("Year and Section", `${studentInfo.year_level} | ${studentInfo.section}`)}
+          {renderInfo("Email Address", `${userInfo.email}`)}
         </SimpleGrid>
-      </Stack>
-    </UserLayout>
+      </Box>
+    </UserProfileLayout>
   );
 };
 
