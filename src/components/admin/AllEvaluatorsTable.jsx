@@ -1,6 +1,17 @@
 import React, { useContext, useState } from "react";
 import dayjs from "dayjs";
-import { Avatar, Flex, Table, TableContainer, Thead, Tbody, Tr, Th, Td, Text, } from "@chakra-ui/react";
+import {
+  Avatar,
+  Flex,
+  Table,
+  TableContainer,
+  Thead,
+  Tbody,
+  Tr,
+  Th,
+  Td,
+  Text,
+} from "@chakra-ui/react";
 
 export default function AllEvaluatorsTable({ evaluatorsData }) {
   return (
@@ -41,9 +52,11 @@ export default function AllEvaluatorsTable({ evaluatorsData }) {
                 </Td>
                 <Td>{evaluator.account.email}</Td>
                 <Td>
-                  {dayjs(evaluator.account.last_login).format(
-                    "D MMMM YYYY h:mm A"
-                  )}
+                  {evaluator.account.last_login
+                    ? dayjs(evaluator.account.last_login).format(
+                        "D MMMM YYYY h:mm A"
+                      )
+                    : "Never"}
                 </Td>
               </Tr>
             ))

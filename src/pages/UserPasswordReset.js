@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { Link as ReactLink } from "react-router-dom";
+import { Link as ReactLink, useNavigate } from "react-router-dom";
 import {
   Box,
   Button,
@@ -15,6 +15,8 @@ import {
 import AuthFormContainer from "../components/AuthFormContainer";
 
 const UserPasswordReset = () => {
+  const navigate = useNavigate();
+
   useEffect(() => {
     document.title = "CONNECT | Password Reset";
   }, []);
@@ -32,7 +34,7 @@ const UserPasswordReset = () => {
           <Stack
             as="form"
             onSubmit={() => {
-              alert("submit");
+              navigate('/signin');
             }}
           >
             <FormControl id="email" mb={8}>

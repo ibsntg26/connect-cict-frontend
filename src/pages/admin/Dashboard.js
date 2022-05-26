@@ -1,15 +1,8 @@
 import React, { useState, useContext, useEffect } from "react";
-import dayjs from "dayjs";
-import { Link } from "react-router-dom";
-
-import UserLayout from "../../components/UserLayout";
+import EvaluatorDashboard from "../evaluator/Dashboard";
 
 const AdminDashboard = () => {
-  return (
-    <UserLayout>
-      <div>AdminDashboard</div>
-    </UserLayout>
-  );
+  return <EvaluatorDashboard />;
 };
 
 export default AdminDashboard;

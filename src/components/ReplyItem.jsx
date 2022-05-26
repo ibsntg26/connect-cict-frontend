@@ -11,7 +11,7 @@ export default function ReplyItem(props) {
       justifyContent={props.userFlag && "end"}
       direction={props.userFlag && "row-reverse"}
     >
-      <Flex direction="column" maxW="45%">
+      <Flex direction="column">
         <Text ms={2} me={props.userFlag && 2} textAlign={props.userFlag && "end"} fontSize="small" color="gray.400">
           {dayjs(props.date).format("MM/D h:mm a")}
         </Text>

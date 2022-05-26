@@ -7,7 +7,7 @@ import PublicRoute from "./utils/public-route";
 import ProtectedRoute from "./utils/protected-route";
 
 // pages
-import Landing from "./pages/Landing";
+import Landing from "./pages/landing/Landing";
 import UserSignin from "./pages/UserSignin";
 import UserSignup from "./pages/UserSignup";
 import UserPasswordReset from "./pages/UserPasswordReset";

@@ -10,12 +10,12 @@ export default function StudentSidebar() {
 
   return (
     <Sidebar>
-      <NavItem
+      {/* <NavItem
         navSize={navSize}
         icon={IoHomeSharp}
         title="Dashboard"
         link="/dashboard"
-      />
+      /> */}
 
       <NavItem
         navSize={navSize}
