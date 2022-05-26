@@ -1,27 +1,27 @@
 import React, { useContext, useEffect, useState } from "react";
-import dayjs from "dayjs";
 import { useNavigate, useParams } from "react-router-dom";
 import { useForm } from "react-hook-form";
-
-import { BsCheckLg, BsPaperclip } from "react-icons/bs";
-import { Flex, Button, SimpleGrid, Heading, Box, VStack, Text, Tooltip, Input, Badge, Divider, FormControl, FormHelperText, FormErrorMessage, Image, Center, Textarea, Modal, ModalOverlay, ModalBody, ModalContent, ModalHeader, ModalFooter, ModalCloseButton, useDisclosure, } from "@chakra-ui/react";
-
-import StudentTicketsLayout from "../../components/student/TicketsLayout";
+import dayjs from "dayjs";
+import { BsPaperclip } from "react-icons/bs";
+import { GoIssueClosed } from "react-icons/go";
+import { IoIosSend } from "react-icons/io";
+import { Badge, Box, Button, Center, Collapse, Divider, Flex, FormControl, FormErrorMessage, Grid, GridItem, Image, Input, Heading, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, SimpleGrid, Text, Textarea, VStack, useDisclosure, } from "@chakra-ui/react";
+import StudentTicketsLayout from "../../components/student/StudentTicketsLayout";
 import ReplyItem from "../../components/ReplyItem";
 
 import AuthContext from "../../context/auth-context";
 import useAxios from "../../utils/axios";
 
-const Ticket = () => {
+const StudentTicket = () => {
   const { user } = useContext(AuthContext);
   const [ticketInfo, setTicketInfo] = useState("");
   const [ticketType, setTicketType] = useState("");
   const [ticketReplies, setTicketReplies] = useState([]);
   const [hasAttachment, setHasAttachment] = useState(false);
+  const [show, setShow] = useState(false);
   const {
     handleSubmit,
     register,
-    setError,
     formState: { errors, isSubmitting },
   } = useForm();
 
@@ -41,6 +41,11 @@ const Ticket = () => {
     return res.data;
   };
 
+  const getTicketReplies = async () => {
+    const res = await api.get(`/api/ticket-reply/?ticket=${ticketId}`);
+    return res.data;
+  };
+
   const closeTicket = async () => {
     await api
       .patch(`/api/student-ticket/${ticketId}/`)
@@ -52,11 +57,6 @@ const Ticket = () => {
       .catch((err) => {
         console.log(err.response.data);
       });
-  };
-
-  const getTicketReplies = async () => {
-    const res = await api.get(`/api/ticket-reply/?ticket=${ticketId}`);
-    return res.data;
   };
 
   const populateTicketReplies = () => {
@@ -92,7 +92,7 @@ const Ticket = () => {
           }
         )
         .then((res) => {
-          document.getElementById("replyForm").reset();
+          document.querySelector("form").reset();
           populateTicketReplies();
           // alert("Reply has been sent!");
         })
@@ -111,7 +111,7 @@ const Ticket = () => {
         let ticket = res;
         let type = "";
 
-        res.message !== "Other" ? (type = res.type.name) : (type = res.subject);
+        type = res.type.id
         delete ticket.type;
 
         setTicketInfo(ticket);
@@ -129,7 +129,7 @@ const Ticket = () => {
       {ticketInfo.attachment && (
         <Modal
           onClose={onAttachmentClose}
-          size="md"
+          size="lg"
           isOpen={isAttachmentOpen}
           motionPreset="slideInBottom"
         >
@@ -155,11 +155,11 @@ const Ticket = () => {
         >
           <ModalOverlay />
           <ModalContent>
-            <ModalHeader>Close Ticket Report</ModalHeader>
+            <ModalHeader>Close Incident Ticket</ModalHeader>
             <ModalCloseButton />
             <ModalBody>
               <Text>
-                {ticketInfo.status == "open"
+                {ticketInfo.status === "open"
                   ? "This ticket hasn't been evaluated yet."
                   : "This ticket is still being processed by an evaluator."}{" "}
                 Are you sure you want to close this report?
@@ -178,15 +178,21 @@ const Ticket = () => {
       )}
 
       <StudentTicketsLayout>
-        <VStack w="full" h="full">
-          <Box h="full" w="full">
-            <Box w="full" p={8}>
-              <Flex justifyContent="space-between">
+        <Grid
+          bg="white"
+          h="full"
+          p={2}
+          borderRadius="10px"
+          templateRows="repeat(5, 1fr)"
+        >
+          <GridItem rowSpan={4}>
+            <Box overflow="auto" h="70vh" pe={2}>
+              <Flex justifyContent="space-between" alignItems="center">
                 <Flex>
                   <Heading fontSize="2xl" maxW={500} me={4} noOfLines={1}>
-                    Ticket #{ticketInfo.id} - {ticketInfo.subject}
+                    {ticketInfo.subject}
                   </Heading>
-                  <Text as="span">
+                  <Text>
                     <Badge
                       fontSize="md"
                       colorScheme={
@@ -200,50 +206,58 @@ const Ticket = () => {
 
                 {ticketInfo.status === "open" ||
                 ticketInfo.status === "processing" ? (
-                  <Box>
-                    <Tooltip hasArrow label="Close report">
-                      <Button
-                        size="sm"
-                        fontSize="xl"
-                        variant="ghost"
-                        color="green.500"
-                        _hover={{
-                          color: "green.700",
-                        }}
-                        onClick={() => onOpen()}
-                      >
-                        <BsCheckLg />
-                      </Button>
-                    </Tooltip>
+                  <Box p={1}>
+                    <Button
+                      colorScheme="red"
+                      size="sm"
+                      variant="ghost"
+                      leftIcon={<GoIssueClosed />}
+                      onClick={() => onOpen()}
+                    >
+                      Close
+                    </Button>
                   </Box>
                 ) : null}
               </Flex>
               <SimpleGrid columns={3} gap={5} mt={5}>
-                {/* <Box>
-                <Text fontSize="sm">Evaluator</Text>
-                <Text as="b" fontSize="large">
-                  {ticketInfo.evaluator}
-                </Text>
-              </Box> */}
+                {ticketInfo.other_info && (
+                  <Box>
+                    <Text fontSize="sm">Other info</Text>
+                    <Text fontWeight={600}>{ticketInfo.other_info}</Text>
+                  </Box>
+                )}
+
                 <Box>
-                  <Text fontSize="sm">Date opened</Text>
-                  <Text as="b" fontSize="large">
+                  <Text fontSize="sm">Opened on</Text>
+                  <Text fontWeight={600}>
                     {dayjs(ticketInfo.date_created).format(
-                      "MMMM D, YYYY h:mm a"
+                      "D MMMM YYYY h:mm A"
                     )}
                   </Text>
                 </Box>
 
-                {ticketInfo.status === "closed" && (
+                {/* {ticketInfo.status === "processing" && (
                   <Box>
-                    <Text fontSize="sm">Date closed</Text>
-                    <Text as="b" fontSize="large">
-                      {dayjs(ticketInfo.date_completed).format(
-                        "MMMM D, YYYY h:mm a"
+                    <Text fontSize="sm">Last updated on</Text>
+                    <Text fontWeight={600}>
+                      {dayjs(ticketInfo.date_updated).format(
+                        "D MMMM YYYY h:mm A"
                       )}
                     </Text>
                   </Box>
                 )}
+
+                {ticketInfo.status === "closed" && (
+                  <Box>
+                    <Text fontSize="sm">Closed by {ticketInfo.closed_by === 'student' ? 'you' : 'an evaluator'} on</Text>
+                    <Text fontWeight={600}>
+                      {dayjs(ticketInfo.date_completed).format(
+                        "D MMMM YYYY h:mm A"
+                      )}
+                    </Text>
+                  </Box>
+                )} */}
+
                 {ticketInfo.attachment && (
                   <Box>
                     <Text fontSize="sm">Attachment</Text>
@@ -263,20 +277,19 @@ const Ticket = () => {
                   </Box>
                 )}
               </SimpleGrid>
+
               <Box mt={8}>
-                <Text fontSize="sm">Description</Text>
-                <Text fontWeight={600}>{ticketInfo.message}</Text>
+              <Text fontSize="sm">{ticketType === 1 ? "Balance reason" : "Concern details"}</Text>
+
+                <Collapse startingHeight={25} in={show} fontWeight={600}>
+                  {ticketInfo.message}
+                </Collapse>
+                <Button size="xs" variant="link" onClick={() => setShow(!show)}>
+                  Show {show ? "Less" : "More"}
+                </Button>
               </Box>
-              <Divider borderBottom="2px solid #ddd" mt={8} />
-              <Box
-                h="full"
-                mt={4}
-                p={2}
-                minH="32vh"
-                maxHeight="32vh"
-                mb={4}
-                overflow="auto"
-              >
+              <Divider borderBottom="2px solid #ddd" my={5} />
+              <Box>
                 {ticketReplies.map((reply) => (
                   <ReplyItem
                     key={reply.id}
@@ -288,75 +301,73 @@ const Ticket = () => {
                   />
                 ))}
               </Box>
-              <Box>
-                <form id="replyForm" onSubmit={handleSubmit(sendReply)}>
-                  <Flex>
-                    <FormControl isInvalid={errors.message} me={5}>
-                      {hasAttachment === true && (
-                        <FormHelperText mb={2}>Attachments (1)</FormHelperText>
-                      )}
-                      <Textarea
-                        {...register("message", {
-                          required: "A message is required.",
-                        })}
-                        placeholder="Type your reply here"
-                        name="message"
-                        maxLength={500}
-                        rows={5}
-                        bg="white"
-                        disabled={ticketInfo.status === "closed"}
-                      />
-                      <FormErrorMessage mb={3} textAlign="right">
-                        {errors.message && errors.message.message}
-                      </FormErrorMessage>
-                    </FormControl>
-
-                    <VStack verticalAlign="top" maxW="15vh">
-                      <FormControl>
-                        {/* <FormLabel>Attachment</FormLabel> */}
-                        <Input
-                          type="file"
-                          name="attachment"
-                          accept="image/*"
-                          {...register("attachment")}
-                          display="none"
-                          id="fileInput"
-                          disabled={ticketInfo.status === "closed"}
-                        />
-                      </FormControl>
-
-                      <Button
-                        w={100}
-                        variant="link"
-                        onClick={() => {
-                          document.getElementById("fileInput").click();
-                          setHasAttachment(true);
-                        }}
-                        disabled={ticketInfo.status === "closed"}
-                      >
-                        <BsPaperclip />
-                        Attach file
-                      </Button>
-
-                      <Button
-                        w={100}
-                        size="lg"
-                        type={"submit"}
-                        isLoading={isSubmitting}
-                        disabled={ticketInfo.status === "closed"}
-                      >
-                        Send
-                      </Button>
-                    </VStack>
-                  </Flex>
-                </form>
-              </Box>
             </Box>
-          </Box>
-        </VStack>
+          </GridItem>
+          <GridItem rowSpan={1}>
+            <Flex as="form" onSubmit={handleSubmit(sendReply)}>
+              <FormControl isInvalid={errors.message} me={5}>
+                {/* {hasAttachment === true && (
+                <FormHelperText mb={2}>Attachments (1)</FormHelperText>
+              )} */}
+                <Textarea
+                  {...register("message", {
+                    required: "A message is required.",
+                  })}
+                  placeholder="Type your reply here"
+                  name="message"
+                  maxLength={500}
+                  rows={4}
+                  bg="white"
+                  disabled={ticketInfo.status === "open" || ticketInfo.status === "closed"}
+                />
+                <FormErrorMessage textAlign="right">
+                  {errors.message && errors.message.message}
+                </FormErrorMessage>
+              </FormControl>
+
+              <VStack verticalAlign="top" maxW="15vh">
+                <FormControl>
+                  {/* <FormLabel>Attachment</FormLabel> */}
+                  <Input
+                    type="file"
+                    name="attachment"
+                    accept="image/*"
+                    {...register("attachment")}
+                    display="none"
+                    id="fileInput"
+                    disabled={ticketInfo.status === "open" || ticketInfo.status === "closed"}
+                  />
+                </FormControl>
+
+                <Button
+                  w={100}
+                  variant="link"
+                  onClick={() => {
+                    document.getElementById("fileInput").click();
+                    setHasAttachment(true);
+                  }}
+                  disabled={ticketInfo.status === "open" || ticketInfo.status === "closed"}
+                >
+                  <BsPaperclip />
+                  Attach file
+                </Button>
+
+                <Button
+                  w={100}
+                  leftIcon={<IoIosSend />}
+                  type="submit"
+                  isLoading={isSubmitting}
+                  disabled={ticketInfo.status === "open" || ticketInfo.status === "closed"}
+                >
+                  Send
+                </Button>
+              </VStack>
+            </Flex>
+          </GridItem>
+        </Grid>
       </StudentTicketsLayout>
     </>
   );
 };
 
-export default Ticket;
+export default StudentTicket;

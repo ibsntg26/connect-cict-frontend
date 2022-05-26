@@ -1,37 +1,37 @@
 import React, { useState, useContext, useEffect } from "react";
+import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import {
-  Flex,
+  Alert,
+  AlertIcon,
   Box,
+  Button,
+  Center,
+  Checkbox,
+  Flex,
   FormControl,
+  FormErrorMessage,
   FormLabel,
+  Heading,
   Image,
   Input,
   InputGroup,
   InputRightElement,
-  Checkbox,
   Link,
   Select,
-  Center,
-  Button,
   Stack,
-  Heading,
   Text,
   Textarea,
-  Alert,
-  AlertIcon,
-  useColorModeValue,
   useToast,
 } from "@chakra-ui/react";
-
 import UserLayout from "../../components/UserLayout";
 
 import AuthContext from "../../context/auth-context";
 import useAxios from "../../utils/axios";
 
-const NewTicket = () => {
+const StudentNewTicket = () => {
   const [ticketData, updateTicketData] = useState({
-    type: "",
+    type: "1",
     subject: "",
     message: "",
     other_info: "",
@@ -106,7 +106,7 @@ const NewTicket = () => {
           ["type"]: ticket_type,
           ["other_info"]: "",
         });
-      } else  {
+      } else {
         setShowOtherInfoField(true);
         setShowSubjectField(false);
         setDetailsLabel("Concern details");
@@ -115,7 +115,6 @@ const NewTicket = () => {
           ["type"]: ticket_type,
           ["subject"]: "",
         });
-        
       }
     }
   };
@@ -137,7 +136,7 @@ const NewTicket = () => {
       )
       .then((res) => {
         // console.log(res.data);
-        alert("Ticket has been forwarded to the evaluators.");
+        alert("Ticket has been forwarded to evaluators.");
         setCanReport(false);
         navigate("/dashboard");
       })
@@ -151,18 +150,12 @@ const NewTicket = () => {
       {canReport === true ? (
         <Stack m={5} spacing={5}>
           <Center>
-            <Heading fontSize="3xl">Open new ticket</Heading>
+            <Heading fontSize="xl">Open new incident ticket</Heading>
           </Center>
           <Center>
-            <Box
-              bg="white"
-              p={5}
-              width="40vw"
-              borderRadius="10px"
-              box-shadow="md"
-            >
+            <Box bg="white" p={5} borderRadius="10px" box-shadow="md">
               <Stack spacing={4}>
-                <form onSubmit={submitHandler}>
+                <Stack as="form" onSubmit={submitHandler}>
                   <Stack spacing={4} mb={10}>
                     <FormControl isRequired>
                       <FormLabel>Type</FormLabel>
@@ -240,16 +233,22 @@ const NewTicket = () => {
                       Submit
                     </Button>
                   </Stack>
-                </form>
+                </Stack>
               </Stack>
             </Box>
           </Center>
         </Stack>
       ) : (
         <Stack m={5} spacing={5}>
-          <Text fontWeight={600} textAlign="center" fontSize="xl" color="gray.500" w="full">
-            You currently have 1 ongoing ticket.<br /> Please wait for the resolution
-            before submitting a new one.
+          <Text
+            fontWeight={600}
+            textAlign="center"
+            fontSize="xl"
+            color="gray.500"
+            w="full"
+          >
+            You currently have 1 ongoing ticket.
+            <br /> Please wait for the resolution before submitting a new one.
           </Text>
         </Stack>
       )}
@@ -257,4 +256,4 @@ const NewTicket = () => {
   );
 };
 
-export default NewTicket;
+export default StudentNewTicket;

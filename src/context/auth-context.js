@@ -1,9 +1,8 @@
-import { createContext, useState, useEffect } from "react";
-import jwt_decode from "jwt-decode";
+import { createContext, useEffect, useState  } from "react";
 import { useNavigate } from "react-router-dom";
+import jwt_decode from "jwt-decode";
 
 const AuthContext = createContext();
-
 export default AuthContext;
 
 export const AuthProvider = ({ children }) => {
@@ -56,7 +55,6 @@ export const AuthProvider = ({ children }) => {
     if (!response) alert("No server response");
     else {
       if (response.status === 200) {
-        // if success
         setAuthTokens(data);
         setUser(jwt_decode(data.access));
 

@@ -6,24 +6,36 @@ import { ChakraProvider, CSSReset, extendTheme } from "@chakra-ui/react";
 import App from "./App";
 
 const theme = extendTheme({
-  // styles: {
-  //   global: {
-  //     // styles for the `body`
-  //     body: {
-  //       color: "gray.400",
-  //     },
-  //   },
-  // },
+  styles: {
+    global: {
+      "&::-webkit-scrollbar": {
+        width: "8px",
+        borderRadius: '8px',
+      },
+      "&::-webkit-scrollbar:horizontal": {
+        height: "8px",
+      },
+      "&::-webkit-scrollbar-track": {
+        backgroundColor: "#f1f1f1",
+      },
+      "&::-webkit-scrollbar-thumb": {
+        backgroundColor: '#aaaaaa',
+      },
+      "&::-webkit-scrollbar-thumb:hover": {
+        backgroundColor: '#bebebe',
+      },
+    },
+  },
 
   components: {
     Text: {
       baseStyle: {
-        color: "gray.700",
+        color: "gray.600",
       },
     },
     Heading: {
       baseStyle: {
-        color: "gray.700",
+        color: "gray.600",
       },
     },
     FormLabel: {
@@ -32,6 +44,12 @@ const theme = extendTheme({
       },
     },
     Button: {
+      baseStyle: {
+        _focus: {
+          outline: "none",
+          boxShadow: "none",
+        }
+      },
       variants: {
         solid: {
           color: "white",

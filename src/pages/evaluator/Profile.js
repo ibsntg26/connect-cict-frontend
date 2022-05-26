@@ -1,18 +1,18 @@
 import React, { useContext, useEffect, useState } from "react";
 import { Link as ReactLink } from "react-router-dom";
 import dayjs from "dayjs";
+import { Box, Button, Flex, Image, SimpleGrid, Text } from "@chakra-ui/react";
+import { FaUserEdit } from "react-icons/fa";
+import ProfileLayout from "../../components/ProfileLayout";
 
-import { Box, Button, Center, Flex, Image, SimpleGrid, Text, } from "@chakra-ui/react";
-
-import UserProfileLayout from "../../components/UserProfileLayout";
 import AuthContext from "../../context/auth-context";
 import useAxios from "../../utils/axios";
 
 function renderInfo(key, value) {
   return (
     <Box>
-      <Text>{key}</Text>
-      <Text as="b" fontSize="xl">
+      <Text fontSize="sm">{key}</Text>
+      <Text fontSize="lg" fontWeight={600}>
         {value}
       </Text>
     </Box>
@@ -20,7 +20,7 @@ function renderInfo(key, value) {
 }
 
 const EvaluatorProfile = () => {
-  const { user } = useContext(AuthContext);
+  const { user, role } = useContext(AuthContext);
   const [userInfo, setUserInfo] = useState("");
   const [evaluatorInfo, setEvaluatorInfo] = useState("");
   const api = useAxios();
@@ -49,45 +49,54 @@ const EvaluatorProfile = () => {
   }, []);
 
   return (
-    <UserProfileLayout>
-      <Box bg="white" borderRadius="10px" boxShadow="md" padding={10}>
-        <Flex flexDir="row" justifyContent="center">
-          <Image
-            borderRadius="full"
-            border="1px"
-            borderColor="gray.200"
-            boxSize="200px"
-            mb={4}
-            src={userInfo.profile_picture}
-            alt={user.name}
-          />
-        </Flex>
-        <Box>
-          <Center>
-            <ReactLink to="/updateprofile">
-              <Button colorScheme="orange" variant="ghost">
-                Update Profile
-              </Button>
-            </ReactLink>
-            <Box me={10}></Box>
-            <ReactLink to="/changepassword">
-              <Button colorScheme="orange" variant="ghost">
-                Change Password
-              </Button>
-            </ReactLink>
-          </Center>
-        </Box>
-      </Box>
+    <ProfileLayout>
+      <Flex align="center" flexDir="column" mb={4}>
+        <Image
+          borderRadius="full"
+          borderColor="gray.200"
+          boxSize="200px"
+          src={userInfo.profile_picture}
+          alt={user.name}
+        />
+        <Box py={2}>
+          <ReactLink to={role === 'evaluator' ? "/profile/update/" : "/admin/profile/update/"}>
+            <Button
+              colorScheme="orange"
+              size="sm"
+              leftIcon={<FaUserEdit />}
+              variant="ghost"
+              me={2}
+            >
+              Update profile
+            </Button>
+          </ReactLink>
 
-      <Box bg="white" borderRadius="10px" boxShadow="md" padding={10}>
+          <ReactLink to={role === 'evaluator' ? "/profile/change-password/" : "/admin/profile/change-password/"}>
+            <Button
+              colorScheme="orange"
+              size="sm"
+              variant="ghost"
+            >
+              Change password
+            </Button>
+          </ReactLink>
+        </Box>
+      </Flex>
+      <Box>
         <SimpleGrid column={2} spacingY="15px">
           {renderInfo("Employee Number", `${evaluatorInfo.employee_id}`)}
-          {renderInfo("Full Name", `${userInfo.first_name} ${userInfo.last_name}`)}
+          {renderInfo(
+            "Full Name",
+            `${userInfo.first_name} ${userInfo.last_name}`
+          )}
           {renderInfo("Email Address", `${userInfo.email}`)}
-          {renderInfo("Last Login", `${dayjs(userInfo.last_login).format('ddd, MMM D, YYYY h:mm A')}`)}
+          {renderInfo(
+            "Last Login",
+            `${dayjs(userInfo.last_login).format("ddd, MMM D, YYYY h:mm A")}`
+          )}
         </SimpleGrid>
       </Box>
-    </UserProfileLayout>
+    </ProfileLayout>
   );
 };
 

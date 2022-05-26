@@ -1,17 +1,16 @@
-import React, { useContext, useEffect, useState } from "react";
-
+import React from 'react'
 import { Text } from "@chakra-ui/react";
 
-import EvaluatorTicketsLayout from "../../components/evaluator/TicketsLayout";
+import EvaluatorTicketsLayout from '../../components/evaluator/EvaluatorTicketsLayout';
 
 const EvaluatorTickets = () => {
   return (
     <EvaluatorTicketsLayout>
-      <Text fontWeight={600} fontSize="lg" color="gray.400" marginTop={5}>
-        Select a ticket to view.
-      </Text>
+        <Text fontWeight={600} textAlign="center" fontSize="lg" color="gray.400" marginTop={5}>
+            Select an incident ticket to process.
+        </Text>
     </EvaluatorTicketsLayout>
-  );
-};
+  )
+}
 
 export default EvaluatorTickets;
