@@ -8,20 +8,28 @@ import {
   FormControl,
   FormLabel,
   FormErrorMessage,
-  HStack,
   Image,
   Input,
-  Select,
+  Modal,
+  ModalBody,
+  ModalCloseButton,
+  ModalContent,
+  ModalFooter,
+  ModalHeader,
+  ModalOverlay,
   SimpleGrid,
+  Text,
+  useDisclosure,
 } from "@chakra-ui/react";
 import { FaUserEdit } from "react-icons/fa";
+import { RiUserUnfollowFill } from "react-icons/ri";
 import ProfileLayout from "../../components/ProfileLayout";
 
 import AuthContext from "../../context/auth-context";
 import useAxios from "../../utils/axios";
 
 const EvaluatorProfileUpdate = () => {
-  const { user, role } = useContext(AuthContext);
+  const { user, role, logoutUser } = useContext(AuthContext);
   const [userPicture, setUserPicture] = useState("");
 
   const {
@@ -39,6 +47,7 @@ const EvaluatorProfileUpdate = () => {
 
   const api = useAxios();
   const navigate = useNavigate();
+  const { isOpen, onOpen, onClose } = useDisclosure();
 
   const getUserProfile = async () => {
     const response = await api.get(
@@ -56,7 +65,9 @@ const EvaluatorProfileUpdate = () => {
         headers: { "content-type": "multipart/form-data" },
       })
       .then((res) => {
-        role === 'evaluator' ? navigate("/profile") : navigate("/admin/profile")
+        role === "evaluator"
+          ? navigate("/profile")
+          : navigate("/admin/profile");
       })
       .catch((err) => {
         const err_data = err.response.data;
@@ -65,6 +76,17 @@ const EvaluatorProfileUpdate = () => {
             message: err_data.email[0],
           });
         }
+      });
+  };
+
+  const deleteAccount = async () => {
+    api
+      .delete(`/api/user/${user.user_id}/`)
+      .then((res) => {
+        logoutUser();
+      })
+      .catch((err) => {
+        console.log(err.response.data);
       });
   };
 
@@ -92,94 +114,136 @@ const EvaluatorProfileUpdate = () => {
   }, []);
 
   return (
-    <ProfileLayout>
-      <Flex
-        as="form"
-        onSubmit={handleSubmit(updateProfile)}
-        align="center"
-        flexDir="column"
-        mb={4}
+    <>
+      <Modal
+        onClose={onClose}
+        size="md"
+        isOpen={isOpen}
+        motionPreset="slideInBottom"
       >
-        <Image
-          borderRadius="full"
-          borderColor="gray.200"
-          boxSize="200px"
-          src={userPicture}
-          alt={user.name}
-        />
-        <Box py={2}>
+        <ModalOverlay />
+        <ModalContent>
+          <ModalHeader>Delete account</ModalHeader>
+          <ModalCloseButton />
+          <ModalBody>
+            <Text>
+              Are you sure you want to permanently delete your account?
+            </Text>
+          </ModalBody>
+          <ModalFooter>
+            <Button variant="ghost" mr={3} onClick={onClose}>
+              No
+            </Button>
+            <Button variant="ghost" color="orange.400" onClick={deleteAccount}>
+              Yes
+            </Button>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
+
+      <ProfileLayout>
+        <Flex
+          as="form"
+          onSubmit={handleSubmit(updateProfile)}
+          align="center"
+          flexDir="column"
+          mb={4}
+        >
+          <Image
+            borderRadius="full"
+            borderColor="gray.200"
+            boxSize="200px"
+            src={userPicture}
+            alt={user.name}
+          />
+          <Box py={2}>
+            <Button
+              type="submit"
+              colorScheme="orange"
+              size="sm"
+              leftIcon={<FaUserEdit />}
+              variant="ghost"
+              me={2}
+              isLoading={isSubmitting}
+            >
+              Save changes
+            </Button>
+          </Box>
+        </Flex>
+        <Box>
+          <SimpleGrid column={2} spacingY="15px">
+            <FormControl isInvalid={errors.profile_picture}>
+              <FormLabel>Profile Picture</FormLabel>
+              <Input
+                type="file"
+                name="profile_picture"
+                accept="image/*"
+                {...register("profile_picture")}
+              />
+              <FormErrorMessage>
+                {errors.profile_picture && errors.profile_picture.message}
+              </FormErrorMessage>
+            </FormControl>
+
+            <FormControl isInvalid={errors.first_name}>
+              <FormLabel>First Name</FormLabel>
+              <Input
+                type="text"
+                name="first_name"
+                {...register("first_name", {
+                  required: "Enter your first name",
+                })}
+              />
+              <FormErrorMessage>
+                {errors.first_name && errors.first_name.message}
+              </FormErrorMessage>
+            </FormControl>
+
+            <FormControl isInvalid={errors.last_name}>
+              <FormLabel>Last Name</FormLabel>
+              <Input
+                type="text"
+                name="last_name"
+                {...register("last_name", {
+                  required: "Enter your last name",
+                })}
+              />
+              <FormErrorMessage>
+                {errors.last_name && errors.last_name.message}
+              </FormErrorMessage>
+            </FormControl>
+
+            <FormControl mb={2} isInvalid={errors.email}>
+              <FormLabel>Email address</FormLabel>
+              <Input
+                type="email"
+                name="email"
+                {...register("email", {
+                  required: "Enter your email",
+                })}
+              />
+              <FormErrorMessage mb={3}>
+                {errors.email && errors.email.message}
+              </FormErrorMessage>
+            </FormControl>
+          </SimpleGrid>
+        </Box>
+
+        {role === "evaluator" && (
           <Button
             type="submit"
-            colorScheme="orange"
+            colorScheme="red"
             size="sm"
-            leftIcon={<FaUserEdit />}
+            leftIcon={<RiUserUnfollowFill />}
+            onClick={onOpen}
             variant="ghost"
-            me={2}
-            isLoading={isSubmitting}
+            mt={10}
           >
-            Save changes
+            Delete account
           </Button>
-        </Box>
-      </Flex>
-      <Box>
-        <SimpleGrid column={2} spacingY="15px">
-          <FormControl isInvalid={errors.profile_picture}>
-            <FormLabel>Profile Picture</FormLabel>
-            <Input
-              type="file"
-              name="profile_picture"
-              accept="image/*"
-              {...register("profile_picture")}
-            />
-            <FormErrorMessage>
-              {errors.profile_picture && errors.profile_picture.message}
-            </FormErrorMessage>
-          </FormControl>
-
-          <FormControl isInvalid={errors.first_name}>
-            <FormLabel>First Name</FormLabel>
-            <Input
-              type="text"
-              name="first_name"
-              {...register("first_name", {
-                required: "Enter your first name",
-              })}
-            />
-            <FormErrorMessage>
-              {errors.first_name && errors.first_name.message}
-            </FormErrorMessage>
-          </FormControl>
-
-          <FormControl isInvalid={errors.last_name}>
-            <FormLabel>Last Name</FormLabel>
-            <Input
-              type="text"
-              name="last_name"
-              {...register("last_name", {
-                required: "Enter your last name",
-              })}
-            />
-            <FormErrorMessage>
-              {errors.last_name && errors.last_name.message}
-            </FormErrorMessage>
-          </FormControl>
-
-          <FormControl mb={2} isInvalid={errors.email}>
-            <FormLabel>Email address</FormLabel>
-            <Input
-              type="email"
-              name="email"
-              {...register("email", {
-                required: "Enter your email",
-              })}
-            />
-            <FormErrorMessage mb={3}>
-              {errors.email && errors.email.message}
-            </FormErrorMessage>
-          </FormControl>
-        </SimpleGrid>
-      </Box>
-    </ProfileLayout>
+        )}
+      </ProfileLayout>
+    </>
   );
 };
 

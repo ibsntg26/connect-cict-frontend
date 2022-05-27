@@ -44,7 +44,7 @@ const StudentProfile = () => {
         setUserInfo(account);
       })
       .catch((e) => {
-        alert(e.message);
+        console.log(e.message);
       });
   }, []);
 

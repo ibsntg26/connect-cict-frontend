@@ -2,27 +2,26 @@ import React, { useState, useContext, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import {
-  Alert,
-  AlertIcon,
   Box,
   Button,
   Center,
-  Checkbox,
-  Flex,
   FormControl,
-  FormErrorMessage,
   FormLabel,
   Heading,
-  Image,
   Input,
-  InputGroup,
-  InputRightElement,
-  Link,
+  Modal,
+  ModalBody,
+  ModalCloseButton,
+  ModalContent,
+  ModalFooter,
+  ModalHeader,
+  ModalOverlay,
   Select,
   Stack,
   Text,
   Textarea,
   useToast,
+  useDisclosure,
 } from "@chakra-ui/react";
 import UserLayout from "../../components/UserLayout";
 
@@ -43,6 +42,8 @@ const StudentNewTicket = () => {
   const [detailsLabel, setDetailsLabel] = useState("Reason");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const { canReport, setCanReport } = useContext(AuthContext);
+  const { isOpen, onOpen, onClose } = useDisclosure();
+
   const toast = useToast();
   const api = useAxios();
   const navigate = useNavigate();
@@ -60,7 +61,7 @@ const StudentNewTicket = () => {
         setCanReport(res["report_perm"] ? res["report_perm"] : false);
       })
       .catch((e) => {
-        alert(e.message);
+        console.log(e.message);
       });
   }, []);
 
@@ -136,9 +137,8 @@ const StudentNewTicket = () => {
       )
       .then((res) => {
         // console.log(res.data);
-        alert("Ticket has been forwarded to evaluators.");
         setCanReport(false);
-        navigate("/dashboard");
+        onOpen();
       })
       .catch((err) => {
         console.log(err.response.data);
@@ -146,113 +146,138 @@ const StudentNewTicket = () => {
   };
 
   return (
-    <UserLayout>
-      {canReport === true ? (
-        <Stack m={5} spacing={5}>
-          <Center>
-            <Heading fontSize="xl">Open new incident ticket</Heading>
-          </Center>
-          <Center>
-            <Box bg="white" p={5} borderRadius="10px" box-shadow="md">
-              <Stack spacing={4}>
-                <Stack as="form" onSubmit={submitHandler}>
-                  <Stack spacing={4} mb={10}>
-                    <FormControl isRequired>
-                      <FormLabel>Type</FormLabel>
-                      <Select name="type" onChange={changeHandler}>
-                        <option value={1}>Remaining balance</option>
-                        <option value={2}>Failed a subject</option>
-                        <option value={3}>Adding/changing of subject/s</option>
-                        <option value={4}>Subjects with INC mark</option>
-                        <option value={5}>
-                          Subjects from lower year level not taken yet
-                        </option>
-                        <option value={6}>
-                          Subjects that are not available on the current
-                          semester not yet taken
-                        </option>
-                        <option value={7}>Others</option>
-                      </Select>
-                    </FormControl>
+    <>
+      <Modal
+        onClose={onClose}
+        size="md"
+        isOpen={isOpen}
+        motionPreset="slideInBottom"
+      >
+        <ModalOverlay />
+        <ModalContent>
+          <ModalHeader>Report submitted</ModalHeader>
+          <ModalCloseButton />
+          <ModalBody>
+            <Text>Ticket has been forwarded to evaluators.</Text>
+          </ModalBody>
+          <ModalFooter>
+            <Button variant="ghost" color="orange.400" onClick={() => navigate("/dashboard")}>
+              OK
+            </Button>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
 
-                    {showSubjectField && (
+      <UserLayout>
+        {canReport === true ? (
+          <Stack m={5} spacing={5}>
+            <Center>
+              <Heading fontSize="xl">Open new incident ticket</Heading>
+            </Center>
+            <Center>
+              <Box bg="white" p={5} borderRadius="10px" box-shadow="md">
+                <Stack spacing={4}>
+                  <Stack as="form" onSubmit={submitHandler}>
+                    <Stack spacing={4} mb={10}>
                       <FormControl isRequired>
-                        <FormLabel>Concern</FormLabel>
+                        <FormLabel>Type</FormLabel>
+                        <Select name="type" onChange={changeHandler}>
+                          <option value={1}>Remaining balance</option>
+                          <option value={2}>Failed a subject</option>
+                          <option value={3}>
+                            Adding/changing of subject/s
+                          </option>
+                          <option value={4}>Subjects with INC mark</option>
+                          <option value={5}>
+                            Subjects from lower year level not taken yet
+                          </option>
+                          <option value={6}>
+                            Subjects that are not available on the current
+                            semester not yet taken
+                          </option>
+                          <option value={7}>Others</option>
+                        </Select>
+                      </FormControl>
+
+                      {showSubjectField && (
+                        <FormControl isRequired>
+                          <FormLabel>Concern</FormLabel>
+                          <Input
+                            type="text"
+                            name="subject"
+                            placeholder="Specify your concern"
+                            onChange={changeHandler}
+                          />
+                        </FormControl>
+                      )}
+
+                      <FormControl isRequired>
+                        <FormLabel>{detailsLabel}</FormLabel>
+                        <Textarea
+                          placeholder="Please describe your concern in no more than 500 characters."
+                          onChange={changeHandler}
+                          name="message"
+                          maxLength={500}
+                          rows={10}
+                        ></Textarea>
+                      </FormControl>
+
+                      {showOtherInfoField && (
+                        <FormControl isRequired>
+                          <FormLabel>Enter course subject/s</FormLabel>
+                          <Input
+                            type="text"
+                            name="other_info"
+                            onChange={changeHandler}
+                          />
+                        </FormControl>
+                      )}
+
+                      <FormControl>
+                        <FormLabel>Attachment</FormLabel>
                         <Input
-                          type="text"
-                          name="subject"
-                          placeholder="Specify your concern"
+                          type="file"
+                          name="attachment"
+                          accept="image/*"
                           onChange={changeHandler}
                         />
                       </FormControl>
-                    )}
+                    </Stack>
 
-                    <FormControl isRequired>
-                      <FormLabel>{detailsLabel}</FormLabel>
-                      <Textarea
-                        placeholder="Please describe your concern in no more than 500 characters."
-                        onChange={changeHandler}
-                        name="message"
-                        maxLength={500}
-                        rows={10}
-                      ></Textarea>
-                    </FormControl>
-
-                    {showOtherInfoField && (
-                      <FormControl isRequired>
-                        <FormLabel>Enter course subject/s</FormLabel>
-                        <Input
-                          type="text"
-                          name="other_info"
-                          onChange={changeHandler}
-                        />
-                      </FormControl>
-                    )}
-
-                    <FormControl>
-                      <FormLabel>Attachment</FormLabel>
-                      <Input
-                        type="file"
-                        name="attachment"
-                        accept="image/*"
-                        onChange={changeHandler}
-                      />
-                    </FormControl>
-                  </Stack>
-
-                  <Stack spacing={10}>
-                    <Button
-                      bg={"orange.400"}
-                      color={"white"}
-                      _hover={{
-                        bg: "orange.500",
-                      }}
-                      type="submit"
-                      // isLoading={isSubmitting}
-                    >
-                      Submit
-                    </Button>
+                    <Stack spacing={10}>
+                      <Button
+                        bg={"orange.400"}
+                        color={"white"}
+                        _hover={{
+                          bg: "orange.500",
+                        }}
+                        type="submit"
+                        // isLoading={isSubmitting}
+                      >
+                        Submit
+                      </Button>
+                    </Stack>
                   </Stack>
                 </Stack>
-              </Stack>
-            </Box>
-          </Center>
-        </Stack>
-      ) : (
-        <Stack m={5} spacing={5}>
-          <Text
-            fontWeight={600}
-            textAlign="center"
-            fontSize="xl"
-            color="gray.500"
-            w="full"
-          >
-            You currently have 1 ongoing ticket.
-            <br /> Please wait for the resolution before submitting a new one.
-          </Text>
-        </Stack>
-      )}
-    </UserLayout>
+              </Box>
+            </Center>
+          </Stack>
+        ) : (
+          <Stack m={5} spacing={5}>
+            <Text
+              fontWeight={600}
+              textAlign="center"
+              fontSize="xl"
+              color="gray.500"
+              w="full"
+            >
+              You currently have 1 ongoing ticket.
+              <br /> Please wait for the resolution before submitting a new one.
+            </Text>
+          </Stack>
+        )}
+      </UserLayout>
+    </>
   );
 };
 
