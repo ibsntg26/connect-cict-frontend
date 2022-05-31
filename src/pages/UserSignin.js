@@ -55,7 +55,7 @@ const UserSignin = () => {
         <Stack spacing={4}>
           <Stack as="form" onSubmit={submitHandler}>
             <FormControl id="email" mb={2}>
-              <FormLabel>Email address</FormLabel>
+              <FormLabel>Email Address</FormLabel>
               <Input type="email" disabled={loginAttempts === 4} />
             </FormControl>
             <FormControl id="password" mb={2}>

@@ -1,26 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
-import {
-  Box,
-  Button,
-  Flex,
-  FormControl,
-  FormLabel,
-  FormErrorMessage,
-  Image,
-  Input,
-  Modal,
-  ModalBody,
-  ModalCloseButton,
-  ModalContent,
-  ModalFooter,
-  ModalHeader,
-  ModalOverlay,
-  SimpleGrid,
-  Text,
-  useDisclosure,
-} from "@chakra-ui/react";
+import { Box, Button, Flex, FormControl, FormLabel, FormErrorMessage, Image, Input, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, SimpleGrid, Text, useDisclosure, } from "@chakra-ui/react";
 import { FaUserEdit } from "react-icons/fa";
 import { RiUserUnfollowFill } from "react-icons/ri";
 import ProfileLayout from "../../components/ProfileLayout";
@@ -31,13 +12,14 @@ import useAxios from "../../utils/axios";
 const EvaluatorProfileUpdate = () => {
   const { user, role, logoutUser } = useContext(AuthContext);
   const [userPicture, setUserPicture] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const {
     handleSubmit,
     register,
     reset,
     setError,
-    formState: { errors, isSubmitting },
+    formState: { errors },
   } = useForm({
     mode: "onChange",
     defaultValues: {
@@ -57,10 +39,12 @@ const EvaluatorProfileUpdate = () => {
   };
 
   const updateProfile = async (data) => {
+    setIsSubmitting(true);
+
     if (data.profile_picture !== null)
       data.profile_picture = data.profile_picture[0];
 
-    api
+    await api
       .put(`/api/user/evaluator/${user.evaluator_id}/`, data, {
         headers: { "content-type": "multipart/form-data" },
       })
@@ -76,7 +60,10 @@ const EvaluatorProfileUpdate = () => {
             message: err_data.email[0],
           });
         }
-      });
+      })
+      .finally(() => {
+        setIsSubmitting(false);
+      });;
   };
 
   const deleteAccount = async () => {
@@ -168,6 +155,15 @@ const EvaluatorProfileUpdate = () => {
             >
               Save changes
             </Button>
+
+            <Button
+              onClick={() => {navigate('../profile')}}
+              colorScheme="gray"
+              size="sm"
+              variant="ghost"
+            >
+              Cancel
+            </Button>
           </Box>
         </Flex>
         <Box>
@@ -214,7 +210,7 @@ const EvaluatorProfileUpdate = () => {
             </FormControl>
 
             <FormControl mb={2} isInvalid={errors.email}>
-              <FormLabel>Email address</FormLabel>
+              <FormLabel>Email Address</FormLabel>
               <Input
                 type="email"
                 name="email"

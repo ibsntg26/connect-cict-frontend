@@ -124,7 +124,7 @@ const UserSignup = () => {
 
                 <HStack alignItems="baseline">
                   <FormControl maxWidth={110} isInvalid={errors.middle_initial}>
-                    <FormLabel>Middle initial</FormLabel>
+                    <FormLabel>Middle Initial</FormLabel>
                     <Input
                       type="text"
                       name="middle_initial"
@@ -149,7 +149,7 @@ const UserSignup = () => {
                 </HStack>
 
                 <FormControl isInvalid={errors.student_id}>
-                  <FormLabel>Student ID number</FormLabel>
+                  <FormLabel>Student ID Number</FormLabel>
                   <Input
                     type="number"
                     name="student_id"
@@ -169,7 +169,7 @@ const UserSignup = () => {
 
                 <HStack alignItems="baseline">
                   <FormControl isInvalid={errors.year_level}>
-                    <FormLabel>Year level</FormLabel>
+                    <FormLabel>Year Level</FormLabel>
                     <Select
                       name="year_level"
                       {...register("year_level", {
@@ -204,7 +204,7 @@ const UserSignup = () => {
                 </HStack>
 
                 <FormControl mb={2} isInvalid={errors.email}>
-                  <FormLabel>Email address</FormLabel>
+                  <FormLabel>Email Address</FormLabel>
                   <Input
                     type="email"
                     name="email"
@@ -242,7 +242,7 @@ const UserSignup = () => {
                 </FormControl>
 
                 <FormControl mb={2} isInvalid={errors.password2}>
-                  <FormLabel>Confirm password</FormLabel>
+                  <FormLabel>Confirm Password</FormLabel>
                   <Input
                     type={show ? "text" : "password"}
                     name="password2"

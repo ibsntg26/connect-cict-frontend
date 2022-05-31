@@ -1,22 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
-import {
-  Box,
-  Button,
-  Flex,
-  FormControl,
-  FormLabel,
-  FormErrorMessage,
-  HStack,
-  Image,
-  Input,
-  Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay,
-  Select,
-  SimpleGrid,
-  Text,
-  useDisclosure
-} from "@chakra-ui/react";
+import { Box, Button, Flex, FormControl, FormLabel, FormErrorMessage, HStack, Image, Input, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Select, SimpleGrid, Text, useDisclosure, } from "@chakra-ui/react";
 import { FaUserEdit } from "react-icons/fa";
 import { RiUserUnfollowFill } from "react-icons/ri";
 import ProfileLayout from "../../components/ProfileLayout";
@@ -27,13 +12,14 @@ import useAxios from "../../utils/axios";
 const StudentProfileUpdate = () => {
   const { user, logoutUser } = useContext(AuthContext);
   const [userPicture, setUserPicture] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const {
     handleSubmit,
     register,
     reset,
     setError,
-    formState: { errors, isSubmitting },
+    formState: { errors },
   } = useForm({
     mode: "onChange",
     defaultValues: {
@@ -54,10 +40,12 @@ const StudentProfileUpdate = () => {
   };
 
   const updateProfile = async (data) => {
+    setIsSubmitting(true);
+
     if (data.profile_picture !== null)
       data.profile_picture = data.profile_picture[0];
 
-    api
+    await api
       .put(`/api/user/student/${user.student_id}/`, data, {
         headers: { "content-type": "multipart/form-data" },
       })
@@ -71,6 +59,9 @@ const StudentProfileUpdate = () => {
             message: err_data.email[0],
           });
         }
+      })
+      .finally(() => {
+        setIsSubmitting(false);
       });
   };
 
@@ -124,7 +115,7 @@ const StudentProfileUpdate = () => {
           <ModalCloseButton />
           <ModalBody>
             <Text>
-               Are you sure you want to permanently delete your account? 
+              Are you sure you want to permanently delete your account?
             </Text>
           </ModalBody>
           <ModalFooter>
@@ -165,6 +156,15 @@ const StudentProfileUpdate = () => {
             >
               Save changes
             </Button>
+
+            <Button
+              onClick={() => {navigate('../profile')}}
+              colorScheme="gray"
+              size="sm"
+              variant="ghost"
+            >
+              Cancel
+            </Button>
           </Box>
         </Flex>
         <Box>
@@ -198,7 +198,7 @@ const StudentProfileUpdate = () => {
 
             <HStack alignItems="baseline">
               <FormControl maxWidth={110} isInvalid={errors.middle_initial}>
-                <FormLabel>Middle initial</FormLabel>
+                <FormLabel>Middle Initial</FormLabel>
                 <Input
                   type="text"
                   name="middle_initial"
@@ -224,7 +224,7 @@ const StudentProfileUpdate = () => {
 
             <HStack alignItems="baseline">
               <FormControl isInvalid={errors.year_level}>
-                <FormLabel>Year level</FormLabel>
+                <FormLabel>Year Level</FormLabel>
                 <Select
                   name="year_level"
                   {...register("year_level", {
@@ -259,7 +259,7 @@ const StudentProfileUpdate = () => {
             </HStack>
 
             <FormControl mb={2} isInvalid={errors.email}>
-              <FormLabel>Email address</FormLabel>
+              <FormLabel>Email Address</FormLabel>
               <Input
                 type="email"
                 name="email"

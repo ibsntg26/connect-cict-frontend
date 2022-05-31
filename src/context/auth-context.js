@@ -76,7 +76,7 @@ export const AuthProvider = ({ children }) => {
     setCanReport(false);
     setError(null);
     localStorage.removeItem("authTokens");
-    navigate("/signin");
+    navigate("/");
   };
 
   const contextData = {

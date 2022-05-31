@@ -91,7 +91,7 @@ const StudentNewTicket = () => {
       if (ticket_type === 1) {
         setShowOtherInfoField(false);
         setShowSubjectField(false);
-        setDetailsLabel("Balance reason");
+        setDetailsLabel("Balance Reason");
         updateTicketData({
           ...ticketData,
           ["type"]: ticket_type,
@@ -101,7 +101,7 @@ const StudentNewTicket = () => {
       } else if (ticket_type === 7) {
         setShowOtherInfoField(false);
         setShowSubjectField(true);
-        setDetailsLabel("Concern details");
+        setDetailsLabel("Concern Details");
         updateTicketData({
           ...ticketData,
           ["type"]: ticket_type,
@@ -110,7 +110,7 @@ const StudentNewTicket = () => {
       } else {
         setShowOtherInfoField(true);
         setShowSubjectField(false);
-        setDetailsLabel("Concern details");
+        setDetailsLabel("Concern Details");
         updateTicketData({
           ...ticketData,
           ["type"]: ticket_type,
@@ -172,7 +172,7 @@ const StudentNewTicket = () => {
         {canReport === true ? (
           <Stack m={5} spacing={5}>
             <Center>
-              <Heading fontSize="xl">Open new incident ticket</Heading>
+              <Heading fontSize="xl">Open New Incident Ticket</Heading>
             </Center>
             <Center>
               <Box bg="white" p={5} borderRadius="10px" box-shadow="md">

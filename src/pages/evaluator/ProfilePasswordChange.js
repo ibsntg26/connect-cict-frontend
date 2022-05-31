@@ -2,6 +2,7 @@ import React, { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { Box, Button, FormControl, FormLabel, FormErrorMessage, FormHelperText, Input, Switch, SimpleGrid, useToast, } from "@chakra-ui/react";
+import { FaUserEdit } from "react-icons/fa";
 import ProfileLayout from "../../components/ProfileLayout";
 
 import AuthContext from "../../context/auth-context";
@@ -43,7 +44,7 @@ const EvaluatorPasswordChange = () => {
       <Box as="form" onSubmit={handleSubmit(updatePassword)}>
         <SimpleGrid column={2} spacingY="15px">
           <FormControl mb={2} isInvalid={errors.old_password}>
-            <FormLabel>Old password</FormLabel>
+            <FormLabel>Old Password</FormLabel>
             <Input
               type={show ? "text" : "password"}
               name="password"
@@ -61,7 +62,7 @@ const EvaluatorPasswordChange = () => {
           </FormControl>
 
           <FormControl mb={2} isInvalid={errors.new_password}>
-            <FormLabel>New password</FormLabel>
+            <FormLabel>New Password</FormLabel>
             <Input
               type={show ? "text" : "password"}
               name="new_password"
@@ -85,7 +86,7 @@ const EvaluatorPasswordChange = () => {
           </FormControl>
 
           <FormControl mb={2} isInvalid={errors.new_password2}>
-            <FormLabel>Confirm new password</FormLabel>
+            <FormLabel>Confirm New Password</FormLabel>
             <Input
               type={show ? "text" : "password"}
               name="new_password2"
@@ -114,10 +115,21 @@ const EvaluatorPasswordChange = () => {
           <Button
             type="submit"
             colorScheme="orange"
-            me={2}
+            leftIcon={<FaUserEdit />}
+            variant="ghost"
             isLoading={isSubmitting}
           >
             Save changes
+          </Button>
+          <Button
+            onClick={() => {
+              navigate("../profile");
+            }}
+            colorScheme="gray"
+            size="sm"
+            variant="ghost"
+          >
+            Cancel
           </Button>
         </SimpleGrid>
       </Box>
