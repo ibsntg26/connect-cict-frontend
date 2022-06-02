@@ -1,81 +1,63 @@
 import React, { useState, useContext, useEffect } from "react";
 import { Link } from "react-router-dom";
 import dayjs from "dayjs";
-import {
-  Box,
-  CircularProgress,
-  CircularProgressLabel,
-  Flex,
-  Grid,
-  GridItem,
-  Heading,
-  Progress,
-  SimpleGrid,
-  Stat,
-  StatLabel,
-  StatNumber,
-  StatHelpText,
-  StatArrow,
-  StatGroup,
-  Text,
-} from "@chakra-ui/react";
+import { Box, Flex, Grid, GridItem, SimpleGrid, Stat, StatLabel, StatNumber, StatHelpText, StatArrow, Text, } from "@chakra-ui/react";
 import UserLayout from "../../components/UserLayout";
+import DoughnutChart from "../../components/charts/Doughnut";
+import HorizontalBarChart from "../../components/charts/HorizontalBar";
 
 import useAxios from "../../utils/axios";
 
-function card(key, value) {
+function card(heading, value, status) {
+  var weekday = require("dayjs/plugin/weekday");
+  dayjs.extend(weekday);
+
   return (
     <Box bg="white" rounded="md" shadow="md" p={3}>
-      {/* <Text fontWeight={600}>{key}</Text>
-      <Text fontSize="3xl" fontWeight={600} align="end" me={5}>
-        {value}
-      </Text> */}
-
       <Stat>
-        <StatLabel>{key}</StatLabel>
+        <StatLabel>{heading}</StatLabel>
         <StatNumber>{value}</StatNumber>
-        {/* <StatHelpText>
-          <StatArrow type="increase" />
-          23.36%
-        </StatHelpText> */}
-        <StatHelpText>May 23 - May 29</StatHelpText>
+        <StatHelpText>
+          {status !== null && <StatArrow type={status} />}
+          {`${dayjs(dayjs().weekday(1)).format("MMMM D")} - ${dayjs(
+            dayjs().weekday(7)
+          ).format("MMMM D")}`}
+        </StatHelpText>
       </Stat>
     </Box>
   );
 }
 
-function progressChart(processing, closed) {
-  let avg = processing == 0 && closed == 0 ? 0 : Math.round((closed / (processing + closed)) * 100);
-
+function progressChart(allIncidentsReportData) {
   return (
-    <Box bg="white" align="center" rounded="md" shadow="md" p={3}>
-      <Text fontWeight={600}>Completed Assigned Incident Tickets</Text>
-      <CircularProgress value={avg} color="orange.400" size="xs">
-        <CircularProgressLabel fontSize="3xl">{avg}%</CircularProgressLabel>
-      </CircularProgress>
+    <Box bg="white" rounded="md" shadow="md" p={{ base: "3", md: "5" }}>
+      <Text fontWeight={600}>Incident Tickets by Status</Text>
+      <Box px={{ base: "1", md: "8" }} py={{ base: "1", md: "4" }}>
+        <DoughnutChart
+          all_open={allIncidentsReportData.all_open}
+          all_my_processing={allIncidentsReportData.all_my_processing}
+          all_my_closed={allIncidentsReportData.all_my_closed}
+          all_others_processing={allIncidentsReportData.all_others_processing}
+        />
+      </Box>
     </Box>
   );
 }
 
-function typesChart(balance, subject, others, all) {
-  let balance_avg = balance == 0 ? 0 : Math.round((balance / all) * 100);
-  let subject_avg = subject == 0 ? 0 : Math.round((subject / all) * 100);
-  let others_avg = others == 0 ? 0 : Math.round((others / all) * 100);
-
+function typesChart(myIncidentsReportData) {
   return (
-    <Box bg="white" rounded="md" shadow="md" p={3}>
+    <Box bg="white" rounded="md" shadow="md" p={{ base: "3", md: "5" }}>
       <Text fontWeight={600}>Assigned Incident Tickets by Type</Text>
-      <Box pt={5}>
-        <Text>{balance} Remaining balance</Text>
-        <Progress colorScheme="green" value={balance_avg} />
-      </Box>
-      <Box pt={3}>
-        <Text>{subject} Subject-related</Text>
-        <Progress colorScheme="green" value={subject_avg} />
-      </Box>
-      <Box pt={3}>
-        <Text>{others} Others</Text>
-        <Progress colorScheme="green" value={others_avg} />
+      <Box py={{ base: "1", md: "4" }} height={270}>
+        <HorizontalBarChart
+          balance={myIncidentsReportData.balance}
+          subject1={myIncidentsReportData.subject1}
+          subject2={myIncidentsReportData.subject2}
+          subject3={myIncidentsReportData.subject3}
+          subject4={myIncidentsReportData.subject4}
+          subject5={myIncidentsReportData.subject5}
+          others={myIncidentsReportData.others}
+        />
       </Box>
     </Box>
   );
@@ -83,7 +65,9 @@ function typesChart(balance, subject, others, all) {
 
 const EvaluatorDashboard = () => {
   const [userNotifications, setUserNotifications] = useState([]);
-  const [report, setReport] = useState([]);
+  // const [report, setReport] = useState([]);
+  const [allIncidentsReportData, setAllIncidentsReportData] = useState([]);
+  const [myIncidentsReportData, setMyIncidentsReportData] = useState([]);
   const api = useAxios();
   const relativeTime = require("dayjs/plugin/relativeTime");
   dayjs.extend(relativeTime);
@@ -102,7 +86,30 @@ const EvaluatorDashboard = () => {
     document.title = "CONNECT | Dashboard";
     getReports()
       .then((res) => {
-        setReport(res);
+        setAllIncidentsReportData({
+          all_time_open: res.all_time_open,
+          all_time_my_processing: res.all_time_my_processing,
+          all_time_my_closed: res.all_time_my_closed,
+          all_time_by_others: res.all_time_by_others,
+          my_processing: res.my_processing,
+          my_processing_status: res.my_processing_status,
+          my_closed: res.my_closed,
+          my_closed_status: res.my_closed_status,
+          new: res.new,
+          new_status: res.new_status,
+          all_open: res.all_open,
+          open_status: res.open_status,
+        });
+        
+        setMyIncidentsReportData({
+          balance: res.balance,
+          subject1: res.subject1,
+          subject2: res.subject2,
+          subject3: res.subject3,
+          subject4: res.subject4,
+          subject5: res.subject5,
+          others: res.others,
+        });
       })
       .catch((e) => {
         console.log(e.message);
@@ -126,14 +133,30 @@ const EvaluatorDashboard = () => {
       >
         <GridItem colSpan={{ base: "1", md: "3" }} p="2">
           <SimpleGrid minChildWidth="150px" spacing="40px" mb={5}>
-            {card("New Incidents", report.new)}
-            {card("All Open Incidents", report.all_open)}
-            {card("My Ongoing Incidents", report.processing)}
-            {card("My Closed Incidents", report.closed)}
+            {card(
+              "New Incidents",
+              allIncidentsReportData.new,
+              allIncidentsReportData.new_status
+            )}
+            {card(
+              "All Open Incidents",
+              allIncidentsReportData.all_open,
+              allIncidentsReportData.open_status
+            )}
+            {card(
+              "My Ongoing Incidents",
+              allIncidentsReportData.my_processing,
+              allIncidentsReportData.my_processing_status
+            )}
+            {card(
+              "My Closed Incidents",
+              allIncidentsReportData.my_closed,
+              allIncidentsReportData.my_closed_status
+            )}
           </SimpleGrid>
           <SimpleGrid minChildWidth="150px" spacing="40px">
-            {progressChart(report.processing, report.closed)}
-            {typesChart(report.balance, report.subject, report.others, report.processing + report.closed)}
+            {progressChart(allIncidentsReportData)}
+            {typesChart(myIncidentsReportData)}
           </SimpleGrid>
         </GridItem>
         <GridItem p={2}>

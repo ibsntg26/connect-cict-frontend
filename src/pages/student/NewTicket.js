@@ -6,6 +6,7 @@ import {
   Button,
   Center,
   FormControl,
+  FormHelperText,
   FormLabel,
   Heading,
   Input,
@@ -121,8 +122,9 @@ const StudentNewTicket = () => {
   };
 
   const submitHandler = async (e) => {
+    setIsSubmitting(true)
     e.preventDefault();
-    // console.log(ticketData);
+
     api
       .post(
         `/api/student-ticket/`,
@@ -136,12 +138,14 @@ const StudentNewTicket = () => {
         { headers: { "content-type": "multipart/form-data" } }
       )
       .then((res) => {
-        // console.log(res.data);
         setCanReport(false);
         onOpen();
       })
       .catch((err) => {
         console.log(err.response.data);
+      })
+      .finally(() => {
+        setIsSubmitting(false);
       });
   };
 
@@ -230,6 +234,9 @@ const StudentNewTicket = () => {
                             name="other_info"
                             onChange={changeHandler}
                           />
+                          <FormHelperText>
+                            Indicate both subject code and name. For multiple subjects, separate with a comma.
+                          </FormHelperText>
                         </FormControl>
                       )}
 
@@ -252,7 +259,7 @@ const StudentNewTicket = () => {
                           bg: "orange.500",
                         }}
                         type="submit"
-                        // isLoading={isSubmitting}
+                        isLoading={isSubmitting}
                       >
                         Submit
                       </Button>

@@ -92,7 +92,9 @@ export default function AllTicketsTable({ ticketsData }) {
 
               <Box mb={6}>
                 <Text fontSize="sm">
-                  {ticketInfo.type.id === 1 ? "Balance reason" : "Concern details"}
+                  {ticketInfo.type.id === 1
+                    ? "Balance reason"
+                    : "Concern details"}
                 </Text>
                 <Collapse startingHeight={25} in={show} fontWeight={600}>
                   {ticketInfo.message}
@@ -126,17 +128,17 @@ export default function AllTicketsTable({ ticketsData }) {
 
               {ticketInfo.status === "processing" &&
                 user.evaluator_id === ticketInfo.evaluator.employee_id && (
-                <Link to={`/tickets/${ticketInfo.id}`}>
-                  <Button size="sm">View full details</Button>
-                </Link>
-              )}
+                  <Link to={`/tickets/${ticketInfo.id}`}>
+                    <Button size="sm">View full details</Button>
+                  </Link>
+                )}
             </ModalFooter>
           </ModalContent>
         </Modal>
       )}
 
       <TableContainer>
-        <Table variant="simple">
+        <Table variant="simple" color="gray.600">
           <Thead>
             <Tr>
               <Th>Reported by</Th>
@@ -178,8 +180,15 @@ export default function AllTicketsTable({ ticketsData }) {
                     </Flex>
                   </Td>
                   <Td>
-                    {ticket.type.name}{" "}
-                    {ticket.type.name === "Others" && `(${ticket.subject})`}
+                    <Text
+                      maxW={180}
+                      whiteSpace="normal"
+                      wordWrap="break-word"
+                      fontSize="14px"
+                    >
+                      {ticket.type.name}{" "}
+                      {ticket.type.name === "Others" && `(${ticket.subject})`}
+                    </Text>
                   </Td>
                   <Td>
                     {dayjs(ticket.date_created).format("D MMMM YYYY h:mm A")}

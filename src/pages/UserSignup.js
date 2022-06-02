@@ -215,6 +215,9 @@ const UserSignup = () => {
                   <FormErrorMessage mb={3}>
                     {errors.email && errors.email.message}
                   </FormErrorMessage>
+                  <FormHelperText>
+                    Use your BulSU email, if necessary.
+                  </FormHelperText>
                 </FormControl>
 
                 <FormControl mb={2} isInvalid={errors.password}>

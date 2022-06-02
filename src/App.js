@@ -14,12 +14,15 @@ import UserPasswordReset from "./pages/UserPasswordReset";
 
 import AdminSignin from "./pages/admin/Signin";
 
+import Test from "./pages/Test";
+
 function App() {
   return (
     <AuthProvider>
       <LayoutProvider>
         <Routes>
           <Route path="/" element={<Landing />} />
+          <Route path="/test" element={<Test />} />
 
           <Route
             path="/signin"

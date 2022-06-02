@@ -1,20 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
 import { IoIosSearch } from "react-icons/io";
-import {
-  Flex,
-  Box,
-  Button,
-  FormControl,
-  FormLabel,
-  Grid,
-  GridItem,
-  Heading,
-  Input,
-  InputGroup,
-  InputLeftElement,
-  Select,
-  Text,
-} from "@chakra-ui/react";
+import { Box, Button, Flex, FormControl, FormLabel, Grid, GridItem, Heading, HStack, Input, InputGroup, InputLeftElement, Select, Text, } from "@chakra-ui/react";
 import UserLayout from "../../components/UserLayout";
 import AllTicketsTable from "../../components/AllTicketsTable";
 
@@ -25,10 +11,12 @@ const EvaluatorAllTickets = () => {
   const { user } = useContext(AuthContext);
   const [tickets, setTickets] = useState([]);
   const [yearFilter, setYearFilter] = useState("all");
+  const [sectionFilter, setSectionFilter] = useState("all");
   const [typeFilter, setTypeFilter] = useState(0);
   const [statusFilter, setStatusFilter] = useState("all");
   const [query, setQuery] = useState("");
   const api = useAxios();
+  const sections = ['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z'];
   const year_levels = ["1st", "2nd", "3rd", "4th"];
 
   const getTickets = async () => {
@@ -44,6 +32,11 @@ const EvaluatorAllTickets = () => {
         (row) => row.student.year_level.toLowerCase().indexOf(yearFilter) > -1
       );
     }
+  };
+
+  const filterSection = (rows) => {
+    if (sectionFilter !== "all") return rows.filter((row) => row.student.section === sectionFilter);
+    return rows;
   };
 
   const filterType = (rows) => {
@@ -154,20 +147,39 @@ const EvaluatorAllTickets = () => {
                 </Select>
               </FormControl>
 
-              <FormControl mb={3}>
-                <FormLabel color="gray.500">Student year level</FormLabel>
-                <Select
-                  name="section"
-                  onChange={(e) => setYearFilter(e.target.value)}
-                >
-                  <option value="all">All</option>
-                  {year_levels.map((year) => (
-                    <option value={year} key={year}>
-                      {year}
-                    </option>
-                  ))}
-                </Select>
-              </FormControl>
+              <HStack alignItems="baseline" mb={3}>
+                <FormControl>
+                  <FormLabel color="gray.500">Student year level</FormLabel>
+                  <Select
+                    name="year"
+                    bg="white"
+                    onChange={(e) => setYearFilter(e.target.value)}
+                  >
+                    <option value="all">All</option>
+                    {year_levels.map((year) => (
+                      <option value={year} key={year}>
+                        {year}
+                      </option>
+                    ))}
+                  </Select>
+                </FormControl>
+
+                <FormControl>
+                  <FormLabel color="gray.500">Student section</FormLabel>
+                  <Select
+                    name="section"
+                    bg="white"
+                    onChange={(e) => setSectionFilter(e.target.value)}
+                  >
+                    <option value="all">All</option>
+                    {sections.map((section) => (
+                      <option value={section} key={section}>
+                        {section}
+                      </option>
+                    ))}
+                  </Select>
+                </FormControl>
+              </HStack>
 
               <FormControl>
                 <FormLabel color="gray.500">Report status</FormLabel>
@@ -188,7 +200,7 @@ const EvaluatorAllTickets = () => {
           <Box bg="white" h="full" p={2} borderRadius="10px">
             <AllTicketsTable
               ticketsData={filterYear(
-                filterType(filterStatus(search(tickets)))
+                filterSection(filterType(filterStatus(search(tickets))))
               )}
             />
           </Box>
