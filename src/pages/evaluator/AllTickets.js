@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
 import { IoIosSearch } from "react-icons/io";
-import { Box, Button, Flex, FormControl, FormLabel, Grid, GridItem, Heading, HStack, Input, InputGroup, InputLeftElement, Select, Text, } from "@chakra-ui/react";
+import { Box, Button, Flex, FormControl, FormLabel, Grid, GridItem, Heading, HStack, Input, InputGroup, InputLeftElement, Select, Switch, Text, } from "@chakra-ui/react";
 import UserLayout from "../../components/UserLayout";
 import AllTicketsTable from "../../components/AllTicketsTable";
 
@@ -10,6 +10,7 @@ import useAxios from "../../utils/axios";
 const EvaluatorAllTickets = () => {
   const { user } = useContext(AuthContext);
   const [tickets, setTickets] = useState([]);
+  const [evaluatorFilter, setEvaluatorFilter] = useState(false);
   const [yearFilter, setYearFilter] = useState("all");
   const [sectionFilter, setSectionFilter] = useState("all");
   const [typeFilter, setTypeFilter] = useState(0);
@@ -23,6 +24,11 @@ const EvaluatorAllTickets = () => {
     const response = await api.get("/api/ticket/");
     return response.data;
   };
+
+  const filterEvaluator = (rows) => {
+    if (evaluatorFilter) return rows.filter((row) => row.evaluator !== null && row.evaluator.employee_id == user.evaluator_id);
+    return rows;
+  }
 
   const filterYear = (rows) => {
     if (yearFilter == "all") {
@@ -129,6 +135,7 @@ const EvaluatorAllTickets = () => {
                 <FormLabel color="gray.500">Incident type</FormLabel>
                 <Select
                   name="type"
+                  bg="white"
                   onChange={(e) => setTypeFilter(e.target.value)}
                 >
                   <option value={0}>All</option>
@@ -181,10 +188,11 @@ const EvaluatorAllTickets = () => {
                 </FormControl>
               </HStack>
 
-              <FormControl>
+              <FormControl mb={5}>
                 <FormLabel color="gray.500">Report status</FormLabel>
                 <Select
                   name="type"
+                  bg="white"
                   onChange={(e) => setStatusFilter(e.target.value)}
                 >
                   <option value="all">All</option>
@@ -193,15 +201,20 @@ const EvaluatorAllTickets = () => {
                   <option value="closed">Closed</option>
                 </Select>
               </FormControl>
+
+              <HStack alignItems="baseline">
+                <Switch colorScheme="orange" checked={evaluatorFilter} onChange={(e) => setEvaluatorFilter(!evaluatorFilter)} />
+                <FormLabel color="gray.500">My processed tickets</FormLabel>
+              </HStack>
             </Box>
           </Box>
         </GridItem>
-        <GridItem colSpan={{ base: "1", md: "3" }}>
+        <GridItem colSpan={{ base: "1", md: "3" }} mb="3" overflow="auto">
           <Box bg="white" h="full" p={2} borderRadius="10px">
             <AllTicketsTable
-              ticketsData={filterYear(
+              ticketsData={filterEvaluator(filterYear(
                 filterSection(filterType(filterStatus(search(tickets))))
-              )}
+              ))}
             />
           </Box>
         </GridItem>

@@ -288,7 +288,7 @@ const AdminAllTickets = () => {
             </Box>
           </Box>
         </GridItem>
-        <GridItem colSpan={{ base: "1", md: "3" }}>
+        <GridItem colSpan={{ base: "1", md: "3" }} mb="3" overflow="auto">
           <Box bg="white" h="full" p={2} borderRadius="10px">
             <AllTicketsTable
               ticketsData={filterYear(

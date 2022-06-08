@@ -10,26 +10,21 @@ import {
 } from "chart.js";
 import { Bar } from "react-chartjs-2";
 
-ChartJS.register(
-  CategoryScale,
-  LinearScale,
-  BarElement,
-  Title,
-  Tooltip,
-  Legend
-);
-
 export default function HorizontalBarChart(props) {
+  ChartJS.register(
+    CategoryScale,
+    LinearScale,
+    BarElement,
+    Title,
+    Tooltip,
+    Legend
+  );
+  
   return (
     <Bar
       height={270}
       options={{
         indexAxis: "y",
-        elements: {
-          bar: {
-            borderWidth: 2,
-          },
-        },
         // responsive: true,
         plugins: {
           legend: {
@@ -65,7 +60,7 @@ export default function HorizontalBarChart(props) {
         ],
         datasets: [
           {
-            label: "Incident Tickets by Status",
+            label: "Incident Tickets by Type",
             data: [
               props.balance,
               props.subject1,
@@ -73,10 +68,9 @@ export default function HorizontalBarChart(props) {
               props.subject3,
               props.subject4,
               props.subject5,
-              props.other,
+              props.others,
             ],
-            borderColor: "rgb(255, 99, 132)",
-            backgroundColor: "rgba(255, 99, 132, 0.5)",
+            backgroundColor: "rgba(255, 193, 84, 1)",
             hoverOffset: 5,
           },
         ],

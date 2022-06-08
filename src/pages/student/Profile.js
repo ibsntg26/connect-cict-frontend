@@ -87,7 +87,7 @@ const StudentProfile = () => {
           {renderInfo("Student Number", `${studentInfo.student_id}`)}
           {renderInfo(
             "Full Name",
-            `${userInfo.first_name} ${userInfo.middle_initial}. ${userInfo.last_name}`
+            `${userInfo.first_name} ${userInfo.middle_initial && userInfo.middle_initial + '.'} ${userInfo.last_name}`
           )}
           {userInfo.year_level
             ? renderInfo(

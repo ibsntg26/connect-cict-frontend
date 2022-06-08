@@ -14,6 +14,8 @@ export default function AllTicketsTable({ ticketsData }) {
 
   const api = useAxios();
   const navigate = useNavigate();
+  const relativeTime = require("dayjs/plugin/relativeTime");
+  dayjs.extend(relativeTime);
 
   const processTicket = async (ticketId) => {
     await api
@@ -52,7 +54,7 @@ export default function AllTicketsTable({ ticketsData }) {
                 <Box>
                   <Text fontSize="sm">Reported by</Text>
                   <Text fontWeight={600}>
-                    {`${ticketInfo.student.account.first_name} ${ticketInfo.student.account.middle_initial}. ${ticketInfo.student.account.last_name}`}
+                    {`${ticketInfo.student.account.first_name} ${ticketInfo.student.account.middle_initial && ticketInfo.student.account.middle_initial + '.'} ${ticketInfo.student.account.last_name}`}
                   </Text>
                 </Box>
                 <Box>
@@ -74,20 +76,22 @@ export default function AllTicketsTable({ ticketsData }) {
                     )}
                   </Text>
                 </Box>
-                <Box>
-                  <Text fontSize="sm">
-                    {ticketInfo.status === "closed"
-                      ? "Closed on"
-                      : "Last update"}
-                  </Text>
-                  <Text fontWeight={600}>
-                    {dayjs(
-                      ticketInfo.status === "closed"
-                        ? ticketInfo.date_completed
-                        : ticketInfo.date_updated
-                    ).format("D MMMM YYYY h:mm A")}
-                  </Text>
-                </Box>
+
+                {ticketInfo.status !== "open" && (
+                  <Box>
+                    <Text fontSize="sm">
+                      {ticketInfo.status === "closed" && `Closed by ${ticketInfo.closed_by} on`}
+                      {ticketInfo.status === "processing" && "Last update"}
+                    </Text>
+                    <Text fontWeight={600}>
+                      {dayjs(
+                        ticketInfo.status === "closed"
+                          ? ticketInfo.date_completed
+                          : ticketInfo.date_updated
+                      ).format("D MMMM YYYY h:mm A")}
+                    </Text>
+                  </Box>
+                )}
               </SimpleGrid>
 
               <Box mb={6}>
@@ -170,9 +174,10 @@ export default function AllTicketsTable({ ticketsData }) {
                       />
                       <Flex flexDir="column" justify="center">
                         <Text fontWeight={600}>
-                          {`${ticket.student.account.first_name} ${ticket.student.account.middle_initial}. ${ticket.student.account.last_name}`}
+                          {`${ticket.student.account.first_name} ${ticket.student.account.middle_initial && ticket.student.account.middle_initial + '.'} ${ticket.student.account.last_name}`}
                         </Text>
                         <Text fontSize="xs">
+                          BSIT{' '}
                           {ticket.student.year_level.charAt(0)}
                           {ticket.student.section}
                         </Text>
@@ -183,7 +188,7 @@ export default function AllTicketsTable({ ticketsData }) {
                     <Text
                       maxW={180}
                       whiteSpace="normal"
-                      wordWrap="break-word"
+                      wordwrap="break-word"
                       fontSize="14px"
                     >
                       {ticket.type.name}{" "}
@@ -191,7 +196,14 @@ export default function AllTicketsTable({ ticketsData }) {
                     </Text>
                   </Td>
                   <Td>
-                    {dayjs(ticket.date_created).format("D MMMM YYYY h:mm A")}
+                    <Flex flexDir="column" justify="center">
+                      <Text>
+                        {dayjs(ticket.date_created).format("D MMMM YYYY h:mm A")}
+                      </Text>
+                      <Text fontSize="xs">
+                        {dayjs(ticket.date_created).fromNow()}
+                      </Text>
+                    </Flex>
                   </Td>
                   <Td>
                     {ticket.evaluator

@@ -55,9 +55,8 @@ export default function AdminAllTicketsPDF(ticketsData) {
     doc.text(`Additional Details: ${details}`, 10, 138);
 
     let evaluator = "None";
-    if (ticket.evaluator)
-      evaluator =
-        evaluator.account.first_name + " " + evaluator.account.last_name;
+    if (ticket.evaluator !== null)
+      evaluator = ticket.evaluator.account.first_name + " " + ticket.evaluator.account.last_name;
 
     doc.text(`Processed by: ${evaluator}`, 10, 145);
 
@@ -68,7 +67,7 @@ export default function AdminAllTicketsPDF(ticketsData) {
     );
 
     doc.text("Resolution:", 10, 165);
-    doc.text("Follow ups:", 10, 187);
+    doc.text("Follow up/s:", 10, 187);
 
     doc.text(`Page ${index + 1} of ${ticketsData.length}`, 105, 288, null, null, "center");
 

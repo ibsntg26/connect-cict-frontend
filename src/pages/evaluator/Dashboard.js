@@ -34,10 +34,10 @@ function progressChart(allIncidentsReportData) {
       <Text fontWeight={600}>Incident Tickets by Status</Text>
       <Box px={{ base: "1", md: "8" }} py={{ base: "1", md: "4" }}>
         <DoughnutChart
-          all_open={allIncidentsReportData.all_open}
-          all_my_processing={allIncidentsReportData.all_my_processing}
-          all_my_closed={allIncidentsReportData.all_my_closed}
-          all_others_processing={allIncidentsReportData.all_others_processing}
+          all_open={allIncidentsReportData.all_time_open}
+          all_my_processing={allIncidentsReportData.all_time_my_processing}
+          all_my_closed={allIncidentsReportData.all_time_my_closed}
+          all_others_processing={allIncidentsReportData.all_time_by_others}
         />
       </Box>
     </Box>

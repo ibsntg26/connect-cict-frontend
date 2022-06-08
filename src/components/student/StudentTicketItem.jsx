@@ -9,7 +9,7 @@ export default function StudentTicketItem(props) {
   return (
     <Tooltip
       hasArrow
-      label={props.label.length > 20 && (props.label)}
+      label={props.label.length > 25 && (props.label)}
       placement="right"
       bgColor="gray.500"
     >
